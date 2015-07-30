@@ -7,7 +7,7 @@ RUN yum -y upgrade
 
 RUN useradd -u 1000 openquake
 
-RUN yum -y install python-oq-engine
+RUN yum -y install python-oq-risklib python-oq-hazardlib
 
 USER openquake
 ENV HOME /home/openquake
