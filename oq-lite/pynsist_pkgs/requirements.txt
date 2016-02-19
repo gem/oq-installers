@@ -1,0 +1,10 @@
+concurrent==2.1.6
+mock==1.0.1
+h5py==2.2.1
+nose==1.3.7
+numpy==1.8.1sse2
+pbr==0.7.0
+psutil==2.2.1
+scipy==0.13.3sse2
+shapely==1.3.1
+six==1.5.2
