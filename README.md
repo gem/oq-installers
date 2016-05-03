@@ -1,6 +1,6 @@
 # Testing OpenQuake on Docker #
 
-Currently runs only `oq-hazardlib` and `oq-risklib`
+Currently runs only `oq-hazardlib` and `oq-risklib`.
 
 ## Build images ##
 
@@ -11,11 +11,11 @@ Currently runs only `oq-hazardlib` and `oq-risklib`
 ## Run a container ##
 
 ```bash
->$ sudo docker run -t openquake-f23
+>$ sudo docker run -i -t openquake-f23
 ```
 
 ### Run a custom branch
 
 ```bash
->$ sudo docker run -e "branch=mybranch" -t openquake-f23
+>$ sudo docker run -e "branch=mybranch" -i -t openquake-f23
 ```
