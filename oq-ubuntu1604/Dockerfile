@@ -5,6 +5,7 @@ RUN apt-get update
 RUN apt-get upgrade -y
 RUN apt-get install -y software-properties-common git
 RUN add-apt-repository -y ppa:openquake-automatic-team/latest-master
+# FIXME this is a workaround
 RUN sed -i 's/xenial/trusty/g' /etc/apt/sources.list.d/openquake-automatic-team-ubuntu-latest-master-xenial.list
 
 RUN apt-get update
