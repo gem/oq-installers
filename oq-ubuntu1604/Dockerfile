@@ -1,0 +1,29 @@
+FROM ubuntu:xenial
+MAINTAINER Daniele Viganò <daniele@vigano.me>
+
+RUN apt-get update
+RUN apt-get upgrade -y
+RUN apt-get install -y software-properties-common git
+RUN add-apt-repository -y ppa:openquake-automatic-team/latest-master
+RUN sed -i 's/xenial/trusty/g' /etc/apt/sources.list.d/openquake-automatic-team-ubuntu-latest-master-xenial.list
+
+RUN apt-get update
+RUN apt-cache depends python-oq-hazardlib | awk '/Depends:/{print$2}' | grep -v python-oq | xargs apt-get install -y
+RUN apt-cache depends python-oq-risklib | awk '/Depends:/{print$2}' | grep -v python-oq | xargs apt-get install -y
+
+RUN adduser --system openquake
+USER openquake
+ENV HOME /home/openquake
+ENV PYTHONPATH $HOME/oq-risklib:$HOME/oq-hazardlib
+
+WORKDIR ${HOME}
+
+RUN git clone https://github.com/gem/oq-hazardlib
+RUN git clone https://github.com/gem/oq-risklib
+RUN cd oq-hazardlib ; \
+    python setup.py build_ext ; \
+    cd openquake/hazardlib/geo ; \
+    ln -s ../../../build/lib.*/openquake/hazardlib/geo/*.so .
+ADD runtests.sh ${HOME}
+
+CMD /bin/bash runtests.sh
