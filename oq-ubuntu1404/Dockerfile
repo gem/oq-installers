@@ -14,6 +14,8 @@ USER openquake
 ENV HOME /home/openquake
 ENV PYTHONPATH $HOME/oq-risklib:$HOME/oq-hazardlib
 
+WORKDIR ${HOME}
+
 RUN git clone https://github.com/gem/oq-hazardlib
 RUN git clone https://github.com/gem/oq-risklib
 RUN cd oq-hazardlib ; \
