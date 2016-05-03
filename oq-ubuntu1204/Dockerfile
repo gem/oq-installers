@@ -1,4 +1,4 @@
-FROM ubuntu:trusty
+FROM ubuntu:precise
 MAINTAINER Daniele Viganò <daniele@vigano.me>
 
 RUN apt-get update
