@@ -1,15 +1,25 @@
 FROM centos:centos7
 MAINTAINER Daniele Viganò <daniele@vigano.me>
 
-ADD gem-openquake-epel-7.repo /etc/yum.repos.d/
-RUN yum -y install epel-release
 RUN yum -y upgrade
+RUN yum -y install epel-release git gcc
+RUN curl -sLo /etc/yum.repos.d/gem-openquake-epel-7.repo https://copr.fedorainfracloud.org/coprs/gem/openquake/repo/epel-7/gem-openquake-epel-7.repo
+
+RUN yum deplist python-oq-risklib | grep provider | \
+awk '{print $2}' | sort | uniq | grep -v python-oq | \
+sed ':a;N;$!ba;s/\n/ /g' | xargs yum -y install
 
 RUN useradd -u 1000 openquake
-
-RUN yum -y install python-oq-risklib python-oq-hazardlib
-
 USER openquake
 ENV HOME /home/openquake
+ENV PYTHONPATH $HOME/oq-risklib:$HOME/oq-hazardlib
 
-CMD cd /usr/lib64/python2.7/site-packages/openquake/hazardlib/; /usr/bin/nosetests -v; cd /usr/lib/python2.7/site-packages/openquake/risklib/; /usr/bin/nosetests -v
+RUN git clone https://github.com/gem/oq-hazardlib
+RUN git clone https://github.com/gem/oq-risklib
+RUN cd oq-hazardlib ; \
+    python setup.py build_ext ; \
+    cd openquake/hazardlib/geo ; \
+    ln -s ../../../build/lib.*/openquake/hazardlib/geo/*.so .
+ADD runtests.sh ${HOME}
+
+CMD /bin/bash runtests.sh
