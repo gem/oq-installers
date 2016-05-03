@@ -19,3 +19,7 @@ Currently runs only `oq-hazardlib` and `oq-risklib`.
 ```bash
 >$ sudo docker run -e "branch=mybranch" -i -t openquake-f23
 ```
+
+## Disclaimer ##
+
+This work is experimental and is not supported by GEM nor the OpenQuake development team.
