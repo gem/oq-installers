@@ -9,7 +9,7 @@ RUN add-apt-repository -y ppa:openquake-automatic-team/latest-master
 RUN apt-get update
 RUN apt-cache depends python-oq-risklib | awk '/Depends:/{print$2}' | grep -v python-oq | xargs apt-get install -y
 
-RUN useradd -u 1000 openquake
+RUN adduser --system openquake
 USER openquake
 ENV HOME /home/openquake
 ENV PYTHONPATH $HOME/oq-risklib:$HOME/oq-hazardlib
