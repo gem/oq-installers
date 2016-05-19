@@ -1,3 +1,2 @@
-hazard
-risk
+*.msi
 !.gitignore
