@@ -82,7 +82,7 @@ Section "!${PRODUCT_NAME}" sec_app
   ; The output path becomes the working directory for shortcuts
   SetOutPath "$INSTDIR"
     CreateShortCut "$SMPROGRAMS\OpenQuake Engine.lnk" "$INSTDIR\oq-server.bat" \
-      "$INSTDIR\openquake.ico"
+      "" "$INSTDIR\openquake.ico"
   SetOutPath "$INSTDIR"
   
   ; Byte-compile Python files.
