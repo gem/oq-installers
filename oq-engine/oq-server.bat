@@ -17,7 +17,7 @@ if exist C:\Windows\System32\timeout.exe (
     timeout /t 10 /nobreak > NUL
 ) else (
     REM Windows XP hack
-    ping 192.0.2.2 -n 1 -w 10000 > nul 
+    ping 192.0.2.2 -n 1 -w 10000 > NUL 
 )
 
 REM Start the WebUI using django
