@@ -1,7 +1,13 @@
 @echo off
 setlocal
 set mypath=%~dp0
-set PATH=%PATH%;%COMMONPROGRAMFILES%\Python\2.7
+if "%PROCESSOR_ARCHITECTURE%"=="x86"
+    set common=%COMMONPROGRAMFILES%
+else
+    set common=%COMMONPROGRAMFILES(x86)%)
+set PATH=%PATH%;%common%\Python\2.7
 set PYTHONPATH=pkgs
+
 cmd /k
+
 endlocal

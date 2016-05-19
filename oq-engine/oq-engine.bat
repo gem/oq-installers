@@ -2,5 +2,12 @@
 setlocal
 set mypath=%~dp0
 set PYTHONPATH=pkgs
-"%COMMONPROGRAMFILES%\Python\2.7\python.exe" -m openquake.engine.bin.openquake_cli %*
+
+if "%PROCESSOR_ARCHITECTURE%"=="x86"
+    set common=%COMMONPROGRAMFILES%
+else
+    set common=%COMMONPROGRAMFILES(x86)%)
+
+"%common%\Python\2.7\python.exe" -m openquake.engine.bin.openquake_cli %*
+
 endlocal
