@@ -8,6 +8,6 @@ if "%PROCESSOR_ARCHITECTURE%"=="x86" (
     set common="%COMMONPROGRAMFILES(x86)%"
 )
 
-"%common%\Python\2.7\python.exe" -m openquake.engine.bin.openquake_cli %*
+%common%\Python\2.7\python.exe -m openquake.engine.bin.openquake_cli %*
 
 endlocal

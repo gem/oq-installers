@@ -9,7 +9,7 @@ if "%PROCESSOR_ARCHITECTURE%"=="x86" (
 )
 
 REM Start the DbServer in background but within the same context
-start "OpenQuake DB server" /B "%COMMONPROGRAMFILES%\Python\2.7\python.exe" -m openquake.server.dbserver
+start "OpenQuake DB server" /B %common%\Python\2.7\python.exe -m openquake.server.dbserver
 
 REM Make sure that the dbserver is up and running
 echo Please wait ...
@@ -21,6 +21,6 @@ if exist C:\Windows\System32\timeout.exe (
 )
 
 REM Start the WebUI using django
-"%common%\Python\2.7\python.exe" -m openquake.server.manage runserver %*
+%common%\Python\2.7\python.exe -m openquake.server.manage runserver %*
 
 endlocal
