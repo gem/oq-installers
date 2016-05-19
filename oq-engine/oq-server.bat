@@ -3,9 +3,9 @@ setlocal
 set mypath=%~dp0
 set PYTHONPATH=pkgs
 if "%PROCESSOR_ARCHITECTURE%"=="x86" (
-    set common=%COMMONPROGRAMFILES%
+    set common="%COMMONPROGRAMFILES%"
 ) else (
-    set common=%COMMONPROGRAMFILES(x86)%
+    set common="%COMMONPROGRAMFILES(x86)%"
 )
 
 REM Start the DbServer in background but within the same context
