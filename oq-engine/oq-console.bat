@@ -9,6 +9,7 @@ if "%PROCESSOR_ARCHITECTURE%"=="x86" (
 set PATH=%PATH%;%common%\Python\2.7
 set PYTHONPATH=pkgs
 
+echo OpenQuake environment loaded
 cmd /k
 
 endlocal
