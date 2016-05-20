@@ -1,7 +1,7 @@
 @echo off
 setlocal
 set mypath=%~dp0
-set PYTHONPATH=pkgs
+set PYTHONPATH=lib
 set PATH=%PATH%;%mypath%\python2.7
 
 REM Create the DB or update it

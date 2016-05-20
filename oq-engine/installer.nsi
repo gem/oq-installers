@@ -52,8 +52,8 @@ Section "!${PRODUCT_NAME}" sec_app
   File ${PRODUCT_ICON}
   SetOutPath "$INSTDIR\python2.7"
   File /r "python2.7\*.*"
-  SetOutPath "$INSTDIR\pkgs"
-  File /r "pkgs\*.*"
+  SetOutPath "$INSTDIR\lib"
+  File /r "lib\*.*"
   SetOutPath "$INSTDIR"
   
   ; Install files
@@ -75,7 +75,7 @@ Section "!${PRODUCT_NAME}" sec_app
   
   ; Byte-compile Python files.
   DetailPrint "Byte-compiling Python modules..."
-  nsExec::ExecToLog '$INSTDIR\python2.7\python.exe -m compileall -q "$INSTDIR\pkgs"'
+  nsExec::ExecToLog '$INSTDIR\python2.7\python.exe -m compileall -q "$INSTDIR\lib"'
 
   WriteUninstaller $INSTDIR\uninstall.exe
   ; Add ourselves to Add/remove programs
@@ -118,7 +118,7 @@ Section "Uninstall"
   SetShellVarContext all
   Delete $INSTDIR\uninstall.exe
   Delete "$INSTDIR\${PRODUCT_ICON}"
-  RMDir /r "$INSTDIR\pkgs"
+  RMDir /r "$INSTDIR\lib"
   RMDir /r "$INSTDIR\python2.7"
   ; Uninstall files
     Delete "$INSTDIR\openquake.ico"
