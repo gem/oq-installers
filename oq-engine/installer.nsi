@@ -1,12 +1,14 @@
-!define PRODUCT_NAME "OpenQuake Engine"
-!define PRODUCT_VERSION "2.0.0"
 !define /date MYTIMESTAMP "%y%m%d%H%M"
+!define PRODUCT_NAME "OpenQuake Engine"
+!define PRODUCT_VERSION "2.0.0-dev${MYTIMESTAMP}"
+!define PUBLISHER "GEM Foundation"
 !define PY_VERSION "2.7.11"
 !define PY_MAJOR_VERSION "2.7"
 !define BITNESS "32"
 !define ARCH_TAG ""
-!define INSTALLER_NAME "OpenQuake_Engine_2.0.0-${MYTIMESTAMP}.exe"
+!define INSTALLER_NAME "OpenQuake_Engine_${PRODUCT_VERSION}.exe"
 !define PRODUCT_ICON "openquake.ico"
+!include "FileFunc.nsh"
  
 SetCompressor lzma
 
@@ -89,10 +91,16 @@ Section "!${PRODUCT_NAME}" sec_app
   ; Byte-compile Python files.
   DetailPrint "Byte-compiling Python modules..."
   nsExec::ExecToLog 'py -2.7-32 -m compileall -q "$INSTDIR\pkgs"'
+  ; nsExec::ExecToLog 'py -2.7-32 -m openquake.server.db.upgrade_manager'
+
   WriteUninstaller $INSTDIR\uninstall.exe
   ; Add ourselves to Add/remove programs
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
                    "DisplayName" "${PRODUCT_NAME}"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
+                   "Publisher" "${PUBLISHER}"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
+                   "DisplayVersion" "${PRODUCT_VERSION}"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
                    "UninstallString" '"$INSTDIR\uninstall.exe"'
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
@@ -103,6 +111,10 @@ Section "!${PRODUCT_NAME}" sec_app
                    "NoModify" 1
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
                    "NoRepair" 1
+  ${GetSize} "$INSTDIR" "/S=0K" $0 $1 $2
+  IntFmt $0 "0x%08X" $0
+  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
+                   "EstimatedSize" "$0"
 
   ; Check if we need to reboot
   IfRebootFlag 0 noreboot
