@@ -90,7 +90,9 @@ Section "!${PRODUCT_NAME}" sec_app
   ; Install shortcuts
   ; The output path becomes the working directory for shortcuts
   SetOutPath "$INSTDIR"
-    CreateShortCut "$SMPROGRAMS\OpenQuake Engine.lnk" "$INSTDIR\oq-server.bat" \
+    CreateShortCut "$SMPROGRAMS\OpenQuake Engine (webui).lnk" "$INSTDIR\oq-server.bat" \
+      "" "$INSTDIR\openquake.ico"
+    CreateShortCut "$SMPROGRAMS\OpenQuake Engine (console).lnk" "$INSTDIR\oq-console.bat" \
       "" "$INSTDIR\openquake.ico"
   SetOutPath "$INSTDIR"
   
@@ -131,7 +133,9 @@ SectionEnd
 
 Section "OpenQuake Engine desktop icon" sec_icon
   SetOutPath "$INSTDIR"
-  CreateShortCut "$DESKTOP\OpenQuake Engine.lnk" "$INSTDIR\oq-server.bat" \
+  CreateShortCut "$DESKTOP\OpenQuake Engine (webui).lnk" "$INSTDIR\oq-server.bat" \
+      "" "$INSTDIR\openquake.ico"
+  CreateShortCut "$DESKTOP\OpenQuake Engine (console).lnk" "$INSTDIR\oq-console.bat" \
       "" "$INSTDIR\openquake.ico"
 SectionEnd
 
@@ -148,7 +152,10 @@ Section "Uninstall"
   ; Uninstall directories
     RMDir /r "$INSTDIR\demos"
   ; Uninstall shortcuts
-      Delete "$SMPROGRAMS\OpenQuake Engine.lnk"
+    Delete "$DESKTOP\OpenQuake Engine (webui).lnk"
+    Delete "$DESKTOP\OpenQuake Engine (console).lnk"
+    Delete "$SMPROGRAMS\OpenQuake Engine (webui).lnk"
+    Delete "$SMPROGRAMS\OpenQuake Engine (console).lnk"
   RMDir $INSTDIR
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 SectionEnd
