@@ -31,6 +31,27 @@ OutFile "${INSTALLER_NAME}"
 InstallDir "$PROGRAMFILES${BITNESS}\${PRODUCT_NAME}"
 ShowInstDetails show
 
+Function .onInit
+ 
+  ReadRegStr $R0 HKLM \
+  "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
+  "UninstallString"
+  StrCmp $R0 "" done
+ 
+  MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
+  "${PRODUCT_NAME} is already installed. $\n$\nClick `OK` to remove the \
+  previous version or `Cancel` to cancel this upgrade." \
+  IDOK uninst
+  Abort
+ 
+;Run the uninstaller
+uninst:
+  ClearErrors
+  Exec $INSTDIR\uninstall.exe
+done:
+
+FunctionEnd
+
 Section -SETTINGS
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
