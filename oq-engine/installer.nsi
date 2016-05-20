@@ -124,6 +124,12 @@ Section "!${PRODUCT_NAME}" sec_app
   noreboot:
 SectionEnd
 
+Section "OpenQuake Engine desktop icon" sec_icon
+  SetOutPath "$INSTDIR"
+  CreateShortCut "$DESKTOP\OpenQuake Engine.lnk" "$INSTDIR\oq-server.bat" \
+      "" "$INSTDIR\openquake.ico"
+SectionEnd
+
 Section "Uninstall"
   SetShellVarContext all
   Delete $INSTDIR\uninstall.exe
@@ -159,11 +165,12 @@ Function .onMouseOverSection
             This is required for ${PRODUCT_NAME} to run."
 
     StrCmp $0 ${sec_app} "" +2
-      SendMessage $R0 ${WM_SETTEXT} 0 "STR:${PRODUCT_NAME}"
+      SendMessage $R0 ${WM_SETTEXT} 0 "STR:The ${PRODUCT_NAME} by GEM."
     
-
-
-    StrCmp $0 ${sec_app} "" +2
+    StrCmp $0 ${sec_pylauncher} "" +2
       SendMessage $R0 ${WM_SETTEXT} 0 "STR:The Python launcher. \
           This is required for ${PRODUCT_NAME} to run."
+
+    StrCmp $0 ${sec_icon} "" +2
+      SendMessage $R0 ${WM_SETTEXT} 0 "STR:The OpenQuake Engine desktop icon."
 FunctionEnd
