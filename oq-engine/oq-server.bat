@@ -23,12 +23,15 @@ call:sleep 2
 REM Start the browser
 start http://localhost:8000
 
+endlocal
+exit /b 0
+
 :sleep 
+setlocal
 if exist C:\Windows\System32\timeout.exe (
     timeout /t %~1 /nobreak > NUL
 ) else (
     REM Windows XP hack
     ping 192.0.2.2 -n %~1 -w 1000 > NUL 
 )
-exit /b 0
 endlocal
