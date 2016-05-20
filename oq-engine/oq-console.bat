@@ -1,13 +1,11 @@
 @echo off
 setlocal
 set mypath=%~dp0
-if "%PROCESSOR_ARCHITECTURE%"=="x86" (
-    set common="%COMMONPROGRAMFILES%"
-) else (
-    set common="%COMMONPROGRAMFILES(x86)%"
-)
-set PATH=%PATH%;%common%\Python\2.7
+set PATH=%PATH%;python2.7
 set PYTHONPATH=pkgs
+
+doskey oq-engine=python.exe -m openquake.engine.bin.openquake_cli %*
+doskey oq-lite=python.exe -m openquake.commonlib.commands %*
 
 echo OpenQuake environment loaded
 cmd /k

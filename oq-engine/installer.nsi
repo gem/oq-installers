@@ -2,8 +2,6 @@
 !define PRODUCT_NAME "OpenQuake Engine"
 !define PRODUCT_VERSION "2.0.0-dev${MYTIMESTAMP}"
 !define PUBLISHER "GEM Foundation"
-!define PY_VERSION "2.7.11"
-!define PY_MAJOR_VERSION "2.7"
 !define BITNESS "32"
 !define ARCH_TAG ""
 !define INSTALLER_NAME "OpenQuake_Engine_${PRODUCT_VERSION}.exe"
@@ -38,42 +36,29 @@ Section -SETTINGS
   SetOverwrite ifnewer
 SectionEnd
 
-Section "PyLauncher" sec_pylauncher
-    ; Check for the existence of the pyw command, skip installing if it exists
-    nsExec::Exec 'where pyw'
-    Pop $0
-    IntCmp $0 0 SkipPylauncher
-    ; Extract the py/pyw launcher msi and run it.
-    File "msi\launchwin${ARCH_TAG}.msi"
-    ExecWait 'msiexec /i "$INSTDIR\launchwin${ARCH_TAG}.msi" /qb ALLUSERS=1'
-    Delete "$INSTDIR\launchwin${ARCH_TAG}.msi"
-    SkipPylauncher:
-SectionEnd
-
-Section "Python ${PY_VERSION}" sec_py
-
-  DetailPrint "Installing Python ${PY_MAJOR_VERSION}, ${BITNESS} bit"
-    File "msi\python-2.7.11.msi"
-    ExecWait 'msiexec /i "$INSTDIR\python-2.7.11.msi" \
-            /qb ALLUSERS=1 TARGETDIR="$COMMONFILES${BITNESS}\Python\${PY_MAJOR_VERSION}"'
-  Delete "$INSTDIR\python-2.7.11.msi"
-SectionEnd
+; Section "Python ${PY_VERSION}" sec_py
+; 
+;   DetailPrint "Installing Python ${PY_MAJOR_VERSION}, ${BITNESS} bit"
+;     File "msi\python-2.7.11.msi"
+;     ExecWait 'msiexec /i "$INSTDIR\python-2.7.11.msi" \
+;             /qb ALLUSERS=1 TARGETDIR="$COMMONFILES${BITNESS}\Python\${PY_MAJOR_VERSION}"'
+;   Delete "$INSTDIR\python-2.7.11.msi"
+; SectionEnd
 
 
 Section "!${PRODUCT_NAME}" sec_app
   SectionIn RO
   SetShellVarContext all
   File ${PRODUCT_ICON}
+  SetOutPath "$INSTDIR\python2.7"
+  File /r "python2.7\*.*"
   SetOutPath "$INSTDIR\pkgs"
   File /r "pkgs\*.*"
   SetOutPath "$INSTDIR"
   
   ; Install files
     SetOutPath "$INSTDIR"
-      File "oq-engine.bat"
       File "openquake.ico"
-      File "oq-engine.bat"
-      File "oq-lite.bat"
       File "oq-server.bat"
       File "oq-console.bat"
   
@@ -90,8 +75,7 @@ Section "!${PRODUCT_NAME}" sec_app
   
   ; Byte-compile Python files.
   DetailPrint "Byte-compiling Python modules..."
-  nsExec::ExecToLog 'py -2.7-32 -m compileall -q "$INSTDIR\pkgs"'
-  ; nsExec::ExecToLog 'py -2.7-32 -m openquake.server.db.upgrade_manager'
+  nsExec::ExecToLog '$INSTDIR\python2.7\python.exe -m compileall -q "$INSTDIR\pkgs"'
 
   WriteUninstaller $INSTDIR\uninstall.exe
   ; Add ourselves to Add/remove programs
@@ -135,11 +119,9 @@ Section "Uninstall"
   Delete $INSTDIR\uninstall.exe
   Delete "$INSTDIR\${PRODUCT_ICON}"
   RMDir /r "$INSTDIR\pkgs"
+  RMDir /r "$INSTDIR\python2.7"
   ; Uninstall files
-    Delete "$INSTDIR\oq-engine.bat"
     Delete "$INSTDIR\openquake.ico"
-    Delete "$INSTDIR\oq-engine.bat"
-    Delete "$INSTDIR\oq-lite.bat"
     Delete "$INSTDIR\oq-server.bat"
     Delete "$INSTDIR\oq-console.bat"
   ; Uninstall directories
@@ -150,9 +132,6 @@ Section "Uninstall"
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 SectionEnd
 
-
-
-
 ; Functions
 
 Function .onMouseOverSection
@@ -160,17 +139,13 @@ Function .onMouseOverSection
     FindWindow $R0 "#32770" "" $HWNDPARENT
     GetDlgItem $R0 $R0 1043 ; description item (must be added to the UI)
 
-    StrCmp $0 ${sec_py} 0 +2
-      SendMessage $R0 ${WM_SETTEXT} 0 "STR:The Python interpreter. \
-            This is required for ${PRODUCT_NAME} to run."
+;    StrCmp $0 ${sec_py} 0 +2
+;      SendMessage $R0 ${WM_SETTEXT} 0 "STR:The Python interpreter. \
+;            This is required for ${PRODUCT_NAME} to run."
 
     StrCmp $0 ${sec_app} "" +2
       SendMessage $R0 ${WM_SETTEXT} 0 "STR:The ${PRODUCT_NAME} by GEM."
     
-    StrCmp $0 ${sec_pylauncher} "" +2
-      SendMessage $R0 ${WM_SETTEXT} 0 "STR:The Python launcher. \
-          This is required for ${PRODUCT_NAME} to run."
-
     StrCmp $0 ${sec_icon} "" +2
       SendMessage $R0 ${WM_SETTEXT} 0 "STR:The OpenQuake Engine desktop icon."
 FunctionEnd
