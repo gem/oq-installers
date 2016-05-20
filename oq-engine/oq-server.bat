@@ -5,7 +5,7 @@ set PYTHONPATH=lib
 set PATH=%PATH%;%mypath%\python2.7
 
 REM Create the DB or update it
-python.exe -m openquake.server.db.upgrade_manager %HOMEPATH%\db.sqlite3
+python.exe -m openquake.server.db.upgrade_manager "%HOMEPATH%\db.sqlite3"
 
 REM Start the DbServer in background but within the same context
 start "OpenQuake DB server" /B python.exe -m openquake.server.dbserver
