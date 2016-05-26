@@ -36,6 +36,7 @@ HSD
 IFS="
 "
 SRC=%_SOURCE_%
+PREFIX=/tmp/build-openquake-dist/qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
 
 for i in sed tar gzip; do
     command -v $i &> /dev/null || {
@@ -72,9 +73,9 @@ fi
 echo "Extracting the archive in $DEST. Please wait."
 tar -C $DEST -xzf $SRC 
 
-SRC_COUNT=${#SRC}
+PREFIX_COUNT=${#PREFIX}
 DEST_COUNT=${#DEST}
-COUNT=$(($SRC_COUNT - $DEST_COUNT))
+COUNT=$(($PREFIX_COUNT - $DEST_COUNT))
 
 for i in $(seq 1 $COUNT); do
     NUL=${NUL}'\x00'
@@ -82,7 +83,7 @@ for i in $(seq 1 $COUNT); do
 done
 
 echo "Finalazing the installation. Please wait."
-find ${DEST}/openquake -type f -exec sed -i ':loop;s@'${SRC}'\([^\x00\x22\x27]*[\x27\x22]\)@'${DEST}'\1'${BLA}'@g;s@'${SRC}'\([^\x00\x22\x27]*\x00\)@'${DEST}'\1'${NUL}'@g;s@'${SRC}'\([^\x00\x22\x27]*\)$@'${DEST}'\1'${BLA}'@g;t loop' "{}" \;
+find ${DEST}/openquake -type f -exec sed -i ':loop;s@'${PREFIX}'\([^\x00\x22\x27]*[\x27\x22]\)@'${DEST}'\1'${BLA}'@g;s@'${PREFIX}'\([^\x00\x22\x27]*\x00\)@'${DEST}'\1'${NUL}'@g;s@'${PREFIX}'\([^\x00\x22\x27]*\)$@'${DEST}'\1'${BLA}'@g;t loop' "{}" \;
 
 echo "Installation completed. To enable it run 'source $DEST/openquake/env.sh'"
 exit 0
