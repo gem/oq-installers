@@ -65,17 +65,19 @@ fi
 if [ -z $DEST -o ! -d $DEST ]; then
     echo -e "!! Please specify a valid destination." >&2
     exit 1
-elif [ -d $DEST/openquake ]; then
-    echo -e "!! An installation already exists in $DEST. Please remove it first." >&2
+fi
+FDEST=$(readlink -e $DEST)
+if [ -d $FDEST/openquake ]; then
+    echo -e "!! An installation already exists in $FDEST. Please remove it first." >&2
     exit 1
 fi
 
-echo "Extracting the archive in $DEST. Please wait."
-tar -C $DEST -xzf $SRC 
+echo "Extracting the archive in $FDEST. Please wait."
+tar -C $FDEST -xzf $SRC
 
 PREFIX_COUNT=${#PREFIX}
-DEST_COUNT=${#DEST}
-COUNT=$(($PREFIX_COUNT - $DEST_COUNT))
+FDEST_COUNT=${#FDEST}
+COUNT=$(($PREFIX_COUNT - $FDEST_COUNT))
 
 for i in $(seq 1 $COUNT); do
     NUL=${NUL}'\x00'
@@ -83,7 +85,7 @@ for i in $(seq 1 $COUNT); do
 done
 
 echo "Finalazing the installation. Please wait."
-find ${DEST}/openquake -type f -exec sed -i ':loop;s@'${PREFIX}'\([^\x00\x22\x27]*[\x27\x22]\)@'${DEST}'\1'${BLA}'@g;s@'${PREFIX}'\([^\x00\x22\x27]*\x00\)@'${DEST}'\1'${NUL}'@g;s@'${PREFIX}'\([^\x00\x22\x27]*\)$@'${DEST}'\1'${BLA}'@g;t loop' "{}" \;
+find ${FDEST}/openquake -type f -exec sed -i ':loop;s@'${PREFIX}'\([^\x00\x22\x27]*[\x27\x22]\)@'${FDEST}'\1'${BLA}'@g;s@'${PREFIX}'\([^\x00\x22\x27]*\x00\)@'${FDEST}'\1'${NUL}'@g;s@'${PREFIX}'\([^\x00\x22\x27]*\)$@'${FDEST}'\1'${BLA}'@g;t loop' "{}" \;
 
-echo "Installation completed. To enable it run 'source $DEST/openquake/env.sh'"
+echo "Installation completed. To enable it run 'source $FDEST/openquake/env.sh'"
 exit 0
