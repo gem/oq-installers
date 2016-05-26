@@ -137,6 +137,6 @@ mkdir $OQ_PREFIX/share/openquake
 cp oq-engine/openquake.cfg $OQ_PREFIX/etc
 cp -R oq-risklib/demos $OQ_PREFIX/share/openquake
 
-tar -C ${OQ_ROOT}/${OQ_REL} -cpzvf opt-openquake-${OQ_ENGINE_DEV}.tar.gz openquake
+tar -C ${OQ_ROOT}/${OQ_REL} -cpzvf openquake-standalone-${OQ_ENGINE_DEV}.tar.gz openquake
 
 exit 0

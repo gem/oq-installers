@@ -26,8 +26,8 @@ help() {
     cat <<HSD
 The command line arguments are as follows:
 
-    -s, --skip-new       The new database will not be created
-    -y, --yes            Don't pause for user input, assume yes on all questions
+    -s, --src            Path to the installation source (.tar.gz)
+    -d, --dest           Path to the destination folder
     -h, --help           This help
 HSD
     exit 0
@@ -69,9 +69,6 @@ elif [ -d $DEST/openquake ]; then
     exit 1
 fi
 
-echo $SRC
-echo $DEST
-
 echo "Extracting the archive in $DEST. Please wait."
 tar -C $DEST -xzf $SRC 
 
@@ -86,11 +83,8 @@ for i in $(seq 1 $COUNT); do
     BLA=${BLA}' ' 
 done
 
-echo $NUL
-echo "'"$BLA"'"
-
 echo "Finisching the installation. Please wait."
-find ${DEST}/openquake -type f -print -exec sed -i ':loop;s@'${SRC}'\([^\x00\x22\x27]*[\x27\x22]\)@'${DEST}'\1'${BLA}'@g;s@'${SRC}'\([^\x00\x22\x27]*\x00\)@'${DEST}'\1'${NUL}'@g;s@'${SRC}'\([^\x00\x22\x27]*\)$@'${DEST}'\1'${BLA}'@g;t loop' "{}" \;
+find ${DEST}/openquake -type f -exec sed -i ':loop;s@'${SRC}'\([^\x00\x22\x27]*[\x27\x22]\)@'${DEST}'\1'${BLA}'@g;s@'${SRC}'\([^\x00\x22\x27]*\x00\)@'${DEST}'\1'${NUL}'@g;s@'${SRC}'\([^\x00\x22\x27]*\)$@'${DEST}'\1'${BLA}'@g;t loop' "{}" \;
 
 echo "Installation cpmpleted. To enable it run 'source $DEST/openquake/env.sh'"
 exit 0
