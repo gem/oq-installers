@@ -47,6 +47,8 @@ fi
 mkdir -p build/src
 mkdir -p $OQ_PREFIX
 
+cp install.sh build/
+
 cd build/src
 
 wget -nc https://www.openssl.org/source/openssl-1.0.2h.tar.gz
@@ -137,6 +139,8 @@ mkdir $OQ_PREFIX/share/openquake
 cp oq-engine/openquake.cfg $OQ_PREFIX/etc
 cp -R oq-risklib/demos $OQ_PREFIX/share/openquake
 
-tar -C ${OQ_ROOT}/${OQ_REL} -cpzvf openquake-standalone-${OQ_ENGINE_DEV}.tar.gz openquake
+tar -C ${OQ_ROOT}/${OQ_REL} -cpzvf openquake-${OQ_ENGINE_DEV}.tar.gz openquake
+sed -i 's/%_SOURCE_%/'openquake-${OQ_ENGINE_DEV}.tar.gz'/g' install.sh
+GZIP=-1 tar -cpzvf openquake-opt-${OQ_ENGINE_DEV}.tar.gz openquake-${OQ_ENGINE_DEV}.tar.gz install.sh
 
 exit 0
