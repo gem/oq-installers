@@ -76,15 +76,13 @@ SRC_COUNT=${#SRC}
 DEST_COUNT=${#DEST}
 COUNT=$(($SRC_COUNT - $DEST_COUNT))
 
-echo $COUNT
-
 for i in $(seq 1 $COUNT); do
     NUL=${NUL}'\x00'
     BLA=${BLA}' ' 
 done
 
-echo "Finisching the installation. Please wait."
+echo "Finalazing the installation. Please wait."
 find ${DEST}/openquake -type f -exec sed -i ':loop;s@'${SRC}'\([^\x00\x22\x27]*[\x27\x22]\)@'${DEST}'\1'${BLA}'@g;s@'${SRC}'\([^\x00\x22\x27]*\x00\)@'${DEST}'\1'${NUL}'@g;s@'${SRC}'\([^\x00\x22\x27]*\)$@'${DEST}'\1'${BLA}'@g;t loop' "{}" \;
 
-echo "Installation cpmpleted. To enable it run 'source $DEST/openquake/env.sh'"
+echo "Installation completed. To enable it run 'source $DEST/openquake/env.sh'"
 exit 0
