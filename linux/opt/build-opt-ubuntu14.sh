@@ -115,6 +115,8 @@ cd ..
 if $CLEANUP; then rm -Rf libgeos-3.5.0; fi
 tar xvf src/3.5.0.tar.gz
 cd libgeos-3.5.0
+# Workaround for an autogen.sh bug
+./autogen.sh || true
 ./autogen.sh
 ./configure --prefix=$OQ_PREFIX
 make
