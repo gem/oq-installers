@@ -27,6 +27,13 @@ OQ_REL=qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
 OQ_PREFIX=${OQ_ROOT}/${OQ_REL}/openquake
 OQ_BRANCH=master
 
+for i in sed tar gzip; do
+    command -v $i &> /dev/null || {
+        echo -e "!! Please install $i first." >&2
+        exit 1
+    }
+done
+
 rm -Rf $OQ_ROOT
 
 #FIXME
@@ -34,11 +41,11 @@ BUILD_OS=ubuntu
 if [ "$BUILD_OS" == "ubuntu" ]; then
     sudo apt-get update
     sudo apt-get upgrade -y
-    sudo apt-get install -y build-essential autoconf libtool libsqlite3-dev libreadline-dev zlib1g-dev libbz2-dev wget xz-utils git
+    sudo apt-get install -y build-essential autoconf libtool libsqlite3-dev libreadline-dev zlib1g-dev libbz2-dev wget xz-utils git which
 elif [ "$BUILD_OS" == "redhat" ]; then
     sudo yum -y upgrade
-    sudo yum groupinstall 'Development Tools'
-    sudo yum install autoconf libtool sqlite-devel readline-devel zlib-devel bzip2-devel wget xz git
+    sudo yum -y groupinstall 'Development Tools'
+    sudo yum -y install autoconf libtool sqlite-devel readline-devel zlib-devel bzip2-devel wget xz git which
 else
     echo "Build OS not uspported"
     exit 1
