@@ -84,7 +84,7 @@ for i in $(seq 1 $COUNT); do
     BLA=${BLA}' ' 
 done
 
-echo "Finalazing the installation. Please wait."
+echo "Finalizing the installation. Please wait."
 find ${FDEST}/openquake -type f -exec sed -i ':loop;s@'${PREFIX}'\([^\x00\x22\x27]*[\x27\x22]\)@'${FDEST}'\1'${BLA}'@g;s@'${PREFIX}'\([^\x00\x22\x27]*\x00\)@'${FDEST}'\1'${NUL}'@g;s@'${PREFIX}'\([^\x00\x22\x27]*\)$@'${FDEST}'\1'${BLA}'@g;t loop' "{}" \;
 
 echo "Installation completed. To enable it run 'source $FDEST/openquake/env.sh'"
