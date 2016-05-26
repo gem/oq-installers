@@ -1,30 +1,51 @@
 #!/bin/bash
+# -*- coding: utf-8 -*-
+# vim: tabstop=4 shiftwidth=4 softtabstop=4
+#
+# Copyright (C) 2010-2016 GEM Foundation
+#
+# OpenQuake is free software: you can redistribute it and/or modify it
+# under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# OpenQuake is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with OpenQuake. If not, see <http://www.gnu.org/licenses/>.
 
-set -x
+if [ $GEM_SET_DEBUG ]; then
+    set -x
+fi
 set -e
 
-OQ_PREFIX=/opt/openquake
+OQ_ROOT=/tmp/build-openquake-dist
+OQ_REL=qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
+OQ_PREFIX=${OQ_ROOT}/${OQ_REL}/openquake
 OQ_BRANCH=master
 
-rm -Rf $OQ_PREFIX
+rm -Rf $OQ_ROOT
 
 #FIXME
 BUILD_OS=ubuntu
 if [ "$BUILD_OS" == "ubuntu" ]; then
-    apt-get update
-    apt-get upgrade -y 
-    apt-get install -y build-essential autoconf libtool libsqlite3-dev libreadline-dev zlib1g-dev libbz2-dev wget xz-utils git
+    sudo apt-get update
+    sudo apt-get upgrade -y
+    sudo apt-get install -y build-essential autoconf libtool libsqlite3-dev libreadline-dev zlib1g-dev libbz2-dev wget xz-utils git
 elif [ "$BUILD_OS" == "redhat" ]; then
-    yum -y upgrade
-    yum groupinstall 'Development Tools'
-    yum install autoconf libtool sqlite-devel readline-devel zlib-devel bzip2-devel wget xz git
+    sudo yum -y upgrade
+    sudo yum groupinstall 'Development Tools'
+    sudo yum install autoconf libtool sqlite-devel readline-devel zlib-devel bzip2-devel wget xz git
 else
     echo "Build OS not uspported"
     exit 1
 fi
 
 mkdir -p build/src
-mkdir $OQ_PREFIX
+mkdir -p $OQ_PREFIX
 
 cd build/src
 
@@ -63,15 +84,16 @@ EOF
 
 source $OQ_PREFIX/env.sh
 
-rm -Rf openssl-1.0.2h
+if $CLEANUP; then rm -Rf openssl-1.0.2h; fi
 tar xvf src/openssl-1.0.2h.tar.gz
 cd openssl-1.0.2h/
 ./config --prefix=$OQ_PREFIX shared
+make depend
 make
 make install
 cd ..
 
-rm -Rf Python-2.7.11
+if $CLEANUP; then rm -Rf Python-2.7.11; fi
 tar xvf src/Python-2.7.11.tar.xz
 cd Python-2.7.11
 ./configure --prefix=$OQ_PREFIX
@@ -79,7 +101,7 @@ make
 make install
 cd ..
 
-rm -Rf hdf5-1.8.17
+if $CLEANUP; then rm -Rf hdf5-1.8.17; fi
 tar xvf src/hdf5-1.8.17.tar.gz
 cd hdf5-1.8.17
 export HDF5_DIR=$OQ_PREFIX
@@ -88,7 +110,7 @@ make
 make install
 cd ..
 
-rm -Rf libgeos-3.5.0
+if $CLEANUP; then rm -Rf libgeos-3.5.0; fi
 tar xvf src/3.5.0.tar.gz
 cd libgeos-3.5.0
 ./autogen.sh
@@ -98,10 +120,11 @@ make install
 cd ..
 
 python src/get-pip.py
-pip install -r $OQ_PREFIX/requirements.txt
+python $(which pip) install -r $OQ_PREFIX/requirements.txt
 
 for g in hazardlib risklib engine;
 do 
+    rm -Rf oq-${g}
     git clone --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-${g}.git
     cd oq-${g}
     declare OQ_${g^^}_DEV=$(git rev-parse --short HEAD)
@@ -114,6 +137,6 @@ mkdir $OQ_PREFIX/share/openquake
 cp oq-engine/openquake.cfg $OQ_PREFIX/etc
 cp -R oq-risklib/demos $OQ_PREFIX/share/openquake
 
-tar -C /opt -cpzvf opt-openquake-${OQ_ENGINE_DEV}.tar.gz openquake
+tar -C ${OQ_ROOT}/${OQ_REL} -cpzvf opt-openquake-${OQ_ENGINE_DEV}.tar.gz openquake
 
 exit 0
