@@ -133,7 +133,7 @@ cd ..
 python src/get-pip.py
 python $(which pip) install -r $OQ_PREFIX/requirements.txt
 
-for g in hazardlib risklib engine;
+for g in hazardlib engine;
 do 
     rm -Rf oq-${g}
     git clone --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-${g}.git
