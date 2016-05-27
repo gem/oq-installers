@@ -41,7 +41,7 @@ BUILD_OS=ubuntu
 if [ "$BUILD_OS" == "ubuntu" ]; then
     sudo apt-get update
     sudo apt-get upgrade -y
-    sudo apt-get install -y build-essential autoconf libtool libsqlite3-dev libreadline-dev zlib1g-dev libbz2-dev wget xz-utils git which
+    sudo apt-get install -y build-essential debianutils autoconf libtool libsqlite3-dev libreadline-dev zlib1g-dev libbz2-dev wget xz-utils git
 elif [ "$BUILD_OS" == "redhat" ]; then
     sudo yum -y upgrade
     sudo yum -y groupinstall 'Development Tools'
