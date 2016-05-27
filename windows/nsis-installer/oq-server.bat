@@ -1,8 +1,9 @@
 @echo off
 setlocal
 set mypath=%~dp0
-set PYTHONPATH=lib
 set PATH=%PATH%;%mypath%\python2.7
+set PYTHONPATH=%mypath%\lib
+set OQ_SITE_CFG_PATH=%mypath%
 
 REM Create the DB or update it
 python.exe -m openquake.server.db.upgrade_manager "%HOMEPATH%\db.sqlite3"
