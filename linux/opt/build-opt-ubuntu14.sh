@@ -144,9 +144,9 @@ do
 done
 
 mkdir $OQ_PREFIX/etc
-mkdir $OQ_PREFIX/share/openquake
+mkdir $OQ_PREFIX/share/openquake/engine
 cp oq-engine/openquake.cfg $OQ_PREFIX/etc
-cp -R oq-risklib/demos $OQ_PREFIX/share/openquake
+cp -R oq-engine/demos $OQ_PREFIX/share/openquake/engine
 
 tar -C ${OQ_ROOT}/${OQ_REL} -cpzvf openquake-${OQ_ENGINE_DEV}.tar.gz openquake
 sed -i 's/%_SOURCE_%/'openquake-${OQ_ENGINE_DEV}.tar.gz'/g' install.sh
