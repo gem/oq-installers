@@ -144,7 +144,7 @@ do
 done
 
 mkdir $OQ_PREFIX/etc
-mkdir $OQ_PREFIX/share/openquake/engine
+mkdir -p $OQ_PREFIX/share/openquake/engine
 cp oq-engine/openquake.cfg $OQ_PREFIX/etc
 cp -R oq-engine/demos $OQ_PREFIX/share/openquake/engine
 
