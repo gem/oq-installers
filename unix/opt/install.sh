@@ -36,7 +36,7 @@ HSD
 IFS="
 "
 #FIXME
-TARGET_OS=linux
+TARGET_OS=%_TOS_%
 SRC=%_SOURCE_%
 PREFIX=/tmp/build-openquake-dist/qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
 
