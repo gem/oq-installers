@@ -22,6 +22,15 @@ if [ $GEM_SET_DEBUG ]; then
 fi
 set -e
 
+check_dep() {
+    for i in $*; do
+        command -v $i &> /dev/null || {
+            echo -e "!! Please install $i first." >&2
+            exit 1
+        }
+    done
+}
+
 #Everyone has at least two cores
 NPROC=2
 OQ_ROOT=/tmp/build-openquake-dist
@@ -42,10 +51,7 @@ elif [ "$BUILD_OS" == "redhat" ]; then
     sudo yum -y groupinstall 'Development Tools'
     sudo yum -y install autoconf bzip2-devel curl git gzip libtool readline-devel sed sqlite-devel tar which xz zlib-devel
 elif [ "$BUILD_OS" == "macosx" ]; then
-    command -v xcode-select &> /dev/null || {
-        echo -e "!! Please install $i first." >&2
-        exit 1
-    }
+    check_dep xcode-select
     sudo xcode-select --install || true
 else
     echo "Build OS not uspported"

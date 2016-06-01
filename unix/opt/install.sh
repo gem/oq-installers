@@ -33,6 +33,15 @@ HSD
     exit 0
 }
 
+check_dep() {
+    for i in $*; do
+        command -v $i &> /dev/null || {
+            echo -e "!! Please install $i first." >&2
+            exit 1
+        }
+    done
+}
+
 realpath() {
     [[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
 }
@@ -44,12 +53,7 @@ TARGET_OS=%_TOS_%
 SRC=%_SOURCE_%
 PREFIX=/tmp/build-openquake-dist/qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
 
-for i in sed tar gzip; do
-    command -v $i &> /dev/null || {
-        echo -e "!! Please install $i first." >&2
-        exit 1
-    }
-done
+check_dep sed tar gzip
 
 if [ -z $1 ]; then
     help
