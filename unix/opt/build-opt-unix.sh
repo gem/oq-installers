@@ -43,11 +43,11 @@ BUILD_OS=ubuntu
 if [ "$BUILD_OS" == "ubuntu" ]; then
     sudo apt-get update
     sudo apt-get upgrade -y
-    sudo apt-get install -y curl build-essential debianutils autoconf libtool libsqlite3-dev libreadline-dev zlib1g-dev libbz2-dev wget xz-utils git
+    sudo apt-get install -y curl build-essential debianutils autoconf libtool libsqlite3-dev libreadline-dev zlib1g-dev libbz2-dev xz-utils git
 elif [ "$BUILD_OS" == "redhat" ]; then
     sudo yum -y upgrade
     sudo yum -y groupinstall 'Development Tools'
-    sudo yum -y install curl autoconf libtool sqlite-devel readline-devel zlib-devel bzip2-devel wget xz git which
+    sudo yum -y install curl autoconf libtool sqlite-devel readline-devel zlib-devel bzip2-devel xz git which
 elif [ "$BUILD_OS" == "macosx" ]; then
     command -v xcode-select &> /dev/null || {
         echo -e "!! Please install $i first." >&2
