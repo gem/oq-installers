@@ -35,6 +35,8 @@ HSD
 
 IFS="
 "
+#FIXME
+TARGET_OS=linux
 SRC=%_SOURCE_%
 PREFIX=/tmp/build-openquake-dist/qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
 
@@ -85,7 +87,12 @@ for i in $(seq 1 $COUNT); do
 done
 
 echo "Finalizing the installation. Please wait."
-find ${FDEST}/openquake -type f -exec sed -i ':loop;s@'${PREFIX}'\([^\x00\x22\x27]*[\x27\x22]\)@'${FDEST}'\1'${BLA}'@g;s@'${PREFIX}'\([^\x00\x22\x27]*\x00\)@'${FDEST}'\1'${NUL}'@g;s@'${PREFIX}'\([^\x00\x22\x27]*\)$@'${FDEST}'\1'${BLA}'@g;t loop' "{}" \;
+REWRITE=":loop;s@${PREFIX}\([^\x00\x22\x27]*[\x27\x22]\)@${FDEST}\1${BLA}@g;s@${PREFIX}\([^\x00\x22\x27]*\x00\)@${FDEST}\1${NUL}@g;s@${PREFIX}\([^\x00\x22\x27]*\)$@${FDEST}\1${BLA}@g;t loop"
+if [ "$BUILD_OS" == "macosx" ]; then
+    find ${FDEST}/openquake -type f -exec sed -i '' $REWRITE "{}" \;
+else
+    find ${FDEST}/openquake -type f -exec sed -i $REWRITE "{}" \;
+fi
 
 echo "Installation completed. To enable it run 'source $FDEST/openquake/env.sh'"
 exit 0
