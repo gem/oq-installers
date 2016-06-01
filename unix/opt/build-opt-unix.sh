@@ -29,13 +29,6 @@ OQ_REL=qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
 OQ_PREFIX=${OQ_ROOT}/${OQ_REL}/openquake
 OQ_BRANCH=master
 
-for i in sed tar gzip; do
-    command -v $i &> /dev/null || {
-        echo -e "!! Please install $i first." >&2
-        exit 1
-    }
-done
-
 rm -Rf $OQ_ROOT
 
 #FIXME
@@ -43,11 +36,11 @@ BUILD_OS=ubuntu
 if [ "$BUILD_OS" == "ubuntu" ]; then
     sudo apt-get update
     sudo apt-get upgrade -y
-    sudo apt-get install -y curl build-essential debianutils autoconf libtool libsqlite3-dev libreadline-dev zlib1g-dev libbz2-dev xz-utils git
+    sudo apt-get install -y autoconf build-essential curl debianutils git gzip libbz2-dev libreadline-dev libsqlite3-dev libtool sed tar xz-utils zlib1g-dev
 elif [ "$BUILD_OS" == "redhat" ]; then
     sudo yum -y upgrade
     sudo yum -y groupinstall 'Development Tools'
-    sudo yum -y install curl autoconf libtool sqlite-devel readline-devel zlib-devel bzip2-devel xz git which
+    sudo yum -y install autoconf bzip2-devel curl git gzip libtool readline-devel sed sqlite-devel tar which xz zlib-devel
 elif [ "$BUILD_OS" == "macosx" ]; then
     command -v xcode-select &> /dev/null || {
         echo -e "!! Please install $i first." >&2
