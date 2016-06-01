@@ -92,7 +92,7 @@ done
 
 echo "Finalizing the installation. Please wait."
 REWRITE=":loop;s@${PREFIX}\([^\x00\x22\x27]*[\x27\x22]\)@${FDEST}\1${BLA}@g;s@${PREFIX}\([^\x00\x22\x27]*\x00\)@${FDEST}\1${NUL}@g;s@${PREFIX}\([^\x00\x22\x27]*\)$@${FDEST}\1${BLA}@g;t loop"
-if [ "$BUILD_OS" == "macosx" ]; then
+if [ "$TARGET_OS" == "macosx" ]; then
     find ${FDEST}/openquake -type f -exec sed -i '' $REWRITE "{}" \;
 else
     find ${FDEST}/openquake -type f -exec sed -i $REWRITE "{}" \;
