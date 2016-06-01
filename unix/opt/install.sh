@@ -33,6 +33,10 @@ HSD
     exit 0
 }
 
+realpath() {
+    [[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
+}
+
 IFS="
 "
 #FIXME
@@ -68,7 +72,7 @@ if [ -z $DEST -o ! -d $DEST ]; then
     echo -e "!! Please specify a valid destination." >&2
     exit 1
 fi
-FDEST=$(readlink -e $DEST)
+FDEST=$(realpath $DEST)
 if [ -d $FDEST/openquake ]; then
     echo -e "!! An installation already exists in $FDEST. Please remove it first." >&2
     exit 1
