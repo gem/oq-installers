@@ -182,10 +182,10 @@ tar -C ${OQ_ROOT}/${OQ_REL} -cpzvf openquake-${OQ_ENGINE_DEV}.tar.gz openquake
 
 OQ_ARCHIVE="s/%_SOURCE_%/openquake-${OQ_ENGINE_DEV}.tar.gz/g" 
 if [ "$BUILD_OS" == "macosx" ]; then
-    sed -i '' '%s/%_TOS_%/macosx/g' install.sh
+    sed -i '' 's/%_TOS_%/macosx/g' install.sh
     sed -i '' $OQ_ARCHIVE install.sh
 else
-    sed -i '%s/%_TOS_%/linux/g' install.sh
+    sed -i 's/%_TOS_%/linux/g' install.sh
     sed -i $OQ_ARCHIVE install.sh
 fi
 GZIP=-1 tar -cpzvf openquake-opt-${OQ_ENGINE_DEV}.tar.gz openquake-${OQ_ENGINE_DEV}.tar.gz install.sh
