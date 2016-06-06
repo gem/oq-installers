@@ -177,9 +177,9 @@ mkdir -p $OQ_PREFIX/share/openquake/engine
 cp oq-engine/openquake.cfg $OQ_PREFIX/etc
 cp -R oq-engine/demos $OQ_PREFIX/share/openquake/engine
 
-tar -C ${OQ_ROOT}/${OQ_REL} -cpzvf openquake-${OQ_ENGINE_DEV}.tar.gz openquake
+tar -C ${OQ_ROOT}/${OQ_REL} -cpzvf openquake-bin-${BUILD_OS}-${OQ_ENGINE_DEV}.tar.gz openquake
 
-OQ_ARCHIVE="s/%_SOURCE_%/openquake-${OQ_ENGINE_DEV}.tar.gz/g" 
+OQ_ARCHIVE="s/%_SOURCE_%/openquake-bin-${BUILD_OS}-${OQ_ENGINE_DEV}.tar.gz/g"
 if [ "$BUILD_OS" == "macosx" ]; then
     sed -i '' 's/%_TOS_%/macosx/g' install.sh
     sed -i '' $OQ_ARCHIVE install.sh
@@ -187,6 +187,6 @@ else
     sed -i 's/%_TOS_%/linux/g' install.sh
     sed -i $OQ_ARCHIVE install.sh
 fi
-GZIP=-1 tar -cpzvf openquake-opt-${OQ_ENGINE_DEV}.tar.gz openquake-${OQ_ENGINE_DEV}.tar.gz install.sh
+GZIP=-1 tar -cpzvf openquake-setup-${BUILD_OS}-${OQ_ENGINE_DEV}.tar.gz openquake-bin-${BUILD_OS}-${OQ_ENGINE_DEV}.tar.gz install.sh
 
 exit 0
