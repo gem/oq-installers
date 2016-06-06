@@ -25,10 +25,15 @@ set -e
 check_dep() {
     for i in $*; do
         command -v $i &> /dev/null || {
-            echo -e "!! Please install $i first." >&2
+            echo -e "!! Please install $i first. Aborting." >&2
             exit 1
         }
     done
+}
+
+not_supported() {
+    echo "!! This operating system is not uspported. Aborting." >&2
+    exit 1
 }
 
 if [ $GEM_SET_NPROC ]; then
@@ -44,22 +49,30 @@ OQ_BRANCH=master
 
 rm -Rf $OQ_ROOT
 
-#FIXME
-BUILD_OS=ubuntu
-if [ "$BUILD_OS" == "ubuntu" ]; then
-    sudo apt-get update
-    sudo apt-get upgrade -y
-    sudo apt-get install -y autoconf build-essential curl debianutils git gzip libbz2-dev libreadline-dev libsqlite3-dev libtool sed tar xz-utils zlib1g-dev
-elif [ "$BUILD_OS" == "redhat" ]; then
-    sudo yum -y upgrade
-    sudo yum -y groupinstall 'Development Tools'
-    sudo yum -y install autoconf bzip2-devel curl git gzip libtool readline-devel sed sqlite-devel tar which xz zlib-devel
-elif [ "$BUILD_OS" == "macosx" ]; then
+
+if [ $(echo $OSTYPE | grep -q linux) ]; then
+    BUILD_OS=linux
+    #FIXME
+    VENDOR=ubuntu
+    if [ "$VENDOR" == "ubuntu" ]; then
+        sudo apt-get update
+        sudo apt-get upgrade -y
+        sudo apt-get install -y autoconf build-essential curl debianutils git gzip libbz2-dev libreadline-dev libsqlite3-dev libtool sed tar xz-utils zlib1g-dev
+    elif [ "$VENDOR" == "redhat" ]; then
+        sudo yum -y upgrade
+        sudo yum -y groupinstall 'Development Tools'
+        sudo yum -y install autoconf bzip2-devel curl git gzip libtool readline-devel sed sqlite-devel tar which xz zlib-devel
+    else
+        not_supported
+    fi
+
+elif [ $(echo $OSTYPE | grep -q darwin) ]; then
+    BUILD_OS=macosx
     check_dep xcode-select
     sudo xcode-select --install || true
+
 else
-    echo "Build OS not uspported"
-    exit 1
+    not_supported
 fi
 
 mkdir -p build/src
@@ -74,7 +87,7 @@ curl -LOz Python-2.7.11.tar.xz https://www.python.org/ftp/python/2.7.11/Python-2
 curl -LOz hdf5-1.8.17.tar.gz http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.17.tar.gz
 curl -LOz get-pip.py https://bootstrap.pypa.io/get-pip.py
 
-if [ "$BUILD_OS" != "macosx" ]; then
+if [ "$BUILD_OS" == "linux" ]; then
     curl -LOz 3.5.0.tar.gz https://github.com/libgeos/libgeos/archive/3.5.0.tar.gz
 fi
 
@@ -147,7 +160,7 @@ make -j $NPROC
 make install
 cd ..
 
-if [ "$BUILD_OS" != "macosx" ]; then
+if [ "$BUILD_OS" == "linux" ]; then
     if $CLEANUP; then rm -Rf libgeos-3.5.0; fi
     tar xvf src/3.5.0.tar.gz
     cd libgeos-3.5.0
