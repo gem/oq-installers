@@ -52,8 +52,11 @@ rm -Rf $OQ_ROOT
 
 if $(echo $OSTYPE | grep -q linux); then
     BUILD_OS=linux
-    #FIXME
-    VENDOR=ubuntu
+    if [ $GEM_SET_VENDOR ]; then
+        VENDOR=$GEM_SET_VENDOR
+    else
+        VENDOR=ubuntu
+    fi
     if [ "$VENDOR" == "ubuntu" ]; then
         sudo apt-get update
         sudo apt-get upgrade -y
