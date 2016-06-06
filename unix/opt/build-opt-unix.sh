@@ -60,11 +60,11 @@ if $(echo $OSTYPE | grep -q linux); then
     if [ "$VENDOR" == "ubuntu" ]; then
         sudo apt-get update
         sudo apt-get upgrade -y
-        sudo apt-get install -y autoconf build-essential curl debianutils git gzip libbz2-dev libreadline-dev libsqlite3-dev libtool sed tar xz-utils zlib1g-dev
+        sudo apt-get install -y autoconf build-essential curl debianutils git gzip libbz2-dev libreadline-dev libsqlite3-dev libtool tar xz-utils zlib1g-dev
     elif [ "$VENDOR" == "redhat" ]; then
         sudo yum -y upgrade
         sudo yum -y groupinstall 'Development Tools'
-        sudo yum -y install autoconf bzip2-devel curl git gzip libtool readline-devel sed sqlite-devel tar which xz zlib-devel
+        sudo yum -y install autoconf bzip2-devel curl git gzip libtool readline-devel sqlite-devel tar which xz zlib-devel
     else
         not_supported
     fi
@@ -134,7 +134,7 @@ fi
 source $OQ_PREFIX/env.sh
 
 if $CLEANUP; then rm -Rf sed-4.2.2; fi
-tar xvf src/sed-4.2.2.tar.xz
+tar xvf src/sed-4.2.2.tar.gz
 cd sed-4.2.2
 ./configure --prefix=$OQ_PREFIX
 make -j $NPROC
