@@ -31,8 +31,12 @@ check_dep() {
     done
 }
 
-#Everyone has at least two cores
-NPROC=2
+if [ $GEM_SET_NPROC ]; then
+    NPROC=$GEM_SET_NPROC
+else
+    #Everyone has at least two cores
+    NPROC=2
+fi
 OQ_ROOT=/tmp/build-openquake-dist
 OQ_REL=qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
 OQ_PREFIX=${OQ_ROOT}/${OQ_REL}/openquake
