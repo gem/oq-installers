@@ -49,7 +49,6 @@ realpath() {
 IFS="
 "
 #FIXME
-TARGET_OS=%_TOS_%
 SRC=%_SOURCE_%
 PREFIX=/tmp/build-openquake-dist/qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
 
@@ -97,11 +96,7 @@ done
 echo "Finalizing the installation. Please wait."
 
 REWRITE=':loop;s@'${PREFIX}'\([^\x00\x22\x27]*[\x27\x22]\)@'${FDEST}'\1'${BLA}'@g;s@'${PREFIX}'\([^\x00\x22\x27]*\x00\)@'${FDEST}'\1'${NUL}'@g;s@'${PREFIX}'\([^\x00\x22\x27]*\)$@'${FDEST}'\1'${BLA}'@g;t loop'
-if [ "$TARGET_OS" == "macosx" ]; then
-    find ${FDEST}/openquake -type f -exec sed -i '' $REWRITE "{}" \;
-else
-    find ${FDEST}/openquake -type f -exec sed -i $REWRITE "{}" \;
-fi
+find ${FDEST}/openquake -type f -exec ${FDEST}/openquake/bin/sed -i $REWRITE "{}" \;
 
 echo "Installation completed. To enable it run 'source $FDEST/openquake/env.sh'"
 exit 0

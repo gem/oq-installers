@@ -84,6 +84,7 @@ cp install.sh build/
 
 cd build/src
 
+curl -LOz sed-4.2.2.tar.gz http://ftp.gnu.org/gnu/sed/sed-4.2.2.tar.gz
 curl -LOz openssl-1.0.2h.tar.gz https://www.openssl.org/source/openssl-1.0.2h.tar.gz
 curl -LOz Python-2.7.11.tar.xz https://www.python.org/ftp/python/2.7.11/Python-2.7.11.tar.xz
 curl -LOz hdf5-1.8.17.tar.gz http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.17.tar.gz
@@ -131,6 +132,14 @@ EOF
 fi
 
 source $OQ_PREFIX/env.sh
+
+if $CLEANUP; then rm -Rf sed-4.2.2; fi
+tar xvf src/sed-4.2.2.tar.xz
+cd sed-4.2.2
+./configure --prefix=$OQ_PREFIX
+make -j $NPROC
+make install
+cd ..
 
 if $CLEANUP; then rm -Rf openssl-1.0.2h; fi
 tar xvf src/openssl-1.0.2h.tar.gz
@@ -199,13 +208,7 @@ cp -R oq-engine/demos $OQ_PREFIX/share/openquake/engine
 tar -C ${OQ_ROOT}/${OQ_REL} -cpzvf openquake-bin-${BUILD_OS}-${OQ_ENGINE_DEV}.tar.gz openquake
 
 OQ_ARCHIVE="s/%_SOURCE_%/openquake-bin-${BUILD_OS}-${OQ_ENGINE_DEV}.tar.gz/g"
-if [ "$BUILD_OS" == "macosx" ]; then
-    sed -i '' 's/%_TOS_%/macosx/g' install.sh
-    sed -i '' $OQ_ARCHIVE install.sh
-else
-    sed -i 's/%_TOS_%/linux/g' install.sh
-    sed -i $OQ_ARCHIVE install.sh
-fi
+${OQ_PREFIX}/bin/sed -i $OQ_ARCHIVE install.sh
 GZIP=-1 tar -cpzvf openquake-setup-${BUILD_OS}-${OQ_ENGINE_DEV}.tar.gz openquake-bin-${BUILD_OS}-${OQ_ENGINE_DEV}.tar.gz install.sh
 
 exit 0
