@@ -50,7 +50,7 @@ OQ_BRANCH=master
 rm -Rf $OQ_ROOT
 
 
-if [ $(echo $OSTYPE | grep -q linux) ]; then
+if $(echo $OSTYPE | grep -q linux); then
     BUILD_OS=linux
     #FIXME
     VENDOR=ubuntu
@@ -65,8 +65,7 @@ if [ $(echo $OSTYPE | grep -q linux) ]; then
     else
         not_supported
     fi
-
-elif [ $(echo $OSTYPE | grep -q darwin) ]; then
+elif $(echo $OSTYPE | grep -q darwin); then
     BUILD_OS=macosx
     check_dep xcode-select
     sudo xcode-select --install || true
