@@ -69,7 +69,7 @@ if [ -d $FDEST/openquake ]; then
     exit 1
 fi
 
-echo "Copying the files in $FDEST. Please wait."
+echo "Copying the files in $FDEST/openquake. Please wait."
 cp -R $SRC $FDEST
 
 PREFIX_COUNT=${#PREFIX}
