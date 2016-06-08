@@ -70,7 +70,7 @@ if $(echo $OSTYPE | grep -q linux); then
     fi
 elif $(echo $OSTYPE | grep -q darwin); then
     BUILD_OS=macosx
-    check_dep xcode-select
+    check_dep xcode-select makeself
     sudo xcode-select --install || true
 
 else
