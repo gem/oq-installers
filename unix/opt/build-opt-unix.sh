@@ -204,7 +204,7 @@ mkdir $OQ_PREFIX/etc
 mkdir -p $OQ_PREFIX/share/openquake/engine
 cp oq-engine/openquake.cfg $OQ_PREFIX/etc
 cp -R oq-engine/demos $OQ_PREFIX/share/openquake/engine
-cp install.sh $OQ_REL
+cp install.sh ${OQ_ROOT}/${OQ_REL}
 
 makeself ${OQ_ROOT}/${OQ_REL} openquake-setup-${BUILD_OS}-${OQ_ENGINE_DEV}.run "installer for the OpenQuake Engine" ./install.sh
 
