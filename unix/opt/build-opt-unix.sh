@@ -60,11 +60,11 @@ if $(echo $OSTYPE | grep -q linux); then
     if [ "$VENDOR" == "ubuntu" ]; then
         sudo apt-get update
         sudo apt-get upgrade -y
-        sudo apt-get install -y autoconf build-essential curl debianutils git gzip libbz2-dev libreadline-dev libsqlite3-dev libtool tar xz-utils zlib1g-dev
+        sudo apt-get install -y autoconf build-essential curl debianutils git gzip libbz2-dev libreadline-dev libsqlite3-dev libtool makeself tar xz-utils zlib1g-dev
     elif [ "$VENDOR" == "redhat" ]; then
         sudo yum -y upgrade
         sudo yum -y groupinstall 'Development Tools'
-        sudo yum -y install autoconf bzip2-devel curl git gzip libtool readline-devel sqlite-devel tar which xz zlib-devel
+        sudo yum -y install autoconf bzip2-devel curl git gzip libtool makeself readline-devel sqlite-devel tar which xz zlib-devel
     else
         not_supported
     fi
@@ -204,11 +204,8 @@ mkdir $OQ_PREFIX/etc
 mkdir -p $OQ_PREFIX/share/openquake/engine
 cp oq-engine/openquake.cfg $OQ_PREFIX/etc
 cp -R oq-engine/demos $OQ_PREFIX/share/openquake/engine
+cp install.sh $OQ_REL
 
-tar -C ${OQ_ROOT}/${OQ_REL} -cpzvf openquake-bin-${BUILD_OS}-${OQ_ENGINE_DEV}.tar.gz openquake
-
-OQ_ARCHIVE="s/%_SOURCE_%/openquake-bin-${BUILD_OS}-${OQ_ENGINE_DEV}.tar.gz/g"
-${OQ_PREFIX}/bin/sed -i $OQ_ARCHIVE install.sh
-GZIP=-1 tar -cpzvf openquake-setup-${BUILD_OS}-${OQ_ENGINE_DEV}.tar.gz openquake-bin-${BUILD_OS}-${OQ_ENGINE_DEV}.tar.gz install.sh
+makeself $OQ_REL openquake-setup-${BUILD_OS}-${OQ_ENGINE_DEV}.run "installer for the OpenQuake Engine" ./install.sh
 
 exit 0
