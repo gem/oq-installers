@@ -59,8 +59,8 @@ if [ ! -d $SRC ]; then
     exit 1
 fi
 if [ -z $DEST ]; then
-
-    echo -n "Type the path where you want to install OpenQuake, followed by [ENTER]: "
+    PROMPT="Type the path where you want to install OpenQuake, followed by [ENTER]: "
+    read -e -p "$PROMPT" -i "$HOME" DEST
     read DEST
 fi
 FDEST=$(realpath "$DEST")
