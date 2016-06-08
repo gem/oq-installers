@@ -33,17 +33,26 @@ HSD
     exit 0
 }
 
+check_dep() {
+    for i in $*; do
+        command -v $i &> /dev/null || {
+            echo -e "!! Please install $i first." >&2
+            exit 1
+        }
+    done
+}
+
+realpath() {
+    [[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
+}
+
 IFS="
 "
+#FIXME
 SRC=%_SOURCE_%
 PREFIX=/tmp/build-openquake-dist/qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
 
-for i in sed tar gzip; do
-    command -v $i &> /dev/null || {
-        echo -e "!! Please install $i first." >&2
-        exit 1
-    }
-done
+check_dep tar gzip
 
 if [ -z $1 ]; then
     help
@@ -66,7 +75,7 @@ if [ -z $DEST -o ! -d $DEST ]; then
     echo -e "!! Please specify a valid destination." >&2
     exit 1
 fi
-FDEST=$(readlink -e $DEST)
+FDEST=$(realpath $DEST)
 if [ -d $FDEST/openquake ]; then
     echo -e "!! An installation already exists in $FDEST. Please remove it first." >&2
     exit 1
@@ -85,7 +94,9 @@ for i in $(seq 1 $COUNT); do
 done
 
 echo "Finalizing the installation. Please wait."
-find ${FDEST}/openquake -type f -exec sed -i ':loop;s@'${PREFIX}'\([^\x00\x22\x27]*[\x27\x22]\)@'${FDEST}'\1'${BLA}'@g;s@'${PREFIX}'\([^\x00\x22\x27]*\x00\)@'${FDEST}'\1'${NUL}'@g;s@'${PREFIX}'\([^\x00\x22\x27]*\)$@'${FDEST}'\1'${BLA}'@g;t loop' "{}" \;
+
+REWRITE=':loop;s@'${PREFIX}'\([^\x00\x22\x27]*[\x27\x22]\)@'${FDEST}'\1'${BLA}'@g;s@'${PREFIX}'\([^\x00\x22\x27]*\x00\)@'${FDEST}'\1'${NUL}'@g;s@'${PREFIX}'\([^\x00\x22\x27]*\)$@'${FDEST}'\1'${BLA}'@g;t loop'
+find ${FDEST}/openquake -type f -exec ${FDEST}/openquake/bin/sed -i $REWRITE "{}" \;
 
 echo "Installation completed. To enable it run 'source $FDEST/openquake/env.sh'"
 exit 0
