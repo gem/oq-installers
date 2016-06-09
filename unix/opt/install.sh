@@ -33,30 +33,17 @@ HSD
     exit 0
 }
 
-check_dep() {
-    for i in $*; do
-        command -v $i &> /dev/null || {
-            echo -e "!! Please install $i first." >&2
-            exit 1
-        }
-    done
-}
-
 realpath() {
-    [[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
+    cd $(eval echo "$1") &>/dev/null && pwd || {
+        echo -e "!! Please specify a valid destination." >&2
+        exit 1
+    }
 }
 
 IFS="
 "
-#FIXME
-SRC=%_SOURCE_%
+SRC=openquake
 PREFIX=/tmp/build-openquake-dist/qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
-
-check_dep tar gzip
-
-if [ -z $1 ]; then
-    help
-fi
 
 while (( "$#" )); do
     case "$1" in
@@ -67,22 +54,23 @@ while (( "$#" )); do
     shift
 done
 
-if [ ! -f $SRC ]; then
+if [ ! -d $SRC ]; then
     echo -e "!! Please specify a valid source." >&2
     exit 1
 fi
-if [ -z $DEST -o ! -d $DEST ]; then
-    echo -e "!! Please specify a valid destination." >&2
-    exit 1
+if [ -z $DEST ]; then
+    PROMPT="Type the path where you want to install OpenQuake, followed by [ENTER]: "
+    read -e -p "$PROMPT" -i "$HOME" DEST
+    read DEST
 fi
-FDEST=$(realpath $DEST)
+FDEST=$(realpath "$DEST")
 if [ -d $FDEST/openquake ]; then
     echo -e "!! An installation already exists in $FDEST. Please remove it first." >&2
     exit 1
 fi
 
-echo "Extracting the archive in $FDEST. Please wait."
-tar -C $FDEST -xzf $SRC
+echo "Copying the files in $FDEST/openquake. Please wait."
+cp -R $SRC $FDEST
 
 PREFIX_COUNT=${#PREFIX}
 FDEST_COUNT=${#FDEST}
