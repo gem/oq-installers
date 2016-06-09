@@ -123,6 +123,7 @@ export LD_LIBRARY_PATH=\${PREFIX}/lib
 export CPATH=\${PREFIX}/include
 export PATH=\${PREFIX}/bin:\${PATH}
 export OQ_SITE_CFG_PATH=\${PREFIX}/etc/openquake.cfg
+export PS1=(openquake)\${PS1}
 EOF
 if [ "$BUILD_OS" == "macosx" ]; then
     cat <<EOF >> $OQ_PREFIX/env.sh
