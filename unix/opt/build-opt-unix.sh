@@ -69,7 +69,7 @@ if $(echo $OSTYPE | grep -q linux); then
         not_supported
     fi
 elif $(echo $OSTYPE | grep -q darwin); then
-    BUILD_OS=macosx
+    BUILD_OS=macos
     check_dep xcode-select makeself
     sudo xcode-select --install || true
 
@@ -125,7 +125,7 @@ export PATH=\${PREFIX}/bin:\${PATH}
 export OQ_SITE_CFG_PATH=\${PREFIX}/etc/openquake.cfg
 export PS1=(openquake)\${PS1}
 EOF
-if [ "$BUILD_OS" == "macosx" ]; then
+if [ "$BUILD_OS" == "macos" ]; then
     cat <<EOF >> $OQ_PREFIX/env.sh
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
@@ -145,7 +145,7 @@ cd ..
 if $CLEANUP; then rm -Rf openssl-1.0.2h; fi
 tar xvf src/openssl-1.0.2h.tar.gz
 cd openssl-1.0.2h/
-if [ "$BUILD_OS" == "macosx" ]; then
+if [ "$BUILD_OS" == "macos" ]; then
     ./Configure darwin64-x86_64-cc shared enable-ec_nistp_64_gcc_128 no-ssl2 no-ssl3 no-comp --prefix=$OQ_PREFIX
 else
     ./config shared --prefix=$OQ_PREFIX
