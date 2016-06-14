@@ -59,7 +59,7 @@ if [ ! -d $SRC ]; then
     exit 1
 fi
 if [ -z $DEST ]; then
-    PROMPT="Type the path where you want to install OpenQuake, followed by [ENTER]. Otherwise leave blank, it will installed in $HOME: "
+    PROMPT="Type the path where you want to install OpenQuake, followed by [ENTER]. Otherwise leave blank, it will be installed in $HOME: "
     read -e -p "$PROMPT" DEST
     [ -z "$DEST" ] && DEST=$HOME
 fi
