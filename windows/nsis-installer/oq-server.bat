@@ -4,6 +4,8 @@ set mypath=%~dp0
 set PATH=%PATH%;%mypath%\python2.7
 set PYTHONPATH=%mypath%\lib
 set OQ_SITE_CFG_PATH=%mypath%
+set OQ_HOST=127.0.0.1
+set OQ_PORT=8800
 
 echo Please wait ...
 REM Start the DbServer in background but within the same context
@@ -13,13 +15,13 @@ REM Make sure that the dbserver is up and running
 call:sleep 5
 
 REM Start the WebUI using django
-start "OpenQuake WebUI server" /B python.exe -m openquake.server.manage runserver %*
+start "OpenQuake WebUI server" /B python.exe -m openquake.server.manage runserver %OQ_HOST%:%OQ_PORT%
 
 REM Make sure that the dbserver is up and running
 call:sleep 2
 
 REM Start the browser
-start http://localhost:8000
+start http://localhost:%OQ_PORT%
 
 endlocal
 exit /b 0
