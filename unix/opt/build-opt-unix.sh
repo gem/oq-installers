@@ -87,7 +87,7 @@ cd build/src
 curl -LOz sed-4.2.2.tar.gz http://ftp.gnu.org/gnu/sed/sed-4.2.2.tar.gz
 curl -LOz openssl-1.0.2h.tar.gz https://www.openssl.org/source/openssl-1.0.2h.tar.gz
 curl -LOz Python-2.7.11.tar.xz https://www.python.org/ftp/python/2.7.11/Python-2.7.11.tar.xz
-curl -LOz hdf5-1.8.17.tar.gz http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.17.tar.gz
+curl -LOz hdf5-1.8.11.tar.gz https://www.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8.11/src/hdf5-1.8.11.tar.gz
 curl -LOz get-pip.py https://bootstrap.pypa.io/get-pip.py
 
 if [ "$BUILD_OS" == "linux" ]; then
@@ -101,8 +101,10 @@ pkgconfig==1.1.0
 Cython==0.23.4
 futures==3.0.5
 mock==1.3.0
-# h5py must be installed after everything elese
-# to avoid SSL errors on MacOS X
+# h5py must be installed after everything else
+# to avoid SSL errors on MacOS X.
+# Use h5py 2.2.1 (same as Trusty) since h5py >= 2.4 is unstable
+# with the WebUI. See: https://github.com/gem/oq-engine/issues/2103
 # h5py==2.6.0
 nose==1.3.7
 numpy==1.11.0
@@ -163,9 +165,9 @@ make -j $NPROC
 make install
 cd ..
 
-if $CLEANUP; then rm -Rf hdf5-1.8.17; fi
-tar xvf src/hdf5-1.8.17.tar.gz
-cd hdf5-1.8.17
+if $CLEANUP; then rm -Rf hdf5-1.8.11; fi
+tar xvf src/hdf5-1.8.11.tar.gz
+cd hdf5-1.8.11
 export HDF5_DIR=$OQ_PREFIX
 ./configure --prefix=$OQ_PREFIX
 make -j $NPROC
@@ -185,11 +187,16 @@ if [ "$BUILD_OS" == "linux" ]; then
     cd ..
 fi
 
+# cleanup pip's cache
+rm -Rf $HOME/.cache/pip
+
 python src/get-pip.py
 python $(which pip) install -r $OQ_PREFIX/requirements.txt
-# h5py must be installed after everything elese
-# to avoid SSL errors on MacOS X
-python $(which pip) install h5py==2.6.0
+# h5py must be installed after everything else
+# to avoid SSL errors on MacOS X.
+# Use h5py 2.2.1 (same as Trusty) since h5py >= 2.4 is unstable
+# with the WebUI. See: https://github.com/gem/oq-engine/issues/2103
+python $(which pip) install h5py==2.2.1
 
 for g in hazardlib engine;
 do 
