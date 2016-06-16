@@ -101,8 +101,10 @@ pkgconfig==1.1.0
 Cython==0.23.4
 futures==3.0.5
 mock==1.3.0
-# h5py must be installed after everything elese
-# to avoid SSL errors on MacOS X
+# h5py must be installed after everything else
+# to avoid SSL errors on MacOS X.
+# Use h5py 2.2.1 (same as Trusty) since h5py >= 2.3 is unstable
+# with the WebUI. See: https://github.com/gem/oq-engine/issues/2103
 # h5py==2.6.0
 nose==1.3.7
 numpy==1.11.0
@@ -187,9 +189,11 @@ fi
 
 python src/get-pip.py
 python $(which pip) install -r $OQ_PREFIX/requirements.txt
-# h5py must be installed after everything elese
-# to avoid SSL errors on MacOS X
-python $(which pip) install h5py==2.6.0
+# h5py must be installed after everything else
+# to avoid SSL errors on MacOS X.
+# Use h5py 2.2.1 (same as Trusty) since h5py >= 2.3 is unstable
+# with the WebUI. See: https://github.com/gem/oq-engine/issues/2103
+python $(which pip) install h5py==2.2.1
 
 for g in hazardlib engine;
 do 
