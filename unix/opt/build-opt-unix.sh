@@ -103,7 +103,7 @@ futures==3.0.5
 mock==1.3.0
 # h5py must be installed after everything else
 # to avoid SSL errors on MacOS X.
-# Use h5py 2.2.1 (same as Trusty) since h5py >= 2.3 is unstable
+# Use h5py 2.2.1 (same as Trusty) since h5py >= 2.4 is unstable
 # with the WebUI. See: https://github.com/gem/oq-engine/issues/2103
 # h5py==2.6.0
 nose==1.3.7
@@ -187,11 +187,14 @@ if [ "$BUILD_OS" == "linux" ]; then
     cd ..
 fi
 
+# cleanup pip's cache
+rm -Rf $HOME/.cache/pip
+
 python src/get-pip.py
 python $(which pip) install -r $OQ_PREFIX/requirements.txt
 # h5py must be installed after everything else
 # to avoid SSL errors on MacOS X.
-# Use h5py 2.2.1 (same as Trusty) since h5py >= 2.3 is unstable
+# Use h5py 2.2.1 (same as Trusty) since h5py >= 2.4 is unstable
 # with the WebUI. See: https://github.com/gem/oq-engine/issues/2103
 python $(which pip) install h5py==2.2.1
 
