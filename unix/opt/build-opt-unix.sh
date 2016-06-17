@@ -32,7 +32,7 @@ check_dep() {
 }
 
 not_supported() {
-    echo "!! This operating system is not uspported. Aborting." >&2
+    echo "!! This operating system is not unsupported. Aborting." >&2
     exit 1
 }
 
@@ -46,6 +46,7 @@ OQ_ROOT=/tmp/build-openquake-dist
 OQ_REL=qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
 OQ_PREFIX=${OQ_ROOT}/${OQ_REL}/openquake
 OQ_BRANCH=master
+CLEANUP=true
 
 rm -Rf $OQ_ROOT
 
@@ -101,7 +102,7 @@ pkgconfig==1.1.0
 Cython==0.23.4
 futures==3.0.5
 mock==1.3.0
-# h5py must be installed after everything elese
+# h5py must be installed after everything else
 # to avoid SSL errors on MacOS X
 # h5py==2.6.0
 nose==1.3.7
@@ -133,6 +134,8 @@ EOF
 fi
 
 source $OQ_PREFIX/env.sh
+
+if $CLEANUP; then rm -Rf $HOME/.cache/pip fi
 
 if $CLEANUP; then rm -Rf sed-4.2.2; fi
 tar xvf src/sed-4.2.2.tar.gz
@@ -187,7 +190,7 @@ fi
 
 python src/get-pip.py
 python $(which pip) install -r $OQ_PREFIX/requirements.txt
-# h5py must be installed after everything elese
+# h5py must be installed after everything else
 # to avoid SSL errors on MacOS X
 python $(which pip) install h5py==2.6.0
 
