@@ -214,6 +214,6 @@ rm -Rf $OQ_PREFIX/share/openquake/engine/doc/sphinx
 # utils is not copied for now, since it does not contain anything useful here
 cp install.sh ${OQ_ROOT}/${OQ_REL}
 
-makeself ${OQ_ROOT}/${OQ_REL} openquake-setup-${BUILD_OS}-${OQ_ENGINE_DEV}.run "installer for the OpenQuake Engine" ./install.sh
+makeself ${OQ_ROOT}/${OQ_REL} ../openquake-setup-${BUILD_OS}-${OQ_ENGINE_DEV}.run "installer for the OpenQuake Engine" ./install.sh
 
 exit 0
