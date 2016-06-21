@@ -135,7 +135,7 @@ fi
 
 source $OQ_PREFIX/env.sh
 
-if $CLEANUP; then rm -Rf $HOME/.cache/pip fi
+if $CLEANUP; then rm -Rf $HOME/.cache/pip; fi
 
 if $CLEANUP; then rm -Rf sed-4.2.2; fi
 tar xvf src/sed-4.2.2.tar.gz
