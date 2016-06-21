@@ -206,8 +206,11 @@ done
 
 mkdir $OQ_PREFIX/etc
 mkdir -p $OQ_PREFIX/share/openquake/engine
+cp oq-engine/README.md oq-engine/LICENSE $OQ_PREFIX
 cp oq-engine/openquake.cfg $OQ_PREFIX/etc
 cp -R oq-engine/demos $OQ_PREFIX/share/openquake/engine
+cp -R oq-engine/doc $OQ_PREFIX/share/openquake/engine
+rm -Rf $OQ_PREFIX/share/openquake/engine/doc/sphinx
 # utils is not copied for now, since it does not contain anything useful here
 cp install.sh ${OQ_ROOT}/${OQ_REL}
 

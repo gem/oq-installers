@@ -79,6 +79,8 @@ Section "!${PRODUCT_NAME}" sec_app
   
   ; Install files
     SetOutPath "$INSTDIR"
+      File "LICENSE.txt"
+      File "README.txt"
       File "openquake.ico"
       File "oq-server.bat"
       File "oq-console.bat"
@@ -146,6 +148,8 @@ Section "Uninstall"
   RMDir /r "$INSTDIR\lib"
   RMDir /r "$INSTDIR\python2.7"
   ; Uninstall files
+    Delete "$INSTDIR\README.txt"
+    Delete "$INSTDIR\LICENSE.txt"
     Delete "$INSTDIR\openquake.ico"
     Delete "$INSTDIR\oq-server.bat"
     Delete "$INSTDIR\oq-console.bat"
