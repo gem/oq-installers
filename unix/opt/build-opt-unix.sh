@@ -52,11 +52,11 @@ rm -Rf $OQ_ROOT
 
 
 if $(echo $OSTYPE | grep -q linux); then
-    BUILD_OS=linux
+    BUILD_OS='linux64'
     if [ $GEM_SET_VENDOR ]; then
         VENDOR=$GEM_SET_VENDOR
     else
-        VENDOR=ubuntu
+        VENDOR='ubuntu'
     fi
     if [ "$VENDOR" == "ubuntu" ]; then
         sudo apt-get update
@@ -70,7 +70,7 @@ if $(echo $OSTYPE | grep -q linux); then
         not_supported
     fi
 elif $(echo $OSTYPE | grep -q darwin); then
-    BUILD_OS=macos
+    BUILD_OS='macos'
     check_dep xcode-select makeself
     sudo xcode-select --install || true
 
@@ -91,7 +91,7 @@ curl -LOz Python-2.7.11.tar.xz https://www.python.org/ftp/python/2.7.11/Python-2
 curl -LOz hdf5-1.8.17.tar.gz http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.17.tar.gz
 curl -LOz get-pip.py https://bootstrap.pypa.io/get-pip.py
 
-if [ "$BUILD_OS" == "linux" ]; then
+if [ "$BUILD_OS" == "linux64" ]; then
     curl -LOz 3.5.0.tar.gz https://github.com/libgeos/libgeos/archive/3.5.0.tar.gz
 fi
 
