@@ -161,7 +161,7 @@ cd ..
 if $CLEANUP; then rm -Rf Python-2.7.11; fi
 tar xvf src/Python-2.7.11.tar.xz
 cd Python-2.7.11
-./configure --prefix=$OQ_PREFIX
+./configure --prefix=$OQ_PREFIX --enable-unicode=ucs4
 make -j $NPROC
 make install
 cd ..
