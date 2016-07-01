@@ -175,7 +175,7 @@ make -j $NPROC
 make install
 cd ..
 
-if [ "$BUILD_OS" == "linux" ]; then
+if [ "$BUILD_OS" == "linux64" ]; then
     if $CLEANUP; then rm -Rf libgeos-3.5.0; fi
     tar xvf src/3.5.0.tar.gz
     cd libgeos-3.5.0
