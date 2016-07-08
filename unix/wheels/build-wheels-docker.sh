@@ -37,6 +37,7 @@ mkdir -p $OQ_PREFIX/src
 
 cd $OQ_PREFIX/src
 
+# Get sources
 curl -Lo libgeos-3.5.0.tar.gz https://github.com/libgeos/libgeos/archive/3.5.0.tar.gz
 curl -LO http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.17.tar.gz
 curl -LO https://pypi.python.org/packages/22/82/64dada5382a60471f85f16eb7d01cc1a9620aea855cd665609adf6fdbb0d/h5py-2.6.0.tar.gz
@@ -68,8 +69,12 @@ tar xzf h5py-2.6.0.tar.gz
 tar xzf Shapely-1.5.13.tar.gz
 
 # Compile wheels
+# Exclude cp26 and cp33 because binary wheels are not available
+# for numpy and we do not support those versions
 for PYBIN in /opt/python/cp{27,34,35}*/bin; do
+    # Download python dependencies
     ${PYBIN}/pip install numpy==1.11.1 Cython==0.23.4
+    # Build wheels
     cd h5py-2.6.0; ${PYBIN}/python setup.py bdist_wheel -d wheelhouse/; cd ..
     cd Shapely-1.5.13; ${PYBIN}/python setup.py bdist_wheel -d wheelhouse/; cd ..
 done
