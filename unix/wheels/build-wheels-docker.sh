@@ -76,7 +76,7 @@ for PYBIN in /opt/python/cp{27,35}*/bin; do
     # Download python dependencies
     ${PYBIN}/pip install numpy==1.11.1 Cython==0.23.4
     # Build wheels
-    for py in *; do
+    for py in $(ls *|grep wheelhouse); do
         cd $py
         rm -Rf build dist
         ${PYBIN}/python setup.py bdist_wheel -d ../wheelhouse/
