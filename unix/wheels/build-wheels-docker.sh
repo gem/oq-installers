@@ -75,8 +75,8 @@ for PYBIN in /opt/python/cp{27,34,35}*/bin; do
     # Download python dependencies
     ${PYBIN}/pip install numpy==1.11.1 Cython==0.23.4
     # Build wheels
-    cd h5py-2.6.0; ${PYBIN}/python setup.py bdist_wheel -d wheelhouse/; cd ..
-    cd Shapely-1.5.13; ${PYBIN}/python setup.py bdist_wheel -d wheelhouse/; cd ..
+    cd h5py-2.6.0; ${PYBIN}/python setup.py bdist_wheel -d ../wheelhouse/; cd ..
+    cd Shapely-1.5.13; ${PYBIN}/python setup.py bdist_wheel -d ../wheelhouse/; cd ..
 done
 
 # Bundle external shared libraries into the wheels
