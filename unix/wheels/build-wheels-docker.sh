@@ -65,18 +65,23 @@ make -j $NPROC
 make install
 cd ..
 
-tar xzf h5py-2.6.0.tar.gz
-tar xzf Shapely-1.5.13.tar.gz
+mkdir py && cd py
+tar xzf ../h5py-2.6.0.tar.gz
+tar xzf ../Shapely-1.5.13.tar.gz
 
 # Compile wheels
-# Exclude cp26 and cp33 because binary wheels are not available
-# for numpy and we do not support those versions
-for PYBIN in /opt/python/cp{27,34,35}*/bin; do
+# Exclude cp26, cp33 and cp34 because binary wheels are not
+# available for numpy and/or we do not support those versions
+for PYBIN in /opt/python/cp{27,35}*/bin; do
     # Download python dependencies
     ${PYBIN}/pip install numpy==1.11.1 Cython==0.23.4
     # Build wheels
-    cd h5py-2.6.0; ${PYBIN}/python setup.py bdist_wheel -d ../wheelhouse/; cd ..
-    cd Shapely-1.5.13; ${PYBIN}/python setup.py bdist_wheel -d ../wheelhouse/; cd ..
+    for py in *; do
+        cd $py
+        rm -Rf build dist
+        ${PYBIN}/python setup.py bdist_wheel -d ../wheelhouse/
+        cd ..
+    done
 done
 
 # Bundle external shared libraries into the wheels
