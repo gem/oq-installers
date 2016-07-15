@@ -3,7 +3,7 @@
 ### Automatic build
 
 ```bash
-sudo docker run --rm -v $(pwd):/io ubuntu:14.04 [-e GEM_SET_BRANCH='master'] /io/build-opt-unix.sh
+sudo docker run --rm -v $(pwd):/io ubuntu:14.04 /io/build-opt-unix.sh [-e GEM_SET_BRANCH='master']
 ```
 
 ### Manual build
