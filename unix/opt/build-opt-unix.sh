@@ -42,6 +42,7 @@ else
     #Everyone has at least two cores
     NPROC=2
 fi
+OQ_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 OQ_ROOT=/tmp/build-openquake-dist
 OQ_REL=qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
 OQ_PREFIX=${OQ_ROOT}/${OQ_REL}/openquake
@@ -49,7 +50,7 @@ OQ_BRANCH=master
 CLEANUP=true
 
 rm -Rf $OQ_ROOT
-
+cd $OQ_DIR
 
 if $(echo $OSTYPE | grep -q linux); then
     BUILD_OS='linux64'
