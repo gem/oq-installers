@@ -51,7 +51,6 @@ fi
 if [ $GEM_SET_BRANCH ]; then
     OQ_BRANCH=$GEM_SET_BRANCH
 else
-    #Everyone has at least two cores
     OQ_BRANCH=master
 fi
 
