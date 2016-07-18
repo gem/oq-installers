@@ -71,6 +71,9 @@ for i in ../py*.tar.gz; do
     tar xzf $i
 done
 
+# Apply geos wheel patch to Shapely
+cd Shapely-1.5.13; patch -p1 < /io/shapely-geos-wheel.patch; cd ..
+
 # Compile wheels
 # Exclude cp26, cp33 and cp34 because binary wheels are not
 # available for numpy and/or we do not support those versions
