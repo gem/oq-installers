@@ -40,8 +40,9 @@ cd $OQ_PREFIX/src
 # Get sources
 curl -Lo libgeos-3.5.0.tar.gz https://github.com/libgeos/libgeos/archive/3.5.0.tar.gz
 curl -LO http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.17.tar.gz
-curl -LO https://pypi.python.org/packages/22/82/64dada5382a60471f85f16eb7d01cc1a9620aea855cd665609adf6fdbb0d/h5py-2.6.0.tar.gz
-curl -LO https://pypi.python.org/packages/ad/f9/4640d50324635fbdc7b109f8ef37de5f04456b89ed175cf2f71ae05efd8f/Shapely-1.5.13.tar.gz
+curl -Lo py-h5py-2.6.0.tar.gz https://pypi.python.org/packages/source/h/h5py/h5py-2.6.0.tar.gz
+curl -Lo py-shapely-1.5.13.tar.gz https://pypi.python.org/packages/source/S/Shapely/Shapely-1.5.13.tar.gz
+curl -Lo py-psutil-3.4.2.tar.gz https://pypi.python.org/packages/source/p/psutil/psutil-3.4.2.tar.gz
 
 export LD_LIBRARY_PATH=${OQ_PREFIX}/lib
 export CPATH=${OQ_PREFIX}/include
@@ -66,8 +67,9 @@ make install
 cd ..
 
 mkdir py && cd py
-tar xzf ../h5py-2.6.0.tar.gz
-tar xzf ../Shapely-1.5.13.tar.gz
+for i in ../py*.tar.gz; do
+    tar xzf $i
+done
 
 # Compile wheels
 # Exclude cp26, cp33 and cp34 because binary wheels are not
