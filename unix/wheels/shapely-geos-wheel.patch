@@ -1,3 +1,8 @@
+Derived from:
+https://github.com/Toblerity/Shapely/commit/884f9921d348016afaab923e022ebc2d65856fc9.patch
+
+---
+
 diff --git a/shapely/geos.py b/shapely/geos.py
 index 97b535e..ee27cba 100644
 --- a/shapely/geos.py
