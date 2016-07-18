@@ -22,7 +22,7 @@ if [ $GEM_SET_DEBUG ]; then
 fi
 set -e
 
-yum -y install autoconf curl gzip libtool tar unzip
+yum -y install autoconf curl gzip libtool patch tar unzip
 
 if [ $GEM_SET_NPROC ]; then
     NPROC=$GEM_SET_NPROC
