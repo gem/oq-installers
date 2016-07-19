@@ -110,11 +110,11 @@ do
     declare OQ_$(echo $g | tr '[:lower:]' '[:upper:]')_DEV=$(git rev-parse --short HEAD)
     cd ..
 done
-cp -R oq-engine/{README.md,LICENSE,openquake.cfg,demos,doc} $OQ_ROOT/dist
+cp -R $OQ_ROOT/oq-engine/{README.md,LICENSE,openquake.cfg,demos,doc} $OQ_ROOT/dist
 rm -Rf $OQ_ROOT/dist/doc/sphinx
 ## utils is not copied for now, since it does not contain anything useful here
-cp install.sh ${OQ_ROOT}/dist
+cp $OQ_DIR/install.sh ${OQ_ROOT}/dist
 
-makeself ${OQ_ROOT}/${dist} ../openquake-py27-${BUILD_OS}-${OQ_ENGINE_DEV}.run "installer for the OpenQuake Engine" ./install.sh
+makeself ${OQ_ROOT}/dist ../openquake-py27-${BUILD_OS}-${OQ_ENGINE_DEV}.run "installer for the OpenQuake Engine" ./install.sh
 
 exit 0
