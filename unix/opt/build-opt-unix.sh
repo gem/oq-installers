@@ -36,20 +36,26 @@ not_supported() {
     exit 1
 }
 
+OQ_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+OQ_ROOT=/tmp/build-openquake-dist
+OQ_REL=qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
+OQ_PREFIX=${OQ_ROOT}/${OQ_REL}/openquake
+CLEANUP=true
+
 if [ $GEM_SET_NPROC ]; then
     NPROC=$GEM_SET_NPROC
 else
     #Everyone has at least two cores
     NPROC=2
 fi
-OQ_ROOT=/tmp/build-openquake-dist
-OQ_REL=qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
-OQ_PREFIX=${OQ_ROOT}/${OQ_REL}/openquake
-OQ_BRANCH=master
-CLEANUP=true
+if [ $GEM_SET_BRANCH ]; then
+    OQ_BRANCH=$GEM_SET_BRANCH
+else
+    OQ_BRANCH=master
+fi
 
 rm -Rf $OQ_ROOT
-
+cd $OQ_DIR
 
 if $(echo $OSTYPE | grep -q linux); then
     BUILD_OS='linux64'
