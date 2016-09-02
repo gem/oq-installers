@@ -3,7 +3,7 @@ MAINTAINER Daniele Viganò <daniele@vigano.me>
 
 RUN apt-get update
 RUN apt-get upgrade -y
-RUN apt-get install -y software-properties-common git
+RUN apt-get install -y software-properties-common python-setuptools python-nose git
 RUN add-apt-repository -y ppa:openquake-automatic-team/latest-master
 # FIXME this is a workaround
 RUN sed -i 's/xenial/trusty/g' /etc/apt/sources.list.d/openquake-automatic-team-ubuntu-latest-master-xenial.list

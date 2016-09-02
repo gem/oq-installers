@@ -3,7 +3,7 @@ MAINTAINER Daniele Viganò <daniele@vigano.me>
 
 RUN apt-get update
 RUN apt-get upgrade -y
-RUN apt-get install -y python-software-properties git
+RUN apt-get install -y python-software-properties python-setuptools python-nose python-mock git
 RUN add-apt-repository -y ppa:openquake-automatic-team/latest-master
 
 RUN apt-get update
