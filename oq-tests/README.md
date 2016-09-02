@@ -26,6 +26,11 @@ Currently runs only `oq-hazardlib` and `oq-engine`.
 >$ sudo docker run -i -t openquake-centos7 /bin/bash
 ```
 
+### Force deps upgrade
+
+```bash
+>$ sudo docker run -e "upgrade=yes" -i -t openquake-centos7
+```
 
 ## Disclaimer ##
 

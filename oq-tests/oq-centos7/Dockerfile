@@ -2,14 +2,16 @@ FROM centos:centos7
 MAINTAINER Daniele Viganò <daniele@openquake.org>
 
 RUN yum -y upgrade
-RUN yum -y install epel-release git gcc
+RUN yum -y install epel-release sudo git gcc
 RUN curl -sLo /etc/yum.repos.d/gem-openquake-epel-7.repo https://copr.fedorainfracloud.org/coprs/gem/openquake/repo/epel-7/gem-openquake-epel-7.repo
 
 RUN yum deplist python-oq-engine | grep provider | \
 awk '{print $2}' | sort | uniq | grep -v python-oq | \
 sed ':a;N;$!ba;s/\n/ /g' | xargs yum -y install
 
-RUN useradd -u 1000 openquake
+RUN useradd -u 1000 openquake && \
+echo 'openquake ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
 USER openquake
 ENV HOME /home/openquake
 ENV PYTHONPATH $HOME/oq-engine:$HOME/oq-hazardlib

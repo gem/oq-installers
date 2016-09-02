@@ -3,7 +3,7 @@ MAINTAINER Daniele Viganò <daniele@openquake.org>
 
 RUN apt-get update
 RUN apt-get upgrade -y
-RUN apt-get install -y python-software-properties python-setuptools git
+RUN apt-get install -y sudo python-software-properties python-setuptools git
 RUN add-apt-repository -y ppa:openquake-automatic-team/latest-master
 
 RUN apt-get update
@@ -11,7 +11,9 @@ RUN apt-cache depends python-oq-hazardlib | awk '/Depends:/{print$2}' | grep -vE
 RUN apt-cache depends python-oq-engine | awk '/Depends:/{print$2}' | grep -vE 'python-oq.*|debconf.*' | xargs apt-get install -y
 RUN apt-get install -y python-django16
 
-RUN adduser --system openquake
+RUN adduser --system openquake && \
+echo 'openquake ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
 USER openquake
 ENV HOME /home/openquake
 ENV PYTHONPATH $HOME/oq-engine:$HOME/oq-hazardlib
