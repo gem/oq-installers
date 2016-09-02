@@ -11,5 +11,5 @@ for l in oq-hazardlib oq-engine; do
         git checkout $branch
     fi;
     git pull
-    /usr/bin/nosetests -v -a '!slow'
+    $(which nosetests) -v -a '!slow'
 done
