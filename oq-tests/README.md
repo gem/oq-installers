@@ -29,4 +29,4 @@ Currently runs only `oq-hazardlib` and `oq-engine`.
 
 ## Disclaimer ##
 
-This work is experimental and is not supported by GEM nor the OpenQuake development team.
+This work is experimental and is not supported by GEM. Use at your own risk.
