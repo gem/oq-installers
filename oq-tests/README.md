@@ -5,20 +5,27 @@ Currently runs only `oq-hazardlib` and `oq-engine`.
 ## Build images ##
 
 ```bash
->$ sudo docker build --rm=true -t openquake-f23 -f oq-fedora23/Dockerfile .
+>$ sudo docker build --rm=true -t openquake-centos7 -f oq-centos7/Dockerfile .
 ```
 
 ## Run a container ##
 
 ```bash
->$ sudo docker run -i -t openquake-f23
+>$ sudo docker run -i -t openquake-centos7
 ```
 
 ### Run a custom branch
 
 ```bash
->$ sudo docker run -e "branch=mybranch" -i -t openquake-f23
+>$ sudo docker run -e "branch=mybranch" -i -t openquake-centos7
 ```
+
+### Run in debug mode (run `/bin/bash`)
+
+```bash
+>$ sudo docker run -i -t openquake-centos7 /bin/bash
+```
+
 
 ## Disclaimer ##
 
