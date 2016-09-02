@@ -7,8 +7,8 @@ RUN apt-get install -y python-software-properties python-setuptools git
 RUN add-apt-repository -y ppa:openquake-automatic-team/latest-master
 
 RUN apt-get update
-RUN apt-cache depends python-oq-hazardlib | awk '/Depends:/{print$2}' | grep -v python-oq | xargs apt-get install -y
-RUN apt-cache depends python-oq-engine | awk '/Depends:/{print$2}' | grep -v python-oq | xargs apt-get install -y
+RUN apt-cache depends python-oq-hazardlib | awk '/Depends:/{print$2}' | grep -vE 'python-oq.*|debconf.*' | xargs apt-get install -y
+RUN apt-cache depends python-oq-engine | awk '/Depends:/{print$2}' | grep -vE 'python-oq.*|debconf.*' | xargs apt-get install -y
 
 RUN adduser --system openquake
 USER openquake
