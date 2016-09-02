@@ -1,5 +1,5 @@
 FROM fedora:latest
-MAINTAINER Daniele Viganò <daniele@vigano.me>
+MAINTAINER Daniele Viganò <daniele@openquake.org>
 
 RUN dnf -y upgrade
 RUN dnf -y install findutils git gcc redhat-rpm-config

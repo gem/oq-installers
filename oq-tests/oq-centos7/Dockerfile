@@ -1,5 +1,5 @@
 FROM centos:centos7
-MAINTAINER Daniele Viganò <daniele@vigano.me>
+MAINTAINER Daniele Viganò <daniele@openquake.org>
 
 RUN yum -y upgrade
 RUN yum -y install epel-release git gcc

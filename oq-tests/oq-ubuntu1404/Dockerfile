@@ -1,5 +1,5 @@
 FROM ubuntu:trusty
-MAINTAINER Daniele Viganò <daniele@vigano.me>
+MAINTAINER Daniele Viganò <daniele@openquake.org>
 
 RUN apt-get update
 RUN apt-get upgrade -y
