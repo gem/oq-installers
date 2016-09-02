@@ -8,7 +8,7 @@ This repo contains several dockfiles to run the full suite of test for the OpenQ
 - CentOS 7
 - Fedora
 
-Tests are full automatic and run inside Docker containers. See [oq-tests/README.md](README.md).
+Tests are fully automatic and run inside Docker containers. See [oq-tests/README.md](README.md).
 
 Powered by
 <img src="https://upload.wikimedia.org/wikipedia/commons/7/79/Docker_%28container_engine%29_logo.png" width="100px">
