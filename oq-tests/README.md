@@ -1,6 +1,6 @@
 # Testing OpenQuake on Docker #
 
-Currently runs only `oq-hazardlib` and `oq-risklib`.
+Currently runs only `oq-hazardlib` and `oq-engine`.
 
 ## Build images ##
 
