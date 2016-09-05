@@ -16,6 +16,8 @@ fi
 ## $branch is a variable set via
 ## -e "branch=myoq"
 
+oq-engine/bin/oq dbserver start
+
 for l in oq-hazardlib oq-engine; do
     echo "RUN $l tests"
     cd ${HOME}/${l}
