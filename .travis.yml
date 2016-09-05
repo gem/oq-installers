@@ -7,8 +7,7 @@ services:
 
 install:
     - cd oq-tests && docker build --rm=true -t oq-centos7 -f oq-centos7/Dockerfile .
-    - docker run --rm=true -i -t oq-centos7 
 
 script:
-    - docker ps | grep -q blog
+    - docker run --rm=true -i -t oq-centos7 
 
