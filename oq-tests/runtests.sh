@@ -19,13 +19,19 @@ fi
 # start the dbserver in background
 oq-engine/bin/oq dbserver start &
 
+# update the sources first at (almost)
+# the same time to avoid out of sync
 for l in oq-hazardlib oq-engine; do
-    echo "RUN $l tests"
     cd ${HOME}/${l}
     git fetch
     if [ -z $branch ]; then
         git checkout $branch
     fi;
     git pull
+done
+
+# run tests
+for l in oq-hazardlib oq-engine; do
+    echo "RUN $l tests"
     nosetests -v -a '!slow'
 done
