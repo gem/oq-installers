@@ -1,4 +1,4 @@
-# Docker for OpenQuake
+# Docker for OpenQuake <img src="https://travis-ci.org/gem/oq-docker.svg">
 
 <img align="left" src="https://www.globalquakemodel.org/media/storage/oq-logo.png" width="400px">
 
