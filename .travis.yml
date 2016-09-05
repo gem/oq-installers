@@ -9,5 +9,5 @@ install:
     - cd oq-tests && docker build --rm=true -t oq-centos7 -f oq-centos7/Dockerfile .
 
 script:
-    - docker run --rm=true -i -t oq-centos7 
+    - docker run --rm=true -i -t oq-centos7 ./runtests.sh
 
