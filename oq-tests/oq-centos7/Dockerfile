@@ -26,4 +26,4 @@ RUN cd oq-hazardlib ; \
     ln -s ../../../build/lib.*/openquake/hazardlib/geo/*.so .
 ADD runtests.sh ${HOME}
 
-CMD /bin/bash runtests.sh
+CMD /bin/bash

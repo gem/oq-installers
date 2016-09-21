@@ -20,10 +20,10 @@ Currently runs only `oq-hazardlib` and `oq-engine`.
 >$ sudo docker run -e "branch=mybranch" -i -t openquake-centos7
 ```
 
-### Run in debug mode (run `/bin/bash`)
+### Run the tests
 
 ```bash
->$ sudo docker run -i -t openquake-centos7 /bin/bash
+>$ sudo docker run -i -t openquake-centos7 ./runtests.sh
 ```
 
 ### Force deps upgrade
