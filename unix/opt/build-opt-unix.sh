@@ -67,11 +67,12 @@ if $(echo $OSTYPE | grep -q linux); then
     if [ "$VENDOR" == "ubuntu" ]; then
         sudo apt-get update
         sudo apt-get upgrade -y
-        sudo apt-get install -y autoconf build-essential curl debianutils git gzip libbz2-dev libreadline-dev libsqlite3-dev libtool makeself tar xz-utils zlib1g-dev
+        sudo apt-get install -y autoconf build-essential curl debianutils git gzip libbz2-dev libreadline-dev libspatialindex-dev libsqlite3-dev libtool makeself tar xz-utils zlib1g-dev
     elif [ "$VENDOR" == "redhat" ]; then
-        sudo yum -y upgrade
-        sudo yum -y groupinstall 'Development Tools'
-        sudo yum -y install autoconf bzip2-devel curl git gzip libtool makeself readline-devel sqlite-devel tar which xz zlib-devel
+        yum -y upgrade
+        yum -y groupinstall 'Development Tools'
+        yum -y install epel-release
+        yum -y install autoconf bzip2-devel curl git gzip libtool makeself readline-devel spatialindex-devel sqlite-devel tar which xz zlib-devel
     else
         not_supported
     fi
@@ -106,21 +107,26 @@ cd ..
 cat <<EOF >> $OQ_PREFIX/requirements.txt
 pkgconfig==1.1.0
 Cython==0.23.4
-futures==3.0.5
 mock==1.3.0
 # h5py must be installed after everything else
 # to avoid SSL errors on MacOS X
 # h5py==2.6.0
 nose==1.3.7
-numpy==1.11.0
-pbr==1.8.0
+numpy==1.11.1
+scipy==0.17.1
 psutil==3.4.2
-scipy==0.17.0
 shapely==1.5.13
-six==1.10.0
-django==1.8.7
 docutils==0.12
-decorator==4.0.6
+decorator==4.0.10
+funcsigs==1.0.2
+pbr==1.8.0
+six==1.10.0
+futures==3.0.5
+django==1.8.7
+requests==2.9.1
+pyshp==1.2.3
+#Rtree needs a patch to work with a custom LD_LIBRARY_PATH
+#Rtree==0.8.2
 EOF
 
 cat <<EOF >> $OQ_PREFIX/env.sh
