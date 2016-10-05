@@ -8,23 +8,26 @@ set OQ_HOST=127.0.0.1
 set OQ_PORT=8800
 
 echo Please wait ...
-REM Start the DbServer in background but within the same context
-start "OpenQuake DB server" /B python.exe -m openquake.server.dbserver
-
-REM Make sure that the dbserver is up and running
-call:sleep 5
-
 REM Start the WebUI using django
-start "OpenQuake WebUI server" /B python.exe -m openquake.server.manage runserver %OQ_HOST%:%OQ_PORT%
+start "OpenQuake WebUI server" /B python.exe -m openquake.commands webui start %OQ_HOST%:%OQ_PORT%
 
 REM Make sure that the dbserver is up and running
-call:sleep 2
+call:check_django
 
 REM Start the browser
 start http://localhost:%OQ_PORT%
 
 endlocal
 exit /b 0
+
+
+:check_django
+setlocal
+ping -n 1 %OQ_HOST
+if ERRORLEVEL 1
+    goto check_django
+endlocal
+
 
 :sleep 
 setlocal
