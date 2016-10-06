@@ -1,6 +1,6 @@
 ## OpenQuake installers for Windows ##
 
-Work in progress. Not suitable for production. Use at your own risk.
+Work in progress.
 
 ### Requirements
 
