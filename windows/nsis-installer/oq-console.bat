@@ -1,7 +1,7 @@
 @echo off
 setlocal
 set mypath=%~dp0
-set PATH=%mypath%\python2.7\Scripts;%mypath%\python2.7;%PATH%
+set PATH=%mypath%\python2.7;%PATH%
 set PYTHONPATH=%mypath%\lib
 set OQ_SITE_CFG_PATH=%mypath%\openquake.cfg
 
