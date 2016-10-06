@@ -21,6 +21,7 @@ Microsoft Windows is not required.
 - `cd oq-engine; wine python setup.py build --compiler=mingw32`
 - copy build
 - copy `demos` and the `openquake.cfg` from oq-engine to the project root
+- run NSINS:` wine $WINEPREFIX/drive_c/Program\ Files/NSIS/makensis.exe installer.nsi`
 
 ### Open issues
 
