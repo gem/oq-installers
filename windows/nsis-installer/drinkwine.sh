@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export WINEDEBUG=-all
+export WINEDEBUG=-all,+fixme-ntdll
 export WINEARCH="win32"
 
 if ! wine --version | grep -q wine-1.9; then
