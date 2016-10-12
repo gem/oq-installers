@@ -62,17 +62,17 @@ if $(echo $OSTYPE | grep -q linux); then
     if [ $GEM_SET_VENDOR ]; then
         VENDOR=$GEM_SET_VENDOR
     else
-        VENDOR='ubuntu'
+        VENDOR='redhat'
     fi
-    if [ "$VENDOR" == "ubuntu" ]; then
-        sudo apt-get update
-        sudo apt-get upgrade -y
-        sudo apt-get install -y autoconf build-essential curl debianutils git gzip libbz2-dev libreadline-dev libspatialindex-dev libsqlite3-dev libtool makeself tar xz-utils zlib1g-dev
-    elif [ "$VENDOR" == "redhat" ]; then
+    if [ "$VENDOR" == "redhat" ]; then
         yum -y upgrade
         yum -y groupinstall 'Development Tools'
         yum -y install epel-release
         yum -y install autoconf bzip2-devel curl git gzip libtool makeself readline-devel spatialindex-devel sqlite-devel tar which xz zlib-devel
+    elif [ "$VENDOR" == "ubuntu" ]; then
+        sudo apt-get update
+        sudo apt-get upgrade -y
+        sudo apt-get install -y autoconf build-essential curl debianutils git gzip libbz2-dev libreadline-dev libspatialindex-dev libsqlite3-dev libtool makeself tar xz-utils zlib1g-dev
     else
         not_supported
     fi
@@ -96,6 +96,8 @@ curl -LOz sed-4.2.2.tar.gz http://ftp.gnu.org/gnu/sed/sed-4.2.2.tar.gz
 curl -LOz openssl-1.0.2h.tar.gz https://www.openssl.org/source/openssl-1.0.2h.tar.gz
 curl -LOz Python-2.7.11.tar.xz https://www.python.org/ftp/python/2.7.11/Python-2.7.11.tar.xz
 curl -LOz hdf5-1.8.17.tar.gz http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.17.tar.gz
+curl -LOz libspatialindex-1.8.5.tar.gz https://github.com/libspatialindex/libspatialindex/archive/1.8.5.tar.gz
+      src/libspatialindex-1.8.5.tar.gz
 curl -LOz get-pip.py https://bootstrap.pypa.io/get-pip.py
 
 if [ "$BUILD_OS" == "linux64" ]; then
@@ -125,8 +127,8 @@ futures==3.0.5
 django==1.8.7
 requests==2.9.1
 pyshp==1.2.3
-#Rtree needs a patch to work with a custom LD_LIBRARY_PATH
-#Rtree==0.8.2
+#Rtree needs master to work with a custom LD_LIBRARY_PATH
+https://github.com/Toblerity/rtree/archive/master.zip
 EOF
 
 cat <<EOF >> $OQ_PREFIX/env.sh
@@ -135,6 +137,7 @@ PREFIX=$OQ_PREFIX
 export LD_LIBRARY_PATH=\${PREFIX}/lib
 export CPATH=\${PREFIX}/include
 export PATH=\${PREFIX}/bin:\${PATH}
+export SPATIALINDEX_LIBRARY=\$LD_LIBRARY_PATH
 export OQ_SITE_CFG_PATH=\${PREFIX}/etc/openquake.cfg
 export PS1=(openquake)\${PS1}
 EOF
@@ -182,6 +185,16 @@ if $CLEANUP; then rm -Rf hdf5-1.8.17; fi
 tar xvf src/hdf5-1.8.17.tar.gz
 cd hdf5-1.8.17
 export HDF5_DIR=$OQ_PREFIX
+./configure --prefix=$OQ_PREFIX
+make -j $NPROC
+make install
+cd ..
+
+if $CLEANUP; then rm -Rf libspatialindex-1.8.5; fi
+tar xvf src/libspatialindex-1.8.5.tar.gz
+cd libspatialindex-1.8.5
+./autogen.sh || true
+./autogen.sh
 ./configure --prefix=$OQ_PREFIX
 make -j $NPROC
 make install
