@@ -2,7 +2,7 @@
 !define PRODUCT_NAME "OpenQuake Engine"
 !define RELEASE "2.1.0"
 !define DEVELOP "-dev${MYTIMESTAMP}"
-!define PRODUCT_VERSION "${RELEASE}"
+!define PRODUCT_VERSION "${RELEASE}${DEVELOP}"
 !define PUBLISHER "GEM Foundation"
 !define BITNESS "32"
 !define ARCH_TAG ""
