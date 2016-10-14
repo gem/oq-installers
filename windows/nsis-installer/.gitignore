@@ -1,4 +1,7 @@
+src/*
+*.msi
 *.exe
 openquake.cfg
 README.txt
 README.md
+README.html

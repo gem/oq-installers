@@ -9,7 +9,7 @@ doskey oq=python.exe -m openquake.commands.__main__ $*
 doskey oq-engine=python.exe -m openquake.commands.__main__ engine $*
 
 echo OpenQuake environment loaded
-echo The command 'oq-engine' is deprecated and will be removed. Please use 'oq engine' instead
+echo To run OpenQuake use 'oq' and 'oq engine'
 cmd /k
 
 endlocal
