@@ -96,7 +96,8 @@ curl -LOz sed-4.2.2.tar.gz http://ftp.gnu.org/gnu/sed/sed-4.2.2.tar.gz
 curl -LOz openssl-1.0.2h.tar.gz https://www.openssl.org/source/openssl-1.0.2h.tar.gz
 curl -LOz Python-2.7.11.tar.xz https://www.python.org/ftp/python/2.7.11/Python-2.7.11.tar.xz
 curl -LOz hdf5-1.8.17.tar.gz http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.17.tar.gz
-curl -LOz 1.8.5.tar.gz https://github.com/libspatialindex/libspatialindex/archive/1.8.5.tar.gz
+# FIXME Rtree is currently unsupported
+# curl -LOz 1.8.5.tar.gz https://github.com/libspatialindex/libspatialindex/archive/1.8.5.tar.gz
 curl -LOz get-pip.py https://bootstrap.pypa.io/get-pip.py
 
 if [ "$BUILD_OS" == "linux64" ]; then
@@ -126,8 +127,9 @@ futures==3.0.5
 django==1.8.7
 requests==2.9.1
 pyshp==1.2.3
-#Rtree needs master to work with a custom LD_LIBRARY_PATH
-https://github.com/Toblerity/rtree/archive/master.zip
+# FIXME Rtree is currently unsupported
+# and needs master to work with a custom LD_LIBRARY_PATH
+# https://github.com/Toblerity/rtree/archive/master.zip
 EOF
 
 cat <<EOF >> $OQ_PREFIX/env.sh
@@ -136,8 +138,9 @@ PREFIX=$OQ_PREFIX
 export LD_LIBRARY_PATH=\${PREFIX}/lib
 export CPATH=\${PREFIX}/include
 export PATH=\${PREFIX}/bin:\${PATH}
-export SPATIALINDEX_LIBRARY=\$LD_LIBRARY_PATH/libspatialindex.so
-export SPATIALINDEX_C_LIBRARY=\$LD_LIBRARY_PATH/libspatialindex_c.so
+# FIXME Rtree is currently unsupported
+# export SPATIALINDEX_LIBRARY=\$LD_LIBRARY_PATH/libspatialindex.so
+# export SPATIALINDEX_C_LIBRARY=\$LD_LIBRARY_PATH/libspatialindex_c.so
 export OQ_SITE_CFG_PATH=\${PREFIX}/etc/openquake.cfg
 export PS1=(openquake)\${PS1}
 EOF
@@ -190,15 +193,16 @@ make -j $NPROC
 make install
 cd ..
 
-if $CLEANUP; then rm -Rf 1.8.5; fi
-tar xvf src/1.8.5.tar.gz
-cd libspatialindex-1.8.5
-./autogen.sh || true
-./autogen.sh
-./configure --prefix=$OQ_PREFIX
-make -j $NPROC
-make install
-cd ..
+# FIXME Rtree is currently unsupported
+# if $CLEANUP; then rm -Rf 1.8.5; fi
+# tar xvf src/1.8.5.tar.gz
+# cd libspatialindex-1.8.5
+# ./autogen.sh || true
+# ./autogen.sh
+# ./configure --prefix=$OQ_PREFIX
+# make -j $NPROC
+# make install
+# cd ..
 
 if [ "$BUILD_OS" == "linux64" ]; then
     if $CLEANUP; then rm -Rf libgeos-3.5.0; fi
