@@ -2,7 +2,7 @@
 !define PRODUCT_NAME "OpenQuake Engine"
 !define RELEASE "2.1.0"
 !define DEVELOP "-dev${MYTIMESTAMP}"
-!define PRODUCT_VERSION "${RELEASE}${DEVELOP}"
+!define PRODUCT_VERSION "${RELEASE}"
 !define PUBLISHER "GEM Foundation"
 !define BITNESS "32"
 !define ARCH_TAG ""
@@ -82,7 +82,7 @@ Section "!${PRODUCT_NAME}" sec_app
   ; Install files
     SetOutPath "$INSTDIR"
       File "LICENSE.txt"
-      File "README.txt"
+      File "README.html"
       File "openquake.cfg"
       File "openquake.ico"
       File "oq-server.bat"
