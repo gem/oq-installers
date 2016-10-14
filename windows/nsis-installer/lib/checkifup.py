@@ -11,4 +11,7 @@ host = str(sys.argv[1])
 
 while (resp != 200):
     time.sleep(1)
-    resp = urllib.urlopen(host).getcode()
+    try:
+        resp = urllib.urlopen(host).getcode()
+    except:
+        pass
