@@ -136,7 +136,8 @@ PREFIX=$OQ_PREFIX
 export LD_LIBRARY_PATH=\${PREFIX}/lib
 export CPATH=\${PREFIX}/include
 export PATH=\${PREFIX}/bin:\${PATH}
-export SPATIALINDEX_LIBRARY=\$LD_LIBRARY_PATH
+export SPATIALINDEX_LIBRARY=\$LD_LIBRARY_PATH/libspatialindex.so
+export SPATIALINDEX_C_LIBRARY=\$LD_LIBRARY_PATH/libspatialindex_c.so
 export OQ_SITE_CFG_PATH=\${PREFIX}/etc/openquake.cfg
 export PS1=(openquake)\${PS1}
 EOF
