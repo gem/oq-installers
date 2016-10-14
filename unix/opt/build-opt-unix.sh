@@ -97,7 +97,6 @@ curl -LOz openssl-1.0.2h.tar.gz https://www.openssl.org/source/openssl-1.0.2h.ta
 curl -LOz Python-2.7.11.tar.xz https://www.python.org/ftp/python/2.7.11/Python-2.7.11.tar.xz
 curl -LOz hdf5-1.8.17.tar.gz http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.17.tar.gz
 curl -LOz libspatialindex-1.8.5.tar.gz https://github.com/libspatialindex/libspatialindex/archive/1.8.5.tar.gz
-      src/libspatialindex-1.8.5.tar.gz
 curl -LOz get-pip.py https://bootstrap.pypa.io/get-pip.py
 
 if [ "$BUILD_OS" == "linux64" ]; then
