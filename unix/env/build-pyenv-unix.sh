@@ -63,16 +63,26 @@ if $(echo $OSTYPE | grep -q linux); then
     if [ $GEM_SET_VENDOR ]; then
         VENDOR=$GEM_SET_VENDOR
     else
-        VENDOR='ubuntu'
+        VENDOR='redhat'
     fi
-    if [ "$VENDOR" == "ubuntu" ]; then
+    if [ "$VENDOR" == "redhat" ]; then
+        yum -y upgrade
+        yum -y install epel-release
+        yum -y install curl gcc git makeself
+        if [ -f /usr/bin/python2.7 ]; then
+            # CentOS 7 (or Fedora)
+            yum -y install python-devel
+        else
+            # CentOS 6 (with SCL)
+            yum -y install centos-release-scl
+            yum -y install python27
+            export PATH=/opt/rh/python27/root/usr/bin:$PATH
+            export LD_LIBRARY_PATH=/opt/rh/python27/root/usr/lib64
+        fi
+    elif [ "$VENDOR" == "ubuntu" ]; then
         sudo apt-get update
         sudo apt-get upgrade -y
         sudo apt-get install -y curl gcc git makeself python python-dev
-    elif [ "$VENDOR" == "redhat" ]; then
-        sudo yum -y upgrade
-        sudo yum -y groupinstall 'Development Tools'
-        sudo yum -y install curl gcc git makeself python python-devel
     else
         not_supported
     fi
