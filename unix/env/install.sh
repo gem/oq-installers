@@ -77,7 +77,7 @@ export OQ_SITE_CFG_PATH=$FDEST/etc/openquake.cfg
 EOF
 
 if $(echo $OSTYPE | grep -q darwin); then
-    cat <<EOF >> $OQ_ROOT/dist/env.sh
+    cat <<EOF >> $FDEST/env.sh
     export LC_ALL=en_US.UTF-8
     export LAN=en_US.UTF-8
 EOF
