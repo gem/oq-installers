@@ -85,6 +85,15 @@ else
     not_supported
 fi
 
+curl -Lo virtualenv-15.0.2.tar.gz https://github.com/pypa/virtualenv/archive/15.0.2.tar.gz
+cd $OQ_ROOT/dist
+tar xzf ../virtualenv-15.0.2.tar.gz
+mv virtualenv-15.0.2 virtualenv
+cd ..
+
+python dist/virtualenv/virtualenv.py pybuild
+source pybuild/bin/activate
+
 for g in hazardlib engine;
 do 
     rm -Rf oq-${g}
@@ -94,13 +103,15 @@ done
 curl -LOz get-pip.py https://bootstrap.pypa.io/get-pip.py
 python get-pip.py
 
-curl -Lo virtualenv-15.0.2.tar.gz https://github.com/pypa/virtualenv/archive/15.0.2.tar.gz
-cd $OQ_ROOT/dist
-tar xzf ../virtualenv-15.0.2.tar.gz
-mv virtualenv-15.0.2 virtualenv
-cd ..
 
-pip wheel --wheel-dir=$OQ_WHEEL -r oq-engine/requirements-py27-linux64.txt
+if [ "$BUILD_OS" == "linux64" ]; then
+    requirements=oq-engine/requirements-py27-linux64.txt
+else
+    requirements=$(mktemp)
+    grep -vi rtree oq-engine/requirements-dev.txt > $requirements
+fi
+pip wheel --wheel-dir=$OQ_WHEEL -r $requirements
+
 pip install $OQ_WHEEL/*
  
 for g in hazardlib engine;
@@ -114,6 +125,17 @@ cp -R $OQ_ROOT/oq-engine/{README.md,LICENSE,openquake.cfg,demos,doc} $OQ_ROOT/di
 rm -Rf $OQ_ROOT/dist/doc/sphinx
 ## utils is not copied for now, since it does not contain anything useful here
 cp $OQ_DIR/install.sh ${OQ_ROOT}/dist
+
+cat <<EOF >> $OQ_ROOT/dist/env.sh
+. bin/activate
+EOF
+
+if [ "$BUILD_OS" == "macos" ]; then
+    cat <<EOF >> $OQ_ROOT/dist/env.sh
+    export LC_ALL=en_US.UTF-8
+    export LAN=en_US.UTF-8
+EOF
+fi
 
 makeself ${OQ_ROOT}/dist ../openquake-py27-${BUILD_OS}-${OQ_ENGINE_DEV}.run "installer for the OpenQuake Engine" ./install.sh
 

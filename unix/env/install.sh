@@ -76,5 +76,5 @@ source $FDEST/bin/activate
 echo "Installing the files in $FDEST. Please wait."
 pip install wheelhouse/*.whl > /dev/null
 
-echo "Installation completed. To enable it run 'source $FDEST/bin/activate'"
+echo "Installation completed. To enable it run 'source $FDEST/env.sh'"
 exit 0
