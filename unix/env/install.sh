@@ -68,9 +68,24 @@ echo "Creating a new python environment in $FDEST. Please wait."
 python virtualenv/virtualenv.py $FDEST > /dev/null
 mkdir $FDEST/etc
 cp openquake.cfg $FDEST/etc
-cp -R {env.sh,README.md,LICENSE,demos,doc} $FDEST
+cp -R {README.md,LICENSE,demos,doc} $FDEST
 
-echo "export OQ_SITE_CFG_PATH=\${VIRTUAL_ENV}/etc/openquake.cfg" >> $FDEST/bin/activate
+
+cat <<EOF >> $FDEST/env.sh
+export OQ_SITE_CFG_PATH=$FDEST/etc/openquake.cfg
+. $FDEST/bin/activate
+EOF
+
+if $(echo $OSTYPE | grep -q darwin); then
+    cat <<EOF >> $OQ_ROOT/dist/env.sh
+    export LC_ALL=en_US.UTF-8
+    export LAN=en_US.UTF-8
+EOF
+fi
+
+cat <<EOF >> $FDEST/env.sh
+. $FDEST/bin/activate
+EOF
 
 source $FDEST/bin/activate
 echo "Installing the files in $FDEST. Please wait."

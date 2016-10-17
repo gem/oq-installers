@@ -126,17 +126,6 @@ rm -Rf $OQ_ROOT/dist/doc/sphinx
 ## utils is not copied for now, since it does not contain anything useful here
 cp $OQ_DIR/install.sh ${OQ_ROOT}/dist
 
-cat <<EOF >> $OQ_ROOT/dist/env.sh
-. bin/activate
-EOF
-
-if [ "$BUILD_OS" == "macos" ]; then
-    cat <<EOF >> $OQ_ROOT/dist/env.sh
-    export LC_ALL=en_US.UTF-8
-    export LAN=en_US.UTF-8
-EOF
-fi
-
 makeself ${OQ_ROOT}/dist ../openquake-py27-${BUILD_OS}-${OQ_ENGINE_DEV}.run "installer for the OpenQuake Engine" ./install.sh
 
 exit 0
