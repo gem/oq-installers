@@ -1,6 +1,6 @@
 !define /date MYTIMESTAMP "%y%m%d%H%M"
 !define PRODUCT_NAME "OpenQuake Engine"
-!define RELEASE "2.1.0"
+!define RELEASE "2.2.0"
 !define DEVELOP "-dev${MYTIMESTAMP}"
 !define PRODUCT_VERSION "${RELEASE}${DEVELOP}"
 !define PUBLISHER "GEM Foundation"
