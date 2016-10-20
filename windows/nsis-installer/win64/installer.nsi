@@ -1,13 +1,13 @@
 !define /date MYTIMESTAMP "%y%m%d%H%M"
 !define PRODUCT_NAME "OpenQuake Engine"
-!define RELEASE "2.1.0"
+!define RELEASE "2.2.0"
 !define DEVELOP "-dev${MYTIMESTAMP}"
 !define PRODUCT_VERSION "${RELEASE}${DEVELOP}"
 !define PUBLISHER "GEM Foundation"
-!define BITNESS "32"
+!define BITNESS "64"
 !define ARCH_TAG ""
-!define INSTALLER_NAME "OpenQuake_Engine_${PRODUCT_VERSION}.exe"
-!define PRODUCT_ICON "openquake.ico"
+!define INSTALLER_NAME "OpenQuake_Engine_${PRODUCT_VERSION}-64bit.exe"
+!define PRODUCT_ICON "..\openquake.ico"
 !include "FileFunc.nsh"
  
 SetCompressor lzma
@@ -17,11 +17,11 @@ RequestExecutionLevel admin
 ; Modern UI installer stuff 
 !include "MUI2.nsh"
 !define MUI_ABORTWARNING
-!define MUI_ICON "openquake_small.ico"
+!define MUI_ICON "..\openquake_small.ico"
 
 ; UI pages
 !insertmacro MUI_PAGE_WELCOME
-!insertmacro MUI_PAGE_LICENSE "LICENSE.txt"
+!insertmacro MUI_PAGE_LICENSE "..\LICENSE.txt"
 !insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
@@ -77,20 +77,21 @@ Section "!${PRODUCT_NAME}" sec_app
   File /r "python2.7\*.*"
   SetOutPath "$INSTDIR\lib"
   File /r "lib\*.*"
+  File /r "..\checkifup.py"
   SetOutPath "$INSTDIR"
   
   ; Install files
     SetOutPath "$INSTDIR"
-      File "LICENSE.txt"
-      File "README.html"
-      File "openquake.cfg"
-      File "openquake.ico"
-      File "oq-server.bat"
-      File "oq-console.bat"
+      File "..\LICENSE.txt"
+      File "..\README.html"
+      File "..\openquake.cfg"
+      File "..\openquake.ico"
+      File "..\oq-server.bat"
+      File "..\oq-console.bat"
   
   ; Install directories
     SetOutPath "$INSTDIR\demos"
-    File /r "demos\*.*"
+    File /r "..\demos\*.*"
   
   ; Install shortcuts
   ; The output path becomes the working directory for shortcuts
