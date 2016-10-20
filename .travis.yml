@@ -5,9 +5,6 @@ python:
 services:
     - docker
 
-install:
-    - cd oq-tests && docker build --rm=true -t oq-centos7 -f oq-centos7/Dockerfile .
-
 script:
-    - docker run --rm=true -i -t oq-centos7 ./runtests.sh
+    - cd wheels && docker run --rm -v $(pwd):/io quay.io/pypa/manylinux1_x86_64 /io/build-wheels-docker.sh
 
