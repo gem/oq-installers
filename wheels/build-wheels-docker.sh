@@ -22,7 +22,7 @@ if [ $GEM_SET_DEBUG ]; then
 fi
 set -e
 
-yum -y install autoconf curl gzip libtool patch tar unzip
+yum -y install autoconf curl gzip libtool libyaml-devel patch tar unzip
 
 if [ $GEM_SET_NPROC ]; then
     NPROC=$GEM_SET_NPROC
@@ -43,6 +43,7 @@ curl -LO http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.17.tar.gz
 curl -Lo py-h5py-2.6.0.tar.gz https://pypi.python.org/packages/source/h/h5py/h5py-2.6.0.tar.gz
 curl -Lo py-shapely-1.5.13.tar.gz https://pypi.python.org/packages/source/S/Shapely/Shapely-1.5.13.tar.gz
 curl -Lo py-psutil-3.4.2.tar.gz https://pypi.python.org/packages/source/p/psutil/psutil-3.4.2.tar.gz
+curl -Lo py-pyyaml-3.12.tar.gz http://pyyaml.org/download/pyyaml/PyYAML-3.12.tar.gz
 
 export LD_LIBRARY_PATH=${OQ_PREFIX}/lib
 export CPATH=${OQ_PREFIX}/include
