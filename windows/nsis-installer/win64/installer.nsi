@@ -6,7 +6,7 @@
 !define PUBLISHER "GEM Foundation"
 !define BITNESS "64"
 !define ARCH_TAG ""
-!define INSTALLER_NAME "OpenQuake_Engine_${PRODUCT_VERSION}-64bit.exe"
+!define INSTALLER_NAME "OpenQuake_Engine_${PRODUCT_VERSION}-${BITNESS}bit.exe"
 !define PRODUCT_ICON "..\openquake.ico"
 !include "FileFunc.nsh"
  
