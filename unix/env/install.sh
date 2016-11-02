@@ -65,7 +65,7 @@ fi
 FDEST=$(realpath "$DEST")
 
 echo "Creating a new python environment in $FDEST. Please wait."
-python virtualenv/virtualenv.py $FDEST > /dev/null
+/usr/bin/python virtualenv/virtualenv.py $FDEST > /dev/null
 mkdir $FDEST/etc
 cp openquake.cfg $FDEST/etc
 cp -R {README.md,LICENSE,demos,doc} $FDEST
