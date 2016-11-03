@@ -2,12 +2,15 @@ FROM centos:centos7
 MAINTAINER Daniele Viganò <daniele@openquake.org>
 
 RUN yum -y upgrade
-RUN yum -y install epel-release sudo git gcc
+RUN yum -y install epel-release sudo git gcc unzip
 RUN curl -sLo /etc/yum.repos.d/gem-openquake-epel-7.repo https://copr.fedorainfracloud.org/coprs/gem/openquake/repo/epel-7/gem-openquake-epel-7.repo
 
 RUN yum deplist python-oq-engine | grep provider | \
 awk '{print $2}' | sort | uniq | grep -v python-oq | \
 sed ':a;N;$!ba;s/\n/ /g' | xargs yum -y install
+
+RUN yum -y install python-pip
+RUN pip install -U pip wheel
 
 RUN useradd -u 1000 openquake && \
 echo 'openquake ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
@@ -22,4 +25,12 @@ RUN git clone https://github.com/gem/oq-hazardlib
 RUN git clone https://github.com/gem/oq-engine
 ADD runtests.sh ${HOME}
 
-CMD /bin/bash
+RUN mkdir lib src
+RUN pip wheel -r oq-engine/requirements-py27-linux64.txt -w src
+
+RUN cd lib; for w in ../src/*.whl; do unzip $w; done
+
+ENV PYTHONPATH $PYTHONPATH:$HOME/lib
+
+WORKDIR ${HOME}
+CMD ${HOME}/runtests.sh
