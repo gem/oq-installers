@@ -19,10 +19,6 @@ WORKDIR ${HOME}
 
 RUN git clone https://github.com/gem/oq-hazardlib
 RUN git clone https://github.com/gem/oq-engine
-RUN cd oq-hazardlib ; \
-    python setup.py build_ext ; \
-    cd openquake/hazardlib/geo ; \
-    ln -s ../../../build/lib.*/openquake/hazardlib/geo/*.so .
 ADD runtests.sh ${HOME}
 
 CMD /bin/bash
