@@ -27,10 +27,8 @@ RUN git clone https://github.com/gem/oq-hazardlib
 RUN git clone https://github.com/gem/oq-engine
 ADD runtests.sh ${HOME}
 
-RUN mkdir lib src
-RUN pip wheel -r oq-engine/requirements-py27-linux64.txt -w src
-
-RUN cd lib; for w in ../src/*.whl; do unzip $w; done
+RUN mkdir lib
+RUN pip install --target $HOME/lib -r oq-engine/requirements-py27-linux64.txt
 
 ENV PYTHONPATH $PYTHONPATH:$HOME/lib
 
