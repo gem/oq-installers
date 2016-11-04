@@ -76,8 +76,8 @@ Section "!${PRODUCT_NAME}" sec_app
   SetOutPath "$INSTDIR\python2.7"
   File /r "python2.7\*.*"
   SetOutPath "$INSTDIR\lib"
-  File /r "lib\*.*"
-  File /r "..\checkifup.py"
+  File /r /x ".gitignore" "lib\*.*"
+  File /r /x ".gitignore" "..\checkifup.py"
   SetOutPath "$INSTDIR"
   
   ; Install files
@@ -91,7 +91,7 @@ Section "!${PRODUCT_NAME}" sec_app
   
   ; Install directories
     SetOutPath "$INSTDIR\demos"
-    File /r "..\demos\*.*"
+    File /r /x ".gitignore" "..\demos\*.*"
   
   ; Install shortcuts
   ; The output path becomes the working directory for shortcuts
