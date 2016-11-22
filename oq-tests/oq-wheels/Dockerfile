@@ -3,7 +3,7 @@ MAINTAINER Daniele Viganò <daniele@openquake.org>
 
 RUN apt-get update
 RUN apt-get upgrade -y
-RUN apt-get install -y wget gcc git python-dev
+RUN apt-get install -y wget git python-dev
 RUN wget https://bootstrap.pypa.io/get-pip.py
 RUN python get-pip.py
 
