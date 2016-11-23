@@ -1,11 +1,10 @@
-FROM centos:centos7
+# vi:syntax=dockerfile
+FROM ubuntu:precise
 MAINTAINER Daniele Viganò <daniele@openquake.org>
 
-RUN yum -y upgrade
-RUN yum -y install sudo git unzip epel-release
-
-RUN yum -y install python-pip
-RUN pip install -U pip wheel
+RUN apt-get update && apt-get install -y \
+    sudo git python-pip unzip && \
+    pip install -U pip wheel
 
 RUN useradd -u 1000 openquake && \
     echo 'openquake ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
