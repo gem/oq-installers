@@ -39,7 +39,7 @@ cd $OQ_PREFIX/src
 
 # Get sources
 curl -Lo libgeos-3.5.0.tar.gz https://github.com/libgeos/libgeos/archive/3.5.0.tar.gz
-curl -LO http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.17.tar.gz
+curl -LO https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8.17/src/hdf5-1.8.17.tar.gz
 curl -Lo py-h5py-2.6.0.tar.gz https://pypi.python.org/packages/source/h/h5py/h5py-2.6.0.tar.gz
 curl -Lo py-shapely-1.5.13.tar.gz https://pypi.python.org/packages/source/S/Shapely/Shapely-1.5.13.tar.gz
 curl -Lo py-psutil-3.4.2.tar.gz https://pypi.python.org/packages/source/p/psutil/psutil-3.4.2.tar.gz
