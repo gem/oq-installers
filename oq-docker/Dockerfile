@@ -1,0 +1,40 @@
+FROM centos:centos7
+MAINTAINER Daniele Viganò <daniele@openquake.org>
+
+ARG branch=master
+
+RUN yum -y upgrade
+RUN yum -y install unzip wget epel-release
+
+RUN yum -y install python-pip
+RUN pip install -U pip wheel
+
+RUN useradd -u 1000 openquake
+RUN mkdir /opt/openquake && \
+    chown openquake.openquake /opt/openquake
+
+USER openquake
+ENV HOME /home/openquake
+
+WORKDIR ${HOME}
+ENV PYTHONPATH /opt/openquake/lib/python2.7/site-packages/
+ENV PATH /opt/openquake/bin/:$PATH
+ENV OQ_SITE_CFG_PATH /opt/openquake/openquake.cfg
+
+RUN mkdir /opt/openquake/lib && ln -rs /opt/openquake/lib /opt/openquake/lib64
+RUN wget -O- https://raw.githubusercontent.com/gem/oq-engine/$branch/requirements-py27-linux64.txt \
+    > /tmp/requirements-py27-linux64.txt 2>/dev/null
+RUN pip install --prefix /opt/openquake -r /tmp/requirements-py27-linux64.txt
+
+RUN pip install --prefix /opt/openquake https://github.com/gem/oq-hazardlib/archive/$branch.zip && \
+    pip install --prefix /opt/openquake https://github.com/gem/oq-engine/archive/$branch.zip
+
+# FIXME openquake.cfg should be installed by pip
+RUN wget -O- https://raw.githubusercontent.com/gem/oq-engine/$branch/openquake.cfg \
+    > $OQ_SITE_CFG_PATH 2>/dev/null
+
+ADD openquake/__init__.py $PYTHONPATH/openquake
+ADD oqrun.sh /opt/openquake/
+
+EXPOSE 8000:8000
+CMD /bin/bash /opt/openquake/oqrun.sh
