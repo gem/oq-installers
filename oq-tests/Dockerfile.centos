@@ -2,7 +2,7 @@
 FROM centos:centos7
 MAINTAINER Daniele Viganò <daniele@openquake.org>
 
-RUN yum -y install sudo git unzip epel-release && \
+RUN yum -y install sudo git epel-release && \
     yum -y install python-pip && \
     pip install -U pip wheel
 

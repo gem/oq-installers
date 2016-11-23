@@ -4,7 +4,7 @@ MAINTAINER Daniele Viganò <daniele@openquake.org>
 
 ARG branch=master
 
-RUN yum -y install unzip wget epel-release && \
+RUN yum -y install wget epel-release && \
     yum -y install python-pip && \
     pip install -U pip wheel
 

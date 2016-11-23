@@ -5,7 +5,7 @@ MAINTAINER Daniele Viganò <daniele@openquake.org>
 ARG branch=master
 
 RUN apt-get update && apt-get install -y \
-    unzip wget python-pip && \
+    wget python-pip && \
     pip install -U pip wheel
 
 RUN useradd -u 1000 openquake
