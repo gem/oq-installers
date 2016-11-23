@@ -24,6 +24,7 @@ oq-engine/bin/oq dbserver start &
 for l in oq-hazardlib oq-engine; do
     cd ${HOME}/${l}
     git fetch
+    # FIXME fallback must be added
     if [ -z $branch ]; then
         git checkout $branch
     fi;
@@ -34,5 +35,5 @@ done
 for l in oq-hazardlib oq-engine; do
     echo "RUN $l tests"
     #nosetests -v -a '!slow'
-    python -m nose -v -a '!slow'
+    nosetests -v -a '!slow'
 done

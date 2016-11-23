@@ -5,7 +5,7 @@ Currently runs only `oq-hazardlib` and `oq-engine`.
 ## Build images ##
 
 ```bash
->$ sudo docker build --rm=true -t openquake-centos7 -f oq-centos7/Dockerfile .
+>$ sudo docker build --rm=true -t openquake-centos7 -f Dockerfile .
 ```
 
 ## Run a container ##
