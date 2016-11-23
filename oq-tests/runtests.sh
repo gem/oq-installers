@@ -34,6 +34,5 @@ done
 # run tests
 for l in oq-hazardlib oq-engine; do
     echo "RUN $l tests"
-    #nosetests -v -a '!slow'
     nosetests -v -a '!slow'
 done
