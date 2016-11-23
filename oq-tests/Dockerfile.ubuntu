@@ -3,7 +3,7 @@ FROM ubuntu:precise
 MAINTAINER Daniele Viganò <daniele@openquake.org>
 
 RUN apt-get update && apt-get install -y \
-    sudo git python-pip && \
+    git python python-pip sudo && \
     pip install -U pip wheel
 
 RUN useradd -u 1000 openquake && \
