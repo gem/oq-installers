@@ -14,7 +14,7 @@ Exposes the WebUI and a `oq` cli.
 >$ sudo docker run --name myoqcontainer -i -t -p 8000:8000 openquake-centos7
 ```
 
-### Start and stop
+### Start and stop ###
 
 ```bash
 >$ sudo docker start myoqcontainer
