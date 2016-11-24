@@ -24,7 +24,8 @@ RUN mkdir /opt/openquake/lib && ln -rs /opt/openquake/lib /opt/openquake/lib64
 # FIXME openquake.cfg should be installed by pip
 RUN wget -O- https://raw.githubusercontent.com/gem/oq-engine/$branch/requirements-py27-linux64.txt \
     > /tmp/requirements-py27-linux64.txt 2>/dev/null && \
-    pip install --prefix /opt/openquake -r /tmp/requirements-py27-linux64.txt && \
+    pip install --force-reinstall --ignore-installed --upgrade --no-deps \
+    --prefix /opt/openquake -r /tmp/requirements-py27-linux64.txt && \
     pip install --prefix /opt/openquake https://github.com/gem/oq-hazardlib/archive/$branch.zip && \
     pip install --prefix /opt/openquake https://github.com/gem/oq-engine/archive/$branch.zip && \
     wget -O- https://raw.githubusercontent.com/gem/oq-engine/$branch/openquake.cfg \
