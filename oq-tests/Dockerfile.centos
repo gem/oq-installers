@@ -1,0 +1,32 @@
+# vi:syntax=dockerfile
+FROM centos:centos7
+MAINTAINER Daniele Viganò <daniele@openquake.org>
+
+RUN yum -y install epel-release git python sudo && \
+    yum -y install python-pip && \
+    pip install -U pip wheel
+
+RUN useradd -u 1000 openquake && \
+    echo 'openquake ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+RUN mkdir /opt/openquake && \
+    chown openquake.openquake /opt/openquake
+
+USER openquake
+ENV HOME /home/openquake
+
+WORKDIR ${HOME}
+
+RUN git clone https://github.com/gem/oq-hazardlib && \
+    git clone https://github.com/gem/oq-engine
+ADD runtests.sh ${HOME}
+
+RUN mkdir /opt/openquake/lib && ln -rs /opt/openquake/lib /opt/openquake/lib64
+RUN pip install --force-reinstall --ignore-installed --upgrade --no-index \
+    --prefix /opt/openquake -r oq-engine/requirements-py27-linux64.txt
+
+ENV PYTHONPATH $HOME/oq-engine:$HOME/oq-hazardlib:/opt/openquake/lib/python2.7/site-packages/
+ENV PATH /opt/openquake/bin/:$PATH
+
+WORKDIR ${HOME}
+CMD ${HOME}/runtests.sh

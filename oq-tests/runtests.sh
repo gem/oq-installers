@@ -24,6 +24,7 @@ oq-engine/bin/oq dbserver start &
 for l in oq-hazardlib oq-engine; do
     cd ${HOME}/${l}
     git fetch
+    # FIXME fallback must be added
     if [ -z $branch ]; then
         git checkout $branch
     fi;
