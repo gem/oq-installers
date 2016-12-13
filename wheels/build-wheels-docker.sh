@@ -40,8 +40,10 @@ cd $OQ_PREFIX/src
 # Get sources
 curl -Lo libgeos-3.5.0.tar.gz https://github.com/libgeos/libgeos/archive/3.5.0.tar.gz
 curl -LO https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8.17/src/hdf5-1.8.17.tar.gz
+curl -Lo proj-4.8.0.tar.gz https://github.com/OSGeo/proj.4/archive/4.8.0.tar.gz
 curl -Lo py-h5py-2.6.0.tar.gz https://pypi.python.org/packages/source/h/h5py/h5py-2.6.0.tar.gz
 curl -Lo py-shapely-1.5.13.tar.gz https://pypi.python.org/packages/source/S/Shapely/Shapely-1.5.13.tar.gz
+curl -Lo py-pyproj-1.9.5.1.tar.gz https://github.com/jswhit/pyproj/archive/v1.9.5.1rel.tar.gz
 curl -Lo py-psutil-3.4.2.tar.gz https://pypi.python.org/packages/source/p/psutil/psutil-3.4.2.tar.gz
 curl -Lo py-pyyaml-3.12.tar.gz http://pyyaml.org/download/pyyaml/PyYAML-3.12.tar.gz
 
@@ -59,6 +61,16 @@ cd ..
 
 tar xzf libgeos-3.5.0.tar.gz
 cd libgeos-3.5.0
+# Workaround for an autogen.sh bug
+./autogen.sh || true
+./autogen.sh
+./configure --prefix=$OQ_PREFIX
+make -j $NPROC
+make install
+cd ..
+
+tar xzf proj-4.8.0.tar.gz
+cd proj.4-4.8.0
 # Workaround for an autogen.sh bug
 ./autogen.sh || true
 ./autogen.sh
