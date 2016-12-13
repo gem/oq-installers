@@ -5,8 +5,7 @@
 This repo contains several dockfiles to run the full suite of test for the OpenQuake Engine and the OpenQuake Hazardlib against several Linux distributions:
 
 - Ubuntu
-- CentOS 7
-- Fedora
+- CentOS
 
 Tests are fully automatic and run inside Docker containers. See [README.md](oq-tests/README.md).
 
