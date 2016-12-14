@@ -13,12 +13,11 @@ Microsoft Windows is not required.
 #### Setup python (64bit)
 - `export WINEPREFIX=/home/user/path/to/my/prefix`
 - `wget https://www.python.org/ftp/python/2.7.12/python-2.7.12.amd64.msi`
-- `wine msiexec /a python-2.7.12.amd64.msi /qb TARGETDIR=python2.7`
-- Untar the downloaded dependencies in `lib`
+- `wine msiexec /a python-2.7.12.amd64.msi /qb TARGETDIR=python-dist\python2.7`
 
 #### Setup build environment
 - in `regedit` add to `HKEY_CURRENT_USER\Environment\PATH`: `C:\Python27:C:\Program Files (x86)\NSIS`
-- Untar the downloaded dependencies in `lib`
+- Untar the downloaded dependencies in `python-dist\lib`
 
 ### Setup OpenQuake
 - `cd oq-hazardlib; wine python setup.py build`
