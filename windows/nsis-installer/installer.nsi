@@ -4,10 +4,10 @@
 !define DEVELOP "-dev${MYTIMESTAMP}"
 !define PRODUCT_VERSION "${RELEASE}${DEVELOP}"
 !define PUBLISHER "GEM Foundation"
-!define BITNESS "32"
+!define BITNESS "64"
 !define ARCH_TAG ""
 !define INSTALLER_NAME "OpenQuake_Engine_${PRODUCT_VERSION}-${BITNESS}bit.exe"
-!define PRODUCT_ICON "..\openquake.ico"
+!define PRODUCT_ICON "openquake.ico"
 !include "FileFunc.nsh"
  
 SetCompressor lzma
@@ -17,11 +17,11 @@ RequestExecutionLevel admin
 ; Modern UI installer stuff 
 !include "MUI2.nsh"
 !define MUI_ABORTWARNING
-!define MUI_ICON "..\openquake_small.ico"
+!define MUI_ICON "openquake_small.ico"
 
 ; UI pages
 !insertmacro MUI_PAGE_WELCOME
-!insertmacro MUI_PAGE_LICENSE "..\LICENSE.txt"
+!insertmacro MUI_PAGE_LICENSE "LICENSE.txt"
 !insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
@@ -74,24 +74,24 @@ Section "!${PRODUCT_NAME}" sec_app
   SetShellVarContext all
   File ${PRODUCT_ICON}
   SetOutPath "$INSTDIR\python2.7"
-  File /r "python2.7\*.*"
+  File /r "python-dist\python2.7\*.*"
   SetOutPath "$INSTDIR\lib"
-  File /r /x ".gitignore" "lib\*.*"
-  File /r /x ".gitignore" "..\checkifup.py"
+  File /r /x ".gitignore" "python-dist\lib\*.*"
+  File /r /x ".gitignore" "checkifup.py"
   SetOutPath "$INSTDIR"
   
   ; Install files
     SetOutPath "$INSTDIR"
-      File "..\LICENSE.txt"
-      File "..\README.html"
-      File "..\openquake.cfg"
-      File "..\openquake.ico"
-      File "..\oq-server.bat"
-      File "..\oq-console.bat"
+      File "LICENSE.txt"
+      File "README.html"
+      File "openquake.cfg"
+      File "openquake.ico"
+      File "oq-server.bat"
+      File "oq-console.bat"
   
   ; Install directories
     SetOutPath "$INSTDIR\demos"
-    File /r /x ".gitignore" "..\demos\*.*"
+    File /r /x ".gitignore" "demos\*.*"
   
   ; Install shortcuts
   ; The output path becomes the working directory for shortcuts
