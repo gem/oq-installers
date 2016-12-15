@@ -81,9 +81,11 @@ Section "!${PRODUCT_NAME}" sec_app
   File ${PRODUCT_ICON}
   SetOutPath "$INSTDIR\python2.7"
   File /r "python-dist\python2.7\*.*"
-  SetOutPath "$INSTDIR\Lib"
-  File /r "python-dist\Lib\*.*"
+  SetOutPath "$INSTDIR\lib"
+  File /r "python-dist\lib\*.*"
   File /r "checkifup.py"
+  SetOutPath "$INSTDIR\lib\openquake"
+  File "src\__init__.py"
   SetOutPath "$INSTDIR"
   
   ; Install files
@@ -110,7 +112,7 @@ Section "!${PRODUCT_NAME}" sec_app
   
   ; Byte-compile Python files.
   DetailPrint "Byte-compiling Python modules..."
-  nsExec::ExecToLog '$INSTDIR\python2.7\python.exe -m compileall -q "$INSTDIR\Lib"'
+  nsExec::ExecToLog '$INSTDIR\python2.7\python.exe -m compileall -q "$INSTDIR\lib"'
 
   WriteUninstaller $INSTDIR\uninstall.exe
   ; Add ourselves to Add/remove programs
@@ -155,7 +157,7 @@ Section "Uninstall"
   SetShellVarContext all
   Delete $INSTDIR\uninstall.exe
   Delete "$INSTDIR\${PRODUCT_ICON}"
-  RMDir /r "$INSTDIR\Lib"
+  RMDir /r "$INSTDIR\lib"
   RMDir /r "$INSTDIR\python2.7"
   ; Uninstall files
     Delete "$INSTDIR\README.html"
