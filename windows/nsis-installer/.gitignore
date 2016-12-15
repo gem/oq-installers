@@ -1,4 +1,6 @@
 src/*
+python-dist/Script
+python-dist/Lib
 *.msi
 *.exe
 openquake.cfg
