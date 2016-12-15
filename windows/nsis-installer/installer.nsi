@@ -9,7 +9,8 @@
 !define INSTALLER_NAME "OpenQuake_Engine_${PRODUCT_VERSION}-${BITNESS}bit.exe"
 !define PRODUCT_ICON "openquake.ico"
 !include "FileFunc.nsh"
- 
+!include "x64.nsh"
+
 SetCompressor lzma
 
 RequestExecutionLevel admin
@@ -35,6 +36,11 @@ ShowInstDetails show
 
 Function .onInit
  
+  ${IfNot} ${RunningX64}
+      MessageBox MB_OK "A 64bit OS is required"
+      Quit
+  ${EndIf}
+
   ReadRegStr $R0 HKLM \
   "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
   "UninstallString"
