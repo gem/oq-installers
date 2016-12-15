@@ -1,5 +1,5 @@
 src/*
-python-dist/Script
+python-dist/Scripts
 python-dist/Lib
 *.msi
 *.exe
