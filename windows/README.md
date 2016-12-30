@@ -32,8 +32,7 @@ Microsoft Windows is not required.
 - `wine msiexec /a python-2.7.12.amd64.msi /qb TARGETDIR=../python-dist/python2.7`
 
 #### Libs
-- `cd python-dist`
-- `wine pip install --force-reinstall --ignore-installed --upgrade --no-index --prefix . ../src/py/*.whl ../src/py27/*.whl ../src/oq-hazardlib ../src/oq-engine`
+- `wine pip install --force-reinstall --ignore-installed --upgrade --no-index --prefix python-dist src/py/*.whl src/py27/*.whl src/oq-hazardlib src/oq-engine`
 
 Setup of the sole `oq-engine` and `oq-hazardlib` can be done adding `--no-deps` to the command above.
 
