@@ -5,8 +5,10 @@ Work in progress.
 ### Requirements
 
 - WINE: https://www.winehq.org/
+- Python: https://www.python.org/
 - NSIS: http://nsis.sourceforge.net/Main_Page
-- The OQ python dependencies: http://ftp.openquake.org/windows/oq-engine/
+- OQ python dependencies: http://ftp.openquake.org/wheelhouse/windows
+- Python markdown: https://pypi.python.org/pypi/Markdown
 
 Microsoft Windows is not required.
 
@@ -33,9 +35,12 @@ Microsoft Windows is not required.
 - `cd python-dist`
 - `wine pip install --force-reinstall --ignore-installed --upgrade --no-index --prefix . ../src/py/*.whl ../src/py27/*.whl ../src/oq-hazardlib ../src/oq-engine`
 
+Setup of the sole `oq-engine` and `oq-hazardlib` can be done adding `--no-deps` to the command above.
+
 ### Setup OpenQuake
 - `cp -r src/oq-engine/demos ..`
 - `cp -r src/oq-engine/openquake.cfg ..`
+- `python -m markdown src/oq-engine/README.md > README.html`
 - run NSIS:` wine makensis installer.nsi`
 
 ### Open issues
