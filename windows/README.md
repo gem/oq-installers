@@ -29,7 +29,7 @@ Microsoft Windows is not required.
 
 #### Python
 - `cd src`
-- `wine msiexec /a python-2.7.12.amd64.msi /qb TARGETDIR=..\python-dist\python2.7`
+- `wine msiexec /a python-2.7.12.amd64.msi /qb TARGETDIR=../python-dist/python2.7`
 
 #### Libs
 - `cd python-dist`
