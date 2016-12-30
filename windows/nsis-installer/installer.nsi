@@ -84,7 +84,7 @@ Section "!${PRODUCT_NAME}" sec_app
   SetOutPath "$INSTDIR\lib"
   File /r "python-dist\lib\*.*"
   File /r "checkifup.py"
-  SetOutPath "$INSTDIR\lib\openquake"
+  SetOutPath "$INSTDIR\lib\site-packages\openquake"
   File "src\__init__.py"
   SetOutPath "$INSTDIR"
   
