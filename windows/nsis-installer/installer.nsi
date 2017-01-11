@@ -6,10 +6,11 @@
 !define PUBLISHER "GEM Foundation"
 !define BITNESS "64"
 !define ARCH_TAG ""
-!define INSTALLER_NAME "OpenQuake_Engine_${PRODUCT_VERSION}-${BITNESS}bit.exe"
+!define INSTALLER_NAME "OpenQuake_Engine_${PRODUCT_VERSION}.exe"
 !define PRODUCT_ICON "openquake.ico"
 !include "FileFunc.nsh"
- 
+!include "x64.nsh"
+
 SetCompressor lzma
 
 RequestExecutionLevel admin
@@ -35,6 +36,11 @@ ShowInstDetails show
 
 Function .onInit
  
+  ${IfNot} ${RunningX64}
+      MessageBox MB_OK "A 64bit OS is required"
+      Quit
+  ${EndIf}
+
   ReadRegStr $R0 HKLM \
   "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
   "UninstallString"
@@ -76,8 +82,10 @@ Section "!${PRODUCT_NAME}" sec_app
   SetOutPath "$INSTDIR\python2.7"
   File /r "python-dist\python2.7\*.*"
   SetOutPath "$INSTDIR\lib"
-  File /r /x ".gitignore" "python-dist\lib\*.*"
-  File /r /x ".gitignore" "checkifup.py"
+  File /r "python-dist\lib\*.*"
+  File /r "checkifup.py"
+  SetOutPath "$INSTDIR\lib\site-packages\openquake"
+  File "src\__init__.py"
   SetOutPath "$INSTDIR"
   
   ; Install files
@@ -152,7 +160,7 @@ Section "Uninstall"
   RMDir /r "$INSTDIR\lib"
   RMDir /r "$INSTDIR\python2.7"
   ; Uninstall files
-    Delete "$INSTDIR\README.txt"
+    Delete "$INSTDIR\README.html"
     Delete "$INSTDIR\LICENSE.txt"
     Delete "$INSTDIR\openquake.cfg"
     Delete "$INSTDIR\openquake.ico"
