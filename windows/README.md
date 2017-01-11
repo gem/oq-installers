@@ -26,13 +26,17 @@ Microsoft Windows is not required.
 - `cd src`
 - `git clone https://github.com/gem/oq-hazardlib.git`
 - `git clone https://github.com/gem/oq-engine.git`
+- `cd oq-engine`
+ - `wine python install bdist_wheel -d ..`
+- `cd oq-hazardlib`
+ - `wine python install bdist_wheel -d ..`
 
 #### Python
 - `cd src`
 - `wine msiexec /a python-2.7.12.amd64.msi /qb TARGETDIR=../python-dist/python2.7`
 
 #### Libs
-- `wine pip install --force-reinstall --ignore-installed --upgrade --no-index --prefix python-dist src/py/*.whl src/py27/*.whl src/oq-hazardlib src/oq-engine`
+- `wine pip install --force-reinstall --ignore-installed --upgrade --no-index --prefix python-dist src/py/*.whl src/py27/*.whl src/openquake.*.whl`
 
 Setup of the sole `oq-engine` and `oq-hazardlib` can be done adding `--no-deps` to the command above.
 
@@ -44,4 +48,29 @@ Setup of the sole `oq-engine` and `oq-hazardlib` can be done adding `--no-deps` 
 
 ### Open issues
 
-See https://github.com/gem/oq-installers/issues
+#### Errors making wheels
+
+An error like this
+
+```python
+Traceback (most recent call last):
+  File "setup.py", line 122, in <module>
+    zip_safe=False,
+  File "C:\Python27\lib\distutils\core.py", line 151, in setup
+    dist.run_commands()
+  File "C:\Python27\lib\distutils\dist.py", line 953, in run_commands
+    self.run_command(cmd)
+  File "C:\Python27\lib\distutils\dist.py", line 972, in run_command
+    cmd_obj.run()
+  File "C:\Python27\lib\site-packages\wheel\bdist_wheel.py", line 236, in run
+    self.write_record(self.bdist_dir, self.distinfo_dir)
+  File "C:\Python27\lib\site-packages\wheel\bdist_wheel.py", line 441, in write_record
+    relpath = os.path.relpath(path, bdist_dir)
+  File "C:\Python27\lib\ntpath.py", line 529, in relpath
+    % (path_prefix, start_prefix))
+ValueError: path is on drive , start on drive Z:
+```
+
+means that the source code folder has a path which is too deep. Try saving sources in a less deep path (like `C:\Temp`).
+
+See also https://github.com/gem/oq-installers/issues
