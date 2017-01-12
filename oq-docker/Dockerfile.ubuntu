@@ -1,5 +1,5 @@
 # vi:syntax=dockerfile
-FROM ubuntu:trusty
+FROM ubuntu:xenial
 MAINTAINER Daniele Viganò <daniele@openquake.org>
 
 ARG branch=master
