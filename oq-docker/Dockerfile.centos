@@ -11,7 +11,7 @@ RUN yum -y install epel-release python wget && \
 RUN useradd -u 1000 openquake
 RUN mkdir -p /opt/openquake/lib && \
     ln -rs /opt/openquake/lib /opt/openquake/lib64 && \
-    chown openquake.openquake /opt/openquake
+    chown -R openquake.openquake /opt/openquake
 
 USER openquake
 ENV HOME /home/openquake
