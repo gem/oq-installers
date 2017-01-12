@@ -8,6 +8,8 @@
 !define ARCH_TAG ""
 !define INSTALLER_NAME "OpenQuake_Engine_${PRODUCT_VERSION}.exe"
 !define PRODUCT_ICON "openquake.ico"
+!define REG_KEY "Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
+
 !include "FileFunc.nsh"
 !include "x64.nsh"
 
@@ -41,9 +43,7 @@ Function .onInit
       Quit
   ${EndIf}
 
-  ReadRegStr $R0 HKLM \
-  "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
-  "UninstallString"
+  ReadRegStr $R0 HKLM "${REG_KEY}" "UninstallString"
   StrCmp $R0 "" done
  
   MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
@@ -55,7 +55,7 @@ Function .onInit
 ;Run the uninstaller
 uninst:
   ClearErrors
-  Exec $INSTDIR\uninstall.exe
+  Exec $R0\uninstall.exe
 done:
 
 FunctionEnd
@@ -116,26 +116,17 @@ Section "!${PRODUCT_NAME}" sec_app
 
   WriteUninstaller $INSTDIR\uninstall.exe
   ; Add ourselves to Add/remove programs
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
-                   "DisplayName" "${PRODUCT_NAME}"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
-                   "Publisher" "${PUBLISHER}"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
-                   "DisplayVersion" "${PRODUCT_VERSION}"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
-                   "UninstallString" '"$INSTDIR\uninstall.exe"'
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
-                   "InstallLocation" "$INSTDIR"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
-                   "DisplayIcon" "$INSTDIR\${PRODUCT_ICON}"
-  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
-                   "NoModify" 1
-  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
-                   "NoRepair" 1
+  WriteRegStr HKLM "${REG_KEY}" "DisplayName" "${PRODUCT_NAME}"
+  WriteRegStr HKLM "${REG_KEY}" "Publisher" "${PUBLISHER}"
+  WriteRegStr HKLM "${REG_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
+  WriteRegStr HKLM "${REG_KEY}" "UninstallString" '"$INSTDIR\uninstall.exe"'
+  WriteRegStr HKLM "${REG_KEY}" "InstallLocation" "$INSTDIR"
+  WriteRegStr HKLM "${REG_KEY}" "DisplayIcon" "$INSTDIR\${PRODUCT_ICON}"
+  WriteRegDWORD HKLM "${REG_KEY}" "NoModify" 1
+  WriteRegDWORD HKLM "${REG_KEY}" "NoRepair" 1
   ${GetSize} "$INSTDIR" "/S=0K" $0 $1 $2
   IntFmt $0 "0x%08X" $0
-  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
-                   "EstimatedSize" "$0"
+  WriteRegDWORD HKLM "${REG_KEY}" "EstimatedSize" "$0"
 
   ; Check if we need to reboot
   IfRebootFlag 0 noreboot
@@ -174,7 +165,7 @@ Section "Uninstall"
     Delete "$SMPROGRAMS\OpenQuake Engine (webui).lnk"
     Delete "$SMPROGRAMS\OpenQuake Engine (console).lnk"
   RMDir $INSTDIR
-  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
+  DeleteRegKey HKLM "${REG_KEY}"
 SectionEnd
 
 ; Functions
