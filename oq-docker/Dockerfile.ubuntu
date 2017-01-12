@@ -9,7 +9,8 @@ RUN apt-get update && apt-get install -y \
     pip install -U pip wheel
 
 RUN useradd -u 1000 openquake
-RUN mkdir /opt/openquake && \
+RUN mkdir -p /opt/openquake/lib && \
+    ln -rs /opt/openquake/lib /opt/openquake/lib64 && \
     chown openquake.openquake /opt/openquake
 
 USER openquake
@@ -20,9 +21,7 @@ ENV PYTHONPATH /opt/openquake/lib/python2.7/site-packages/
 ENV PATH /opt/openquake/bin/:$PATH
 ENV OQ_SITE_CFG_PATH /opt/openquake/openquake.cfg
 
-RUN mkdir /opt/openquake/lib && ln -rs /opt/openquake/lib /opt/openquake/lib64
 ADD https://api.github.com/repos/gem/oq-engine/git/refs/heads/$branch version.json
-# FIXME openquake.cfg should be installed by pip
 RUN wget -O- https://raw.githubusercontent.com/gem/oq-engine/$branch/requirements-py27-linux64.txt \
     > /tmp/requirements-py27-linux64.txt 2>/dev/null && \
     pip install --force-reinstall --ignore-installed --upgrade --no-deps \
@@ -30,10 +29,10 @@ RUN wget -O- https://raw.githubusercontent.com/gem/oq-engine/$branch/requirement
     pip install --prefix /opt/openquake https://github.com/gem/oq-hazardlib/archive/$branch.zip && \
     pip install --prefix /opt/openquake https://github.com/gem/oq-engine/archive/$branch.zip && \
     wget -O- https://raw.githubusercontent.com/gem/oq-engine/$branch/openquake.cfg \
-    > $OQ_SITE_CFG_PATH 2>/dev/null
+    > $OQ_SITE_CFG_PATH 2>/dev/null && rm /tmp/requirements-py27-linux64.txt
 
 ADD openquake/__init__.py $PYTHONPATH/openquake
 ADD oqrun.sh /opt/openquake/
 
-EXPOSE 8000:8000
+EXPOSE 8800:8800
 CMD /bin/bash /opt/openquake/oqrun.sh
