@@ -148,7 +148,7 @@ Section -post
   IfRebootFlag 0 noreboot
     MessageBox MB_YESNO "A reboot is required to finish the installation. Do you wish to reboot now?" \
                 /SD IDNO IDNO noreboot
-      Reboot
+    Reboot
   noreboot:
 SectionEnd
 
