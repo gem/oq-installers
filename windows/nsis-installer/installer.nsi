@@ -101,7 +101,7 @@ Section "!OpenQuake Engine and Hazardlib" SecOQ
   File "oq-server.bat"
   File "openquake.cfg"
   SetOutPath "$INSTDIR\lib\site-packages"
-  File /r "src\python-dist\lib\site-packages\openquake*.*"
+  File /r "python-dist\lib\site-packages\openquake*.*"
   SetOutPath "$INSTDIR\demos"
   File /r /x ".gitignore" "demos\*.*"
   
