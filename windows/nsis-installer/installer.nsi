@@ -82,6 +82,9 @@ Section "!Core Files" SecCore
 
   SetOutPath "$INSTDIR\lib"
   File "checkifup.py"
+
+  SetOutPath "$INSTDIR\lib\site-packages\openquake"
+  File "src\__init__.py"
 SectionEnd
 
 
@@ -89,7 +92,7 @@ Section "!Python libraries" SecLib
   SetShellVarContext all
 
   SetOutPath "$INSTDIR\lib"
-  File /r "python-dist\lib\*.*"
+  File /r /x "openquake*" "python-dist\lib\*.*"
 SectionEnd
 
 
@@ -97,8 +100,8 @@ Section "!OpenQuake Engine and Hazardlib" SecOQ
   SetOutPath "$INSTDIR"
   File "oq-server.bat"
   File "openquake.cfg"
-  SetOutPath "$INSTDIR\lib\site-packages\openquake"
-  File "src\__init__.py"
+  SetOutPath "$INSTDIR\lib\site-packages"
+  File /r "src\python-dist\lib\site-packages\openquake*.*"
   SetOutPath "$INSTDIR\demos"
   File /r /x ".gitignore" "demos\*.*"
   
@@ -108,7 +111,6 @@ Section "!OpenQuake Engine and Hazardlib" SecOQ
   SetOutPath "$INSTDIR"
 
   !define OQ_INSTALLED "true"
-
 SectionEnd
 
 Section "OpenQuake Engine desktop icon" SecIcon
