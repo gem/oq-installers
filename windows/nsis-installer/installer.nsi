@@ -1,8 +1,10 @@
 !define /date MYTIMESTAMP "%y%m%d%H%M"
 !define PRODUCT_NAME "OpenQuake Engine"
-!define RELEASE "2.2.0"
-!define DEVELOP "-dev${MYTIMESTAMP}"
-!define PRODUCT_VERSION "${RELEASE}${DEVELOP}"
+!define VER_MAJOR "2"
+!define VER_MINOR "2"
+!define VER_REVISION "0"
+!define VER_BUILD "${MYTIMESTAMP}"
+!define PRODUCT_VERSION "${VER_MAJOR}.${VER_MINOR}.${VER_REVISION}.${VER_BUILD}"
 !define PUBLISHER "GEM Foundation"
 !define BITNESS "64"
 !define ARCH_TAG ""
@@ -13,6 +15,7 @@
 !define REG_KEY "Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 
 !include "FileFunc.nsh"
+!include "WordFunc.nsh"
 !include "x64.nsh"
 
 SetCompressor lzma
@@ -27,11 +30,21 @@ RequestExecutionLevel admin
 ; UI pages
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_LICENSE "LICENSE.txt"
+!ifdef VER_MAJOR & VER_MINOR & VER_REVISION & VER_BUILD
+Page custom PageReinstall PageLeaveReinstall
+!endif
 !insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
 !insertmacro MUI_PAGE_FINISH
 !insertmacro MUI_LANGUAGE "English"
+
+!ifdef VER_MAJOR & VER_MINOR & VER_REVISION & VER_BUILD
+VIProductVersion ${PRODUCT_VERSION}
+VIAddVersionKey "FileVersion" "${VER_MAJOR}.${VER_MINOR}.${VER_REVISION}"
+VIAddVersionKey "FileDescription" "OpenQuake Setup"
+VIAddVersionKey "LegalCopyright" "https://github.com/gem/oq-engine/blob/master/LICENSE"
+!endif
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 OutFile "${INSTALLER_NAME}"
@@ -42,37 +55,12 @@ Function .onInit
       MessageBox MB_OK "A 64bit OS is required"
       Quit
   ${EndIf}
-
-  #ReadRegStr $R0 HKLM "${REG_KEY}" "UninstallString"
-  #StrCmp $R0 "" done
- 
-  #MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
-  #"${PRODUCT_NAME} is already installed. $\n$\nClick `OK` to remove the \
-  #previous version or `Cancel` to cancel this upgrade." \
-  #IDOK uninst
-  #Abort
- 
-  #;Run the uninstaller
-  #uninst:
-  #  ClearErrors
-  #  Exec $R0\uninstall.exe
-  #done:
 FunctionEnd
 
 Section -SETTINGS
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
 SectionEnd
-
-; Section "Python ${PY_VERSION}" sec_py
-; 
-;   DetailPrint "Installing Python ${PY_MAJOR_VERSION}, ${BITNESS} bit"
-;     File "msi\python-2.7.11.msi"
-;     ExecWait 'msiexec /i "$INSTDIR\python-2.7.11.msi" \
-;             /qb ALLUSERS=1 TARGETDIR="$COMMONFILES${BITNESS}\Python\${PY_MAJOR_VERSION}"'
-;   Delete "$INSTDIR\python-2.7.11.msi"
-; SectionEnd
-
 
 Section "!Core Files" SecCore
   SectionIn RO
@@ -162,7 +150,6 @@ Section -post
   noreboot:
 SectionEnd
 
-
 Section "Uninstall"
   SetShellVarContext all
   Delete $INSTDIR\uninstall.exe
@@ -195,7 +182,7 @@ Var ReinstallPageCheck
 Function PageReinstall
 
   ReadRegStr $R0 HKLM "Software\${PRODUCT_NAME}" ""
-  ReadRegStr $R1 HKLM "${REG_UNINST_KEY}" "UninstallString"
+  ReadRegStr $R1 HKLM "${REG_KEY}" "UninstallString"
   ${IfThen} "$R0$R1" == "" ${|} Abort ${|}
 
   StrCpy $R4 "older"
@@ -203,12 +190,11 @@ Function PageReinstall
   ReadRegDWORD $R1 HKLM "Software\${PRODUCT_NAME}" "VersionMinor"
   ReadRegDWORD $R2 HKLM "Software\${PRODUCT_NAME}" "VersionRevision"
   ReadRegDWORD $R3 HKLM "Software\${PRODUCT_NAME}" "VersionBuild"
-  ${IfThen} $R0 = 0 ${|} StrCpy $R4 "unknown" ${|} ; Anonymous builds have no version number
   StrCpy $R0 $R0.$R1.$R2.$R3
 
   ${VersionCompare} ${VER_MAJOR}.${VER_MINOR}.${VER_REVISION}.${VER_BUILD} $R0 $R0
   ${If} $R0 == 0
-    StrCpy $R1 "${PRODUCT_NAME} ${VERSION} is already installed. Select the operation you want to perform and click Next to continue."
+    StrCpy $R1 "${PRODUCT_NAME} ${PRODUCT_VERSION} is already installed. Select the operation you want to perform and click Next to continue."
     StrCpy $R2 "Add/Reinstall components"
     StrCpy $R3 "Uninstall ${PRODUCT_NAME}"
     !insertmacro MUI_HEADER_TEXT "Already Installed" "Choose the maintenance option to perform."
@@ -216,7 +202,7 @@ Function PageReinstall
   ${ElseIf} $R0 == 1
     StrCpy $R1 "An $R4 version of ${PRODUCT_NAME} is installed on your system. It's recommended that you uninstall the current version before installing. Select the operation you want to perform and click Next to continue."
     StrCpy $R2 "Uninstall before installing"
-    StrCpy $R3 "Do not uninstall"
+    StrCpy $R3 "Upgrade/Repair"
     !insertmacro MUI_HEADER_TEXT "Already Installed" "Choose how you want to install ${PRODUCT_NAME}."
     StrCpy $R0 "1"
   ${ElseIf} $R0 == 2
@@ -279,7 +265,7 @@ Function PageLeaveReinstall
   StrCmp $R1 "1" reinst_done ; Same version, skip to add/reinstall components?
 
   reinst_uninstall:
-  ReadRegStr $R1 HKLM "${REG_UNINST_KEY}" "UninstallString"
+  ReadRegStr $R1 HKLM "${REG_KEY}" "UninstallString"
 
   ;Run uninstaller
     HideWindow
@@ -296,9 +282,6 @@ Function PageLeaveReinstall
 FunctionEnd
 
 !endif
-
-
-
 
 #Function .onMouseOverSection
 #    ; Find which section the mouse is over, and set the corresponding description.
