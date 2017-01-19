@@ -17,9 +17,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with OpenQuake. If not, see <http://www.gnu.org/licenses/>.
 
-if [ $GEM_SET_DEBUG ]; then
+#if [ $GEM_SET_DEBUG ]; then
     set -x
-fi
+#fi
 set -e
 
 check_dep() {
@@ -146,8 +146,8 @@ make install
 cd ..
 
 if $CLEANUP; then rm -Rf Python-2.7.12; fi
-tar xvf src/Python-2.7.12.tar.xz
-cd Python-2.7.11
+tar xJvf src/Python-2.7.12.tar.xz
+cd Python-2.7.12
 ./configure --prefix=$OQ_PREFIX --enable-unicode=ucs4
 make -j $NPROC
 make install
@@ -165,11 +165,6 @@ cd ..
 # cd ..
 
 python src/get-pip.py
-if [ "$BUILD_OS" == "linux64" ]; then
-    python $(which pip) install -r $OQ_PREFIX/requirements-py27-linux64.txt
-elif [ "$BUILD_OS" == "macos" ]; then
-    python $(which pip) install -r $OQ_PREFIX/requirements-py27-macos.txt
-fi
 
 for g in hazardlib engine;
 do 
@@ -177,7 +172,12 @@ do
     git clone --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-${g}.git
     cd oq-${g}
     declare OQ_$(echo $g | tr '[:lower:]' '[:upper:]')_DEV=$(git rev-parse --short HEAD)
-    pip install .
+    if [ "$BUILD_OS" == "linux64" -a -f requirements-py27-linux64.txt ]; then
+        python $(which pip) install -r requirements-py27-linux64.txt
+    elif [ "$BUILD_OS" == "macos" -a -f requirements-py27-macos.txt ]; then
+        python $(which pip) install -r requirements-py27-macos.txt
+    fi
+    python -m pip install .
     cd ..
 done
 
