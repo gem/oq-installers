@@ -2,16 +2,22 @@
 
 To support as most distros as possible the default build target for Linux is CentOS 6 (`$GEM_SET_VENDOR='redhat'`).
 
+To reduce the workload (downloading pre-requisites) a `Dockerfile` is provided to create a builder:
+
+```bash
+sudo docker build --rm=true -t centos6-builder -f Dockerfile.builder .
+```
+
 ### Automatic build
 
 ```bash
-sudo docker run [-e GEM_SET_BRANCH='master'] --rm -v $(pwd):/io centos:6 /io/build-opt-unix.sh
+sudo docker run [-e GEM_SET_BRANCH='master'] --rm -v $(pwd):/io centos6-builder /io/build-opt-unix.sh
 ```
 
 ### Manual build
 
 ```bash
-sudo docker run --rm -t -i -v $(pwd):/io centos:6 /bin/bash
+sudo docker run --rm -t -i -v $(pwd):/io centos6-builder /bin/bash
 $ cd /io
 $ [GEM_SET_BRANCH='master'] bash build-opt-unix.sh
 ```
