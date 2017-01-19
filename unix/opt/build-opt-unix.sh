@@ -94,7 +94,7 @@ cd build/src
 
 curl -LOz sed-4.2.2.tar.gz http://ftp.gnu.org/gnu/sed/sed-4.2.2.tar.gz
 curl -LOz openssl-1.0.2h.tar.gz https://www.openssl.org/source/openssl-1.0.2h.tar.gz
-curl -LOz Python-2.7.11.tar.xz https://www.python.org/ftp/python/2.7.11/Python-2.7.12.tar.xz
+curl -LOz Python-2.7.12.tar.xz https://www.python.org/ftp/python/2.7.12/Python-2.7.12.tar.xz
 # FIXME Rtree is currently unsupported
 # curl -LOz 1.8.5.tar.gz https://github.com/libspatialindex/libspatialindex/archive/1.8.5.tar.gz
 curl -LOz get-pip.py https://bootstrap.pypa.io/get-pip.py
