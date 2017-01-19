@@ -116,9 +116,10 @@ python get-pip.py
 
 if [ "$BUILD_OS" == "linux64" ]; then
     requirements=oq-engine/requirements-py27-linux64.txt
+elif [ "$BUILD_OS" == "macos" ]; then
+    requirements=oq-engine/requirements-py27-macos.txt
 else
-    requirements=$(mktemp)
-    grep -vi rtree oq-engine/requirements-dev.txt > $requirements
+    exit 1
 fi
 pip wheel --wheel-dir=$OQ_WHEEL -r $requirements
 
