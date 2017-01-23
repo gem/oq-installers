@@ -64,11 +64,12 @@ if $(echo $OSTYPE | grep -q linux); then
     else
         VENDOR='redhat'
     fi
+    check_dep sudo
     if [ "$VENDOR" == "redhat" ]; then
-        yum -y upgrade
-        yum -y groupinstall 'Development Tools'
-        yum -y install epel-release
-        yum -y install autoconf bzip2-devel curl git gzip libtool makeself readline-devel spatialindex-devel sqlite-devel tar which xz zlib-devel
+        sudo yum -y upgrade
+        sudo yum -y groupinstall 'Development Tools'
+        sudo yum -y install epel-release
+        sudo yum -y install autoconf bzip2-devel curl git gzip libtool makeself readline-devel spatialindex-devel sqlite-devel tar which xz zlib-devel
     elif [ "$VENDOR" == "ubuntu" ]; then
         sudo apt-get update
         sudo apt-get upgrade -y
