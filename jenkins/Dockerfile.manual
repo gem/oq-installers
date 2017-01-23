@@ -1,0 +1,19 @@
+# vi:syntax=dockerfile
+FROM ubuntu:xenial
+MAINTAINER Daniele Viganò <daniele@openquake.org>
+
+ARG uid=107
+
+RUN apt update && \
+    apt upgrade -y
+
+RUN apt install -y texlive-full \
+                   poppler-utils
+
+RUN useradd -u $uid builder
+
+USER builder
+
+WORKDIR /io
+
+CMD /bin/bash
