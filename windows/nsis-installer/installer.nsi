@@ -8,7 +8,7 @@
 !define PUBLISHER "GEM Foundation"
 !define BITNESS "64"
 !define ARCH_TAG ""
-!define INSTALLER_NAME "OpenQuake_Engine_${PRODUCT_VERSION}.exe"
+!define INSTALLER_NAME "OpenQuake_Engine_${VER_MAJOR}.${VER_MINOR}.${VER_REVISION}-${VER_BUILD}.exe"
 !define PRODUCT_ICON "openquake.ico"
 # WOW6432Node is needed because we are running 64bit software. It's hardcoded since we support only
 # installations on 64bit systems (code is 64bit only)
@@ -70,6 +70,7 @@ Section "!Core Files" SecCore
   File ${PRODUCT_ICON}
   File "LICENSE.txt"
   File "README.html"
+  File "OpenQuake manual.pdf"
   File "oq-console.bat"
 
   SetOutPath "$INSTDIR"
