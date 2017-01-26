@@ -6,8 +6,9 @@ services:
     - docker
 
 before_script:
-    - cd oq-docker && docker build --rm=true -t openquake-centos7 -f Dockerfile.centos .
+    - cd oq-docker
+    - docker build --rm=true -t openquake-centos7 -f Dockerfile.centos .
 
 script:
-    - cd oq-docker && docker run -i -t openquake-centos7 /usr/bin/oq
+    - docker run -i -t openquake-centos7 /usr/bin/oq
 
