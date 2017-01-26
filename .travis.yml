@@ -5,6 +5,9 @@ python:
 services:
     - docker
 
+before_script:
+    - cd oq-docker && docker build --rm=true -t openquake-centos7 -f Dockerfile.centos .
+
 script:
-    - cd wheels && docker run --rm -v $(pwd):/io quay.io/pypa/manylinux1_x86_64 /io/build-wheels-docker.sh
+    - cd oq-docker && docker run -i -t openquake-centos7 /usr/bin/oq
 
