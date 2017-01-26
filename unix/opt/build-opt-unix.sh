@@ -111,7 +111,6 @@ export PATH=\${PREFIX}/bin:\${PATH}
 # FIXME Rtree is currently unsupported
 # export SPATIALINDEX_LIBRARY=\$LD_LIBRARY_PATH/libspatialindex.so
 # export SPATIALINDEX_C_LIBRARY=\$LD_LIBRARY_PATH/libspatialindex_c.so
-export OQ_SITE_CFG_PATH=\${PREFIX}/etc/openquake.cfg
 export PS1=(openquake)\${PS1}
 EOF
 if [ "$BUILD_OS" == "macos" ]; then
@@ -185,7 +184,6 @@ done
 mkdir $OQ_PREFIX/etc
 mkdir -p $OQ_PREFIX/share/openquake/engine
 cp oq-engine/README.md oq-engine/LICENSE $OQ_PREFIX
-cp oq-engine/openquake.cfg $OQ_PREFIX/etc
 cp -R oq-engine/demos $OQ_PREFIX/share/openquake/engine
 cp -R oq-engine/doc $OQ_PREFIX/share/openquake/engine
 rm -Rf $OQ_PREFIX/share/openquake/engine/doc/sphinx

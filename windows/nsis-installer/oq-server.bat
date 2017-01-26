@@ -3,7 +3,6 @@ setlocal
 set mypath=%~dp0
 set PATH=%mypath%\python2.7;%PATH%
 set PYTHONPATH=%mypath%\lib\site-packages
-set OQ_SITE_CFG_PATH=%mypath%\openquake.cfg
 set OQ_HOST=localhost
 set OQ_PORT=8800
 

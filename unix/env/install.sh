@@ -66,13 +66,10 @@ FDEST=$(realpath "$DEST")
 
 echo "Creating a new python environment in $FDEST. Please wait."
 /usr/bin/python virtualenv/virtualenv.py $FDEST > /dev/null
-mkdir $FDEST/etc
-cp openquake.cfg $FDEST/etc
 cp -R {README.md,LICENSE,demos,doc} $FDEST
 
 
 cat <<EOF >> $FDEST/env.sh
-export OQ_SITE_CFG_PATH=$FDEST/etc/openquake.cfg
 . $FDEST/bin/activate
 EOF
 
