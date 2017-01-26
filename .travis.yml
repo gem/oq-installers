@@ -10,5 +10,5 @@ before_script:
     - docker build --rm=true -t openquake-centos7 -f Dockerfile.centos .
 
 script:
-    - docker run -i -t openquake-centos7 /usr/bin/oq
+    - docker run -i -t openquake-centos7 'oq --version'
 
