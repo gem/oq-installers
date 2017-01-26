@@ -100,7 +100,6 @@ SectionEnd
 Section "!OpenQuake Engine and Hazardlib" SecOQ
   SetOutPath "$INSTDIR"
   File "oq-server.bat"
-  File "openquake.cfg"
   SetOutPath "$INSTDIR\lib\site-packages"
   File /r "python-dist\lib\site-packages\openquake*.*"
   SetOutPath "$INSTDIR\demos"
@@ -162,7 +161,6 @@ Section "Uninstall"
   ; Uninstall files
     Delete "$INSTDIR\README.html"
     Delete "$INSTDIR\LICENSE.txt"
-    Delete "$INSTDIR\openquake.cfg"
     Delete "$INSTDIR\openquake.ico"
     Delete "$INSTDIR\oq-server.bat"
     Delete "$INSTDIR\oq-console.bat"

@@ -5,7 +5,6 @@ python-dist/Lib
 *.msi
 *.exe
 *.pdf
-openquake.cfg
 README.txt
 README.md
 README.html
