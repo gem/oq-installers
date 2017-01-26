@@ -1,0 +1,11 @@
+language: python
+python:
+    - 2.7
+
+services:
+    - docker
+
+script:
+    - cd ./unix/opt/
+    - docker run --rm -v $(pwd):/io centos:6 /io/build-opt-unix.sh
+
