@@ -13,7 +13,6 @@ RUN mkdir -p /opt/openquake/lib && \
 
 ENV PYTHONPATH /opt/openquake/lib/python2.7/site-packages/
 ENV PATH /opt/openquake/bin/:$PATH
-ENV OQ_SITE_CFG_PATH /opt/openquake/openquake.cfg
 
 ADD https://api.github.com/repos/gem/oq-engine/git/refs/heads/$branch /tmp/nocache.json
 RUN wget -O- https://raw.githubusercontent.com/gem/oq-engine/$branch/requirements-py27-linux64.txt \
@@ -21,9 +20,7 @@ RUN wget -O- https://raw.githubusercontent.com/gem/oq-engine/$branch/requirement
     pip install --force-reinstall --ignore-installed --upgrade --no-deps \
     --prefix /opt/openquake -r /opt/openquake/requirements.txt && \
     pip install --prefix /opt/openquake https://github.com/gem/oq-hazardlib/archive/$branch.zip && \
-    pip install --prefix /opt/openquake https://github.com/gem/oq-engine/archive/$branch.zip && \
-    wget -O- https://raw.githubusercontent.com/gem/oq-engine/$branch/openquake.cfg \
-    > $OQ_SITE_CFG_PATH 2>/dev/null
+    pip install --prefix /opt/openquake https://github.com/gem/oq-engine/archive/$branch.zip
 
 ADD openquake/__init__.py $PYTHONPATH/openquake
 ADD oqrun.sh /opt/openquake/
