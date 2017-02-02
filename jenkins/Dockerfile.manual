@@ -11,6 +11,11 @@ RUN apt install -y texlive-full \
                    poppler-utils \
                    inkscape
 
+# Add Titilium and Intro from the fonts folder
+# You need to put otf and ttf files inside it
+# first.
+ADD fonts /usr/share/fonts
+
 RUN useradd -u $uid builder
 
 USER builder
