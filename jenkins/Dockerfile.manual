@@ -8,7 +8,8 @@ RUN apt update && \
     apt upgrade -y
 
 RUN apt install -y texlive-full \
-                   poppler-utils
+                   poppler-utils \
+                   inkscape
 
 RUN useradd -u $uid builder
 
