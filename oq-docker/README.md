@@ -5,13 +5,22 @@ Exposes the WebUI and a `oq` cli.
 ## Build images ##
 
 ```bash
->$ sudo docker build --rm=true -t openquake-centos7 -f Dockerfile.centos .
+>$ sudo docker build --rm=true -t openquake/engine -f Dockerfile.centos .
 ```
 
 ## Run a container ##
 
+
+### TTY ###
+
 ```bash
 >$ sudo docker run --name myoqcontainer -i -t -p 8800:8800 openquake-centos7
+```
+
+### Headless ###
+
+```bash
+>$ sudo docker run --name myoqcontainer -d -p 8800:8800 openquake-centos7
 ```
 
 ### Start and stop ###
