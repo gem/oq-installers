@@ -71,7 +71,7 @@ function build {
 
 function post {
     # Bundle external shared libraries into the wheels
-    for whl in $OQ_PREFIX/wheelhouse/*.whl; do
+    for whl in /tmp/wheelhouse/*.whl; do
         auditwheel repair $whl -w /io/wheelhouse/
         rm $whl
     done
