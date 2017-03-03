@@ -39,6 +39,9 @@ else
     NPROC=2
 fi
 
+HUID=$(stat -c '%u' ${BASH_SOURCE[0]})
+HGID=$(stat -c '%g' ${BASH_SOURCE[0]})
+
 export PY
 export NPROC
 export OQ_PREFIX
@@ -73,6 +76,8 @@ function post {
         auditwheel repair $whl -w /io/wheelhouse/
         rm $whl
     done
+
+    chown -R $HUID.$HGID /io/wheelhouse
 }
 
 get Cython
