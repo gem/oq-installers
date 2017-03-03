@@ -24,8 +24,13 @@ set -e
 
 MYDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-cd $MYDIR/builders
-for s in *.sh; do
-    echo "Running $s"
-    ./$s
-done
+if [ -z $OQ_PREFIX ]; then source $MYDIR/../build-common.sh; fi
+
+cd $OQ_PREFIX/wheelhouse
+
+yum install openblas-devel.x86_64 libgfortran.x86_64
+
+get numpy
+build scipy==0.17.1
+
+post

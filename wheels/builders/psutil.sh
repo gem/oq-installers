@@ -24,8 +24,10 @@ set -e
 
 MYDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-cd $MYDIR/builders
-for s in *.sh; do
-    echo "Running $s"
-    ./$s
-done
+if [ -z $OQ_PREFIX ]; then source $MYDIR/../build-common.sh; fi
+
+cd $OQ_PREFIX/wheelhouse
+
+build psutil==3.4.2
+
+post

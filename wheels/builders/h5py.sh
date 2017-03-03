@@ -22,10 +22,30 @@ if [ $GEM_SET_DEBUG ]; then
 fi
 set -e
 
+if [ -z $GEM_FORCE_H5PY ]; then
+    echo "Will not build h5py because is provided by upstream"
+    exit 0
+fi
+
 MYDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-cd $MYDIR/builders
-for s in *.sh; do
-    echo "Running $s"
-    ./$s
-done
+if [ -z $OQ_PREFIX ]; then source $MYDIR/../build-common.sh; fi
+
+yum install -y curl gzip tar
+
+cd $OQ_PREFIX/src
+
+curl -LO https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8.17/src/hdf5-1.8.17.tar.gz
+tar xzf hdf5-1.8.17.tar.gz
+cd hdf5-1.8.17
+./configure --prefix=$OQ_PREFIX
+make -j $NPROC
+make install
+cd ..
+
+cd $OQ_PREFIX/wheelhouse
+
+get numpy
+build h5py==2.6.0
+
+post
