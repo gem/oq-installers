@@ -22,9 +22,8 @@ if [ $GEM_SET_DEBUG ]; then
 fi
 set -e
 
-OQ_PREFIX=/build
-mkdir -p $OQ_PREFIX/src
-mkdir -p $OQ_PREFIX/wheelhouse
+mkdir -p /tmp/src
+mkdir -p /tmp/wheelhouse
 
 if [ $GEM_SET_PY ]; then
     PY="$GEM_SET_PY"
@@ -44,19 +43,16 @@ HGID=$(stat -c '%g' ${BASH_SOURCE[0]})
 
 export PY
 export NPROC
-export OQ_PREFIX
 
-export LD_LIBRARY_PATH=${OQ_PREFIX}/lib
-export CPATH=${OQ_PREFIX}/include
-export PATH=${OQ_PREFIX}/bin:${PATH}
-export HDF5_DIR=$OQ_PREFIX
+export OQ_ENV_SET=true
+export HDF5_DIR=/usr/local
 
 function get {
     for PYVER in $PY; do
         for PYBIN in /opt/python/cp${PYVER}*/bin; do
             # Download python dependencies
-            if ls /io/wheelhouse/$1*${PYVER}* &>/dev/null; then
-                ${PYBIN}/pip install $1*${PYVER}*
+            if cache=$(ls /io/wheelhouse/$1*${PYVER}*.whl); then
+                ${PYBIN}/pip install $cache
             else
                 ${PYBIN}/pip install $1
             fi
@@ -68,7 +64,7 @@ function build {
     for PYVER in $PY; do
         for PYBIN in /opt/python/cp${PYVER}*/bin; do
             # Download python dependencies
-            ${PYBIN}/pip wheel --no-binary :all: -w $OQ_PREFIX/wheelhouse $1
+            ${PYBIN}/pip wheel --no-binary :all: -w /tmp/wheelhouse $1
         done
     done
 }

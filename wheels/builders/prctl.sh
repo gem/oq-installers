@@ -24,9 +24,9 @@ set -e
 
 MYDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-if [ -z $OQ_PREFIX ]; then source $MYDIR/../build-common.sh; fi
+if [ -z $OQ_ENV_SET ]; then source $MYDIR/../build-common.sh; fi
 
-cd $OQ_PREFIX/wheelhouse
+cd /tmp/wheelhouse
 
 yum install -y libcap-devel.x86_64
 

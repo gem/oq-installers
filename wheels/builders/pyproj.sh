@@ -24,11 +24,11 @@ set -e
 
 MYDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-if [ -z $OQ_PREFIX ]; then source $MYDIR/../build-common.sh; fi
+if [ -z $OQ_ENV_SET ]; then source $MYDIR/../build-common.sh; fi
 
 yum install -y autoconf curl gzip libtool tar
 
-cd $OQ_PREFIX/src
+cd /tmp/src
 
 curl -Lo proj-4.8.0.tar.gz https://github.com/OSGeo/proj.4/archive/4.8.0.tar.gz
 tar xvf proj-4.8.0.tar.gz
@@ -36,11 +36,11 @@ cd proj.4-4.8.0
 # Workaround for an autogen.sh bug
 ./autogen.sh || true
 ./autogen.sh
-./configure --prefix=$OQ_PREFIX
+./configure --prefix=/usr/local
 make -j $NPROC
 make install
 
-cd $OQ_PREFIX/wheelhouse
+cd /tmp/wheelhouse
 
 build pyproj==1.9.5.1
 

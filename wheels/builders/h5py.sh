@@ -29,21 +29,21 @@ fi
 
 MYDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-if [ -z $OQ_PREFIX ]; then source $MYDIR/../build-common.sh; fi
+if [ -z $OQ_ENV_SET ]; then source $MYDIR/../build-common.sh; fi
 
 yum install -y curl gzip tar
 
-cd $OQ_PREFIX/src
+cd /tmp/src
 
 curl -LO https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8.17/src/hdf5-1.8.17.tar.gz
 tar xzf hdf5-1.8.17.tar.gz
 cd hdf5-1.8.17
-./configure --prefix=$OQ_PREFIX
+./configure --prefix=/usr/local
 make -j $NPROC
 make install
 cd ..
 
-cd $OQ_PREFIX/wheelhouse
+cd /tmp/wheelhouse
 
 get numpy
 build h5py==2.6.0

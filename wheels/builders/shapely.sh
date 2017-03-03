@@ -24,11 +24,11 @@ set -e
 
 MYDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-if [ -z $OQ_PREFIX ]; then source $MYDIR/../build-common.sh; fi
+if [ -z $OQ_ENV_SET ]; then source $MYDIR/../build-common.sh; fi
 
 yum install -y autoconf curl gzip libtool tar
 
-cd $OQ_PREFIX/src
+cd /tmp/src
 
 curl -Lo libgeos-3.5.0.tar.gz https://github.com/libgeos/libgeos/archive/3.5.0.tar.gz
 tar xvf libgeos-3.5.0.tar.gz
@@ -36,11 +36,11 @@ cd libgeos-3.5.0
 # Workaround for an autogen.sh bug
 ./autogen.sh || true
 ./autogen.sh
-./configure --prefix=$OQ_PREFIX
+./configure --prefix=/usr/local
 make -j $NPROC
 make install
 
-cd $OQ_PREFIX/wheelhouse
+cd /tmp/wheelhouse
 
 build Shapely==1.5.13
 
