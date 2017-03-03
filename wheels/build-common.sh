@@ -55,13 +55,16 @@ function get {
     for PYVER in $PY; do
         for PYBIN in /opt/python/cp${PYVER}*/bin; do
             # Download python dependencies
-            ${PYBIN}/pip install $1 
+            if ls /io/wheelhouse/$1*${PYVER}* &>/dev/null; then
+                ${PYBIN}/pip install $1*${PYVER}*
+            else
+                ${PYBIN}/pip install $1
+            fi
         done
     done
 }
 
 function build {
-
     for PYVER in $PY; do
         for PYBIN in /opt/python/cp${PYVER}*/bin; do
             # Download python dependencies
@@ -79,6 +82,3 @@ function post {
 
     chown -R $HUID.$HGID /io/wheelhouse
 }
-
-get Cython
-
