@@ -38,7 +38,7 @@ make install
 
 cd ..
 
-get matplotlib==1.5.3 numpy pyshp pillow pyproj
+get numpy pyshp pyproj matplotlib==1.5.3 pillow
 build .
 
 post
