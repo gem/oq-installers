@@ -28,7 +28,7 @@ mkdir -p /tmp/wheelhouse
 if [ $GEM_SET_PY ]; then
     PY="$GEM_SET_PY"
 else
-    PY="36"
+    PY="*27mu 35"
 fi
 
 if [ $GEM_SET_NPROC ]; then
