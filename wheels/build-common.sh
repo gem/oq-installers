@@ -64,7 +64,7 @@ function build {
     for PYVER in $PY; do
         for PYBIN in /opt/python/cp${PYVER}*/bin; do
             # Download python dependencies
-            ${PYBIN}/pip wheel --no-binary :all: -w /tmp/wheelhouse $1
+            ${PYBIN}/pip wheel --no-deps --no-binary :all: -w /tmp/wheelhouse $1
         done
     done
 }
