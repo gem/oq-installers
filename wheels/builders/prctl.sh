@@ -24,8 +24,11 @@ set -e
 
 MYDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-cd $MYDIR/builders
-for s in *.sh; do
-    echo "Running $s"
-    ./$s
-done
+if [ -z $OQ_ENV_SET ]; then source $MYDIR/../build-common.sh; fi
+
+cd /tmp/wheelhouse
+
+yum install -y libcap-devel.x86_64
+
+build python_prctl==1.6.1
+post

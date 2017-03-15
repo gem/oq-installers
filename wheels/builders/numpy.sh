@@ -24,8 +24,22 @@ set -e
 
 MYDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-cd $MYDIR/builders
-for s in *.sh; do
-    echo "Running $s"
-    ./$s
-done
+if [ -z $OQ_ENV_SET ]; then source $MYDIR/../build-common.sh; fi
+
+cd /tmp/src
+
+yum install -y libgfortran.x86_64
+
+if [ ! -f /usr/local/lib/libopenblasp-r0.2.18.so ]; then
+    curl -Lo OpenBLAS-0.2.18.tar.gz https://github.com/xianyi/OpenBLAS/archive/v0.2.18.tar.gz
+    tar xvf OpenBLAS-0.2.18.tar.gz
+    cd OpenBLAS-0.2.18
+    make DYNAMIC_ARCH=1 USE_OPENMP=0 NUM_THREADS=64
+    make PREFIX=/usr/local install
+fi
+
+cd /tmp/wheelhouse
+
+build numpy==1.11.1
+
+post
