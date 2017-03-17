@@ -28,7 +28,10 @@ mkdir -p /tmp/wheelhouse
 if [ $GEM_SET_PY ]; then
     PY="$GEM_SET_PY"
 else
-    PY="36"
+    # FIXME '*27mu' is an ugly hack,
+    # but in this way we can skip 'cp27'
+    # builds which currently we don't need
+    PY="*27mu 35"
 fi
 
 if [ $GEM_SET_NPROC ]; then
@@ -64,7 +67,7 @@ function build {
     for PYVER in $PY; do
         for PYBIN in /opt/python/cp${PYVER}*/bin; do
             # Download python dependencies
-            ${PYBIN}/pip wheel --no-binary :all: -w /tmp/wheelhouse $1
+            ${PYBIN}/pip wheel --no-deps --no-binary :all: -w /tmp/wheelhouse $1
         done
     done
 }
