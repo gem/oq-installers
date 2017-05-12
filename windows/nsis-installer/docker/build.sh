@@ -40,7 +40,7 @@ wine msiexec /a $PY_MSI /qb TARGETDIR=../python-dist/python2.7
 ## but in Docker is broken because of https://github.com/suchja/wine/issues/7
 # wine $HOME/.wine/drive_c/Python27/Scripts/pip.exe install --disable-pip-version-check --force-reinstall --ignore-installed --upgrade --no-deps --no-index --prefix python-dist src/py/*.whl src/py27/*.whl src/openquake.*.whl
 ## So we unzip the wheels instead
-find -name \*.whl -exec unzip -o -x {} -d ../python-dist/Lib \;
+find -name \*.whl -exec unzip -o -x {} -d ../python-dist/Lib/site-packages \;
 
 cd ..
 
