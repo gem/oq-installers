@@ -6,6 +6,7 @@ services:
     - docker
 
 script:
-    - cd ./unix/opt/
-    - docker run --rm -v $(pwd):/io centos:6 /io/build-opt-unix.sh
+    - cd ./windows/nsis-installer && mkdir -p src/py src/py27
+    - docker build --rm=true -t oq-nsis -f docker/Dockerfile .
+    - docker run -v $(pwd):/io -t --rm oq-nsis
 
