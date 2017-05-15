@@ -6,7 +6,7 @@ services:
     - docker
 
 script:
-    - cd ./windows/nsis-installer && mkdir -p src/py src/py27
+    - cd ./windows/nsis-installer && mkdir -p src/py src/py27 && touch "OpenQuake manual.pdf"
     - docker build --rm=true -t oq-nsis -f docker/Dockerfile .
     - docker run -v $(pwd):/io -t --rm oq-nsis
 
