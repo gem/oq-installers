@@ -1,0 +1,35 @@
+# vi:syntax=dockerfile
+FROM centos:centos7
+MAINTAINER Daniele Viganò <daniele@openquake.org>
+
+ARG branch=master
+
+RUN yum -y install epel-release python wget && \
+    yum -y install python-pip && \
+    pip install -U pip wheel
+
+RUN mkdir -p /opt/openquake/lib && \
+    ln -rs /opt/openquake/lib /opt/openquake/lib64
+
+ENV PYTHONPATH /opt/openquake/lib/python2.7/site-packages/
+ENV PATH /opt/openquake/bin/:$PATH
+
+ADD https://api.github.com/repos/gem/oq-engine/git/refs/heads/$branch /tmp/nocache.json
+RUN wget -O- https://raw.githubusercontent.com/gem/oq-engine/$branch/requirements-py27-linux64.txt \
+    > /opt/openquake/requirements.txt 2>/dev/null && \
+    pip install --force-reinstall --ignore-installed --upgrade --no-deps \
+    --prefix /opt/openquake -r /opt/openquake/requirements.txt && \
+    pip install --prefix /opt/openquake https://github.com/gem/oq-hazardlib/archive/$branch.zip && \
+    pip install --prefix /opt/openquake https://github.com/gem/oq-engine/archive/$branch.zip
+
+ADD openquake/__init__.py $PYTHONPATH/openquake
+ADD oqrun.sh /opt/openquake/
+
+RUN useradd -u 1000 openquake
+
+USER openquake
+ENV HOME /home/openquake
+WORKDIR ${HOME}
+
+EXPOSE 8800:8800
+CMD /bin/bash /opt/openquake/oqrun.sh

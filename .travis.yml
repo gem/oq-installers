@@ -5,7 +5,9 @@ python:
 services:
     - docker
 
-script:
-    - cd ./unix/opt/
-    - docker run --rm -v $(pwd):/io centos:6 /io/build-opt-unix.sh
+before_script:
+    - cd oq-docker
+    - docker build --rm=true -t openquake-centos7 -f Dockerfile.centos .
 
+script:
+    - docker run --rm -i -t openquake-centos7 /opt/openquake/bin/oq --version
