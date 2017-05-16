@@ -31,6 +31,10 @@ for i in oq-engine oq-hazardlib; do
 done
 
 # Extract Python, to be included in the installation
+if [ ! -f $PY_MSI ]; then
+    PY_MSI=$HOME/$PY_MSI
+    echo "Extracting python from $PY_MSI"
+fi
 wine msiexec /a $PY_MSI /qb TARGETDIR=../python-dist/python2.7
 
 # Extract wheels to be included in the installation
