@@ -6,8 +6,6 @@ set -e
 # Default software distribution
 PY="2.7.13"
 PY_MSI="python-$PY.amd64.msi"
-WHEEL="wheel-0.29.0-py2.py3-none-any.whl"
-NSIS="nsis-3.01-setup.exe"
 
 cd /io/src
 
@@ -15,28 +13,6 @@ if [ ! -d py -o ! -d py27 ]; then
     echo "Please download python dependencies first."
     exit 1
 fi
-
-# Install Python, used by the builder
-if [ ! -f $PY_MSI ]; then
-    PY_MSI=$HOME/$PY_MSI
-    echo "Using python from $PY_MSI"
-fi
-wine msiexec /i $PY_MSI /qn ALL
-
-# Install wheel dependency, used by the builder
-if [ -f ${HOME}/${WHEEL} ]; then
-    wine pip install --disable-pip-version-check --no-index ${HOME}/${WHEEL}
-    echo "Using wheel from ${HOME}/${WHEEL}"
-else
-    wine pip install wine
-fi
-
-# Install NSIS, used by the builder
-if [ ! -f $NSIS ]; then
-    NSIS=$HOME/$NSIS
-    echo "Using NSIS from $NSIS"
-fi
-wine ${NSIS} /S
 
 # Cleanup
 rm -Rf ../python-dist/python2.7/*
