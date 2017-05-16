@@ -10,4 +10,3 @@ script:
     - cd ./windows/nsis-installer
     - docker build --rm=true -t oq-nsis -f docker/Dockerfile .
     - docker run --rm -t -i oq-nsis /usr/bin/wine python -c 'import pip; print(pip.__version__)'
-   

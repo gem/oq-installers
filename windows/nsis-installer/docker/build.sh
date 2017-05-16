@@ -7,7 +7,8 @@ set -e
 PY="2.7.13"
 PY_MSI="python-$PY.amd64.msi"
 
-cd /io/src
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd $DIR/../src && pwd
 
 if [ ! -d py -o ! -d py27 ]; then
     echo "Please download python dependencies first."
