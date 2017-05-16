@@ -14,8 +14,7 @@ ENV WINEDEBUG -all
 WORKDIR $HOME
 
 RUN wget -q https://downloads.sourceforge.net/project/nsis/NSIS%203/3.01/nsis-3.01-setup.exe && \
-    wget -q https://www.python.org/ftp/python/2.7.13/python-2.7.13.amd64.msi
+    wget -q https://www.python.org/ftp/python/2.7.13/python-2.7.13.amd64.msi && \
+    pip wheel --disable-pip-version-check --no-deps wheel
     
-RUN wine nsis-3.01-setup.exe /S
-
 CMD /bin/bash /io/docker/build.sh
