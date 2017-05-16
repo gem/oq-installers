@@ -1,7 +1,5 @@
 ## OpenQuake installers for Windows ##
 
-Work in progress.
-
 ### Requirements
 
 - WINE: https://www.winehq.org/
@@ -12,42 +10,38 @@ Work in progress.
 
 Microsoft Windows is not required.
 
-### Setup WINE prefix
+### Build with Docker
+
+#### Build Docker image
+```bash
+$ docker build --rm=true -t oq-nsis -f docker/Dockerfile .
+```
+### Run the container
+```bash
+$ docker run -v $(pwd):/io -t -i --rm oq-nsis
+```
+
+### Manual installation 
+
+#### Setup WINE prefix
 - `export WINEPREFIX=/home/user/path/to/my/prefix`
 - `cd src`
-- `wget https://www.python.org/ftp/python/2.7.12/python-2.7.12.amd64.msi`
+- `wget https://www.python.org/ftp/python/2.7.13/python-2.7.13.amd64.msi`
 - `wine msiexec /i python-2.7.12.amd64.msi`
-- in `regedit` add to `HKEY_CURRENT_USER\Environment\PATH`: `C:\Python27:C:\Program Files (x86)\NSIS`
 - `wine pip install wheel`
-
-### Dependencies
 
 #### OpenQuake
 - `cd src`
-- `git clone https://github.com/gem/oq-hazardlib.git`
-- `git clone https://github.com/gem/oq-engine.git`
-- `cd oq-engine`
- - `wine python install bdist_wheel -d ..`
-- `cd oq-hazardlib`
- - `wine python install bdist_wheel -d ..`
-
-#### Python
-- `cd src`
-- `wine msiexec /a python-2.7.12.amd64.msi /qb TARGETDIR=../python-dist/python2.7`
+- `git clone [-b mybranch] https://github.com/gem/oq-hazardlib.git`
+- `git clone [-b mybranch] https://github.com/gem/oq-engine.git`
 
 #### Libs
-- `wine pip install --force-reinstall --ignore-installed --upgrade --no-index --prefix python-dist src/py/*.whl src/py27/*.whl src/openquake.*.whl`
+- Download `py` and `py27` from the internal repo and put it into `src`
 
-Setup of the sole `oq-engine` and `oq-hazardlib` can be done adding `--no-deps` to the command above.
+#### Run the builder
+- `docker/build.sh`
 
-### Setup OpenQuake
-- `cp -r src/oq-engine/demos .`
-- `python -m markdown src/oq-engine/README.md > README.html`
-- run NSIS:` wine makensis /V4 installer.nsi`
-
-### Open issues
-
-#### Errors making wheels
+### Errors making wheels
 
 An error like this
 
@@ -69,7 +63,6 @@ Traceback (most recent call last):
     % (path_prefix, start_prefix))
 ValueError: path is on drive , start on drive Z:
 ```
-
 means that the source code folder has a path which is too deep. Try saving sources in a less deep path (like `C:\Temp`).
 
 See also https://github.com/gem/oq-installers/issues
