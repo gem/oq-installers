@@ -4,7 +4,7 @@ MAINTAINER Daniele Viganò <daniele@openquake.org>
 
 ARG uid=107
 
-RUN apt update && apt install -y perl-tk libdigest-md5-perl
+RUN apt update && apt install -y perl-tk libdigest-md5-perl wget
 
 RUN wget -q http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz && \
     tar xzf install-tl-unx.tar.gz
