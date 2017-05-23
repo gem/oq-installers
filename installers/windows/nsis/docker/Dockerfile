@@ -4,7 +4,7 @@ MAINTAINER Daniele Viganò <daniele@openquake.org>
 
 ARG uid=1000
 
-RUN dnf -y install wine python-markdown python-wheel wget git unzip
+RUN dnf -y install wine python-markdown python-wheel wget git zip unzip
 
 RUN useradd -u 1000 builder
 
