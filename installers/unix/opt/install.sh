@@ -88,7 +88,7 @@ find ${FDEST}/openquake -type f -exec ${FDEST}/openquake/bin/sed -i $REWRITE "{}
 
 PROMPT="Do you want to make the 'oq' command available by default? [Y/n]: "
 read -e -p "$PROMPT" OQ
-if [ "$OQ" != 'N' && "$OQ" != 'n' ]; then
+if [[ "$OQ" != 'N' && "$OQ" != 'n' ]]; then
     echo "alias oq=\"${FDEST}/bin/oq\"" > $HOME/.bashrc
 fi
 

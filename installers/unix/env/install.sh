@@ -49,7 +49,7 @@ realpath() {
 
 IFS="
 "
-MACOS=$(echo $OSTYPE | grep -q darwin)
+MACOS=$(echo $OSTYPE | grep darwin)
 
 while (( "$#" )); do
     case "$1" in
@@ -87,7 +87,7 @@ pip install wheelhouse/*.whl > /dev/null
 
 PROMPT="Do you want to make the 'oq' command available by default? [Y/n]: "
 read -e -p "$PROMPT" OQ
-if [ "$OQ" != 'N' && "$OQ" != 'n' ]; then
+if [[ "$OQ" != 'N' && "$OQ" != 'n' ]]; then
     if [ $MACOS ]; then
         echo "alias oq=\"${FDEST}/bin/oq\"" > $HOME/.profile
     else
