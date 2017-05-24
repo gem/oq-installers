@@ -107,7 +107,7 @@ Section "!OpenQuake Engine and Hazardlib" SecOQ
   
   SetOutPath "$INSTDIR"
     CreateShortCut "$SMPROGRAMS\OpenQuake Engine (console).lnk" "$INSTDIR\oq-console.bat" \
-      "" "$INSTDIR\openquake.ico"
+      "" "$INSTDIR\openquake_black.ico"
   SetOutPath "$INSTDIR"
 
   !define OQ_INSTALLED "true"
@@ -116,7 +116,7 @@ SectionEnd
 Section "OpenQuake Engine desktop icon" SecIcon
   SetOutPath "$INSTDIR"
   CreateShortCut "$DESKTOP\OpenQuake Engine (console).lnk" "$INSTDIR\oq-console.bat" \
-      "" "$INSTDIR\openquake.ico"
+      "" "$INSTDIR\openquake_black.ico"
   StrCmp "${OQ_INSTALLED}" "" done
   
   CreateShortCut "$DESKTOP\OpenQuake Engine (webui).lnk" "$INSTDIR\oq-server.bat" \
@@ -161,6 +161,7 @@ Section "Uninstall"
   ; Uninstall files
     Delete "$INSTDIR\README.html"
     Delete "$INSTDIR\LICENSE.txt"
+    Delete "$INSTDIR\openquake_black.ico"
     Delete "$INSTDIR\openquake.ico"
     Delete "$INSTDIR\oq-server.bat"
     Delete "$INSTDIR\oq-console.bat"
