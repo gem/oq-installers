@@ -166,21 +166,13 @@ cd ..
 
 python src/get-pip.py
 
-if [ "$BUILD_OS" == "linux64" ]; then
-    requirements=oq-engine/requirements-py27-linux64.txt
-elif [ "$BUILD_OS" == "macos" ]; then
-    requirements=oq-engine/requirements-py27-macos.txt
-else
-    exit 1
-fi
-
 for g in hazardlib engine;
 do 
     rm -Rf oq-${g}
     git clone --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-${g}.git
     cd oq-${g}
     declare OQ_$(echo $g | tr '[:lower:]' '[:upper:]')_DEV=$(git rev-parse --short HEAD)
-    python -m pip install -r $requirements
+    python -m pip install -r requirements-py27-${BUILD_OS}.txt
     python -m pip install .
     cd ..
 done
