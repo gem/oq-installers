@@ -67,7 +67,8 @@ Section "!Core Files" SecCore
   SetShellVarContext all
 
   SetOutPath "$INSTDIR"
-  File ${PRODUCT_ICON}
+  File "openquake.ico"
+  File "openquake_black.ico"
   File "LICENSE.txt"
   File "README.html"
   File "OpenQuake manual.pdf"
@@ -161,6 +162,7 @@ Section "Uninstall"
   ; Uninstall files
     Delete "$INSTDIR\README.html"
     Delete "$INSTDIR\LICENSE.txt"
+    Delete "$INSTDIR\OpenQuake manual.pdf"
     Delete "$INSTDIR\openquake_black.ico"
     Delete "$INSTDIR\openquake.ico"
     Delete "$INSTDIR\oq-server.bat"
