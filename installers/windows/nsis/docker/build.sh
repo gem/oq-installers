@@ -18,6 +18,7 @@ fi
 # Cleanup
 rm -Rf ../python-dist/python2.7/*
 rm -Rf ../python-dist/Lib/*
+rm -Rf ../demos/*
 
 ## This is an alternative method that we cannot use because we need extra data
 ## not packaged in the python packages
