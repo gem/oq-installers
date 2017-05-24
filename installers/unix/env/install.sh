@@ -70,7 +70,7 @@ echo "Creating a new python environment in $FDEST. Please wait."
 /usr/bin/python virtualenv/virtualenv.py $FDEST > /dev/null
 cp -R {README.md,LICENSE,demos,doc} $FDEST
 
-if [ $MACOS ];
+if [ $MACOS ]; then
     cat <<EOF >> $FDEST/env.sh
     export LC_ALL=en_US.UTF-8
     export LAN=en_US.UTF-8
@@ -88,7 +88,7 @@ pip install wheelhouse/*.whl > /dev/null
 PROMPT="Do you want to make the 'oq' command available by default? [Y/n]: "
 read -e -p "$PROMPT" OQ
 if [ "$OQ" != 'N' && "$OQ" != 'n' ]; then
-    if [ $MACOS ];
+    if [ $MACOS ]; then
         echo "alias oq=\"${FDEST}/bin/oq\"" > $HOME/.profile
     else
         echo "alias oq=\"${FDEST}/bin/oq\"" > $HOME/.bashrc
