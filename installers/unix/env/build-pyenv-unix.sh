@@ -133,6 +133,7 @@ do
     cd ..
 done
 cp -R ${OQ_ROOT}/oq-engine/{README.md,LICENSE,demos,doc} ${OQ_ROOT}/dist
+rm -Rf $OQ_ROOT/dist/doc/sphinx
 
 # Make a zipped copy of each demo
 for d in hazard risk; do
@@ -142,7 +143,7 @@ for d in hazard risk; do
     done
     cd -
 done
-rm -Rf $OQ_ROOT/dist/doc/sphinx
+
 ## utils is not copied for now, since it does not contain anything useful here
 cp $OQ_DIR/install.sh ${OQ_ROOT}/dist
 

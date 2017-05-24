@@ -17,9 +17,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with OpenQuake. If not, see <http://www.gnu.org/licenses/>.
 
-#if [ $GEM_SET_DEBUG ]; then
+if [ $GEM_SET_DEBUG ]; then
     set -x
-#fi
+fi
 set -e
 
 check_dep() {
@@ -69,11 +69,11 @@ if $(echo $OSTYPE | grep -q linux); then
         sudo yum -y upgrade
         sudo yum -y groupinstall 'Development Tools'
         sudo yum -y install epel-release
-        sudo yum -y install autoconf bzip2-devel curl git gzip libtool makeself readline-devel spatialindex-devel sqlite-devel tar which xz zlib-devel
+        sudo yum -y install autoconf bzip2-devel curl git gzip libtool makeself readline-devel spatialindex-devel sqlite-devel tar which xz zip zlib-devel
     elif [ "$VENDOR" == "ubuntu" ]; then
         sudo apt-get update
         sudo apt-get upgrade -y
-        sudo apt-get install -y autoconf build-essential curl debianutils git gzip libbz2-dev libreadline-dev libspatialindex-dev libsqlite3-dev libtool makeself tar xz-utils zlib1g-dev
+        sudo apt-get install -y autoconf build-essential curl debianutils git gzip libbz2-dev libreadline-dev libspatialindex-dev libsqlite3-dev libtool makeself tar xz-utils zip zlib1g-dev
     else
         not_supported
     fi
@@ -166,27 +166,40 @@ cd ..
 
 python src/get-pip.py
 
+if [ "$BUILD_OS" == "linux64" ]; then
+    requirements=oq-engine/requirements-py27-linux64.txt
+elif [ "$BUILD_OS" == "macos" ]; then
+    requirements=oq-engine/requirements-py27-macos.txt
+else
+    exit 1
+fi
+
 for g in hazardlib engine;
 do 
     rm -Rf oq-${g}
     git clone --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-${g}.git
     cd oq-${g}
     declare OQ_$(echo $g | tr '[:lower:]' '[:upper:]')_DEV=$(git rev-parse --short HEAD)
-    if [ "$BUILD_OS" == "linux64" -a -f requirements-py27-linux64.txt ]; then
-        python $(which pip) install -r requirements-py27-linux64.txt
-    elif [ "$BUILD_OS" == "macos" -a -f requirements-py27-macos.txt ]; then
-        python $(which pip) install -r requirements-py27-macos.txt
-    fi
+    python -m pip install -r $requirements
     python -m pip install .
     cd ..
 done
 
-mkdir $OQ_PREFIX/etc
 mkdir -p $OQ_PREFIX/share/openquake/engine
 cp oq-engine/README.md oq-engine/LICENSE $OQ_PREFIX
 cp -R oq-engine/demos $OQ_PREFIX/share/openquake/engine
 cp -R oq-engine/doc $OQ_PREFIX/share/openquake/engine
 rm -Rf $OQ_PREFIX/share/openquake/engine/doc/sphinx
+
+# Make a zipped copy of each demo
+for d in hazard risk; do
+    cd ${OQ_PREFIX}/share/openquake/engine/demos/${d}
+    for z in *; do
+        zip -r ${z}.zip $z
+    done
+    cd -
+done
+
 # utils is not copied for now, since it does not contain anything useful here
 cp install.sh ${OQ_ROOT}/${OQ_REL}
 
