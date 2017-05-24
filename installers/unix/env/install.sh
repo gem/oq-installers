@@ -49,6 +49,8 @@ realpath() {
 
 IFS="
 "
+MACOS=$(echo $OSTYPE | grep -q darwin)
+
 while (( "$#" )); do
     case "$1" in
         -d|--dest) DEST="$2"; shift;;
@@ -69,11 +71,17 @@ echo "Creating a new python environment in $FDEST. Please wait."
 cp -R {README.md,LICENSE,demos,doc} $FDEST
 
 
-cat <<EOF >> $FDEST/env.sh
-. $FDEST/bin/activate
-EOF
+PROMPT="Do you want to make the 'oq' command available by default? [Y/n]: "
+read -e -p "$PROMPT" OQ
+if [ "$OQ" != 'N' && "$OQ" != 'n' ]; then
+    if [ $MACOS ];
+        echo "alias oq=\"$FDEST/bin/oq\"" > $HOME/.profile
+    else
+        echo "alias oq=\"$FDEST/bin/oq\"" > $HOME/.bashrc
+    fi
+fi
 
-if $(echo $OSTYPE | grep -q darwin); then
+if [ $MACOS ];
     cat <<EOF >> $FDEST/env.sh
     export LC_ALL=en_US.UTF-8
     export LAN=en_US.UTF-8

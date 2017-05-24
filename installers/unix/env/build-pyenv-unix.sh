@@ -68,7 +68,7 @@ if $(echo $OSTYPE | grep -q linux); then
     if [ "$VENDOR" == "redhat" ]; then
         yum -y upgrade
         yum -y install epel-release
-        yum -y install curl gcc git makeself
+        yum -y install curl gcc git makeself zip
         if [ -f /usr/bin/python2.7 ]; then
             # CentOS 7 (or Fedora)
             yum -y install python-devel
@@ -82,7 +82,7 @@ if $(echo $OSTYPE | grep -q linux); then
     elif [ "$VENDOR" == "ubuntu" ]; then
         sudo apt-get update
         sudo apt-get upgrade -y
-        sudo apt-get install -y curl gcc git makeself python python-dev
+        sudo apt-get install -y curl gcc git makeself python python-dev zip
     else
         not_supported
     fi
@@ -132,7 +132,16 @@ do
     declare OQ_$(echo $g | tr '[:lower:]' '[:upper:]')_DEV=$(git rev-parse --short HEAD)
     cd ..
 done
-cp -R $OQ_ROOT/oq-engine/{README.md,LICENSE,demos,doc} $OQ_ROOT/dist
+cp -R ${OQ_ROOT}/oq-engine/{README.md,LICENSE,demos,doc} ${OQ_ROOT}/dist
+
+# Make a zipped copy of each demo
+for d in hazard risk; do
+    cd ${OQ_ROOT}/dist/demos/${d}
+    for z in *; do
+        zip -r ${z}.zip $z
+    done
+    cd -
+done
 rm -Rf $OQ_ROOT/dist/doc/sphinx
 ## utils is not copied for now, since it does not contain anything useful here
 cp $OQ_DIR/install.sh ${OQ_ROOT}/dist
