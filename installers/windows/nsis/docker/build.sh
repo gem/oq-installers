@@ -45,6 +45,14 @@ cd ..
 
 # Get the demo and the README
 cp -r src/oq-engine/demos .
+for d in hazard risk; do
+    cd demos/${d}
+    for z in *; do
+        zip -r ${z}.zip $z
+    done
+    cd -
+done
+
 python -m markdown src/oq-engine/README.md > README.html
 
 # Get a copy of the OQ manual if not yet available
