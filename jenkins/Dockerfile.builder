@@ -9,7 +9,7 @@ RUN yum -y upgrade && \
     yum -y install epel-release && \
     yum -y install autoconf bzip2-devel curl git gzip libtool makeself \
                    readline-devel spatialindex-devel sudo sqlite-devel tar \
-                   which xz zlib-devel
+                   which xz zip zlib-devel
 
 RUN useradd -u $uid builder &&
 echo 'builder ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
