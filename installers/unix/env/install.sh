@@ -49,7 +49,7 @@ realpath() {
 
 IFS="
 "
-MACOS=$(echo $OSTYPE | grep darwin)
+MACOS=$(echo $OSTYPE | grep darwin || true)
 
 while (( "$#" )); do
     case "$1" in

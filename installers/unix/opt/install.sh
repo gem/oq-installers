@@ -49,7 +49,7 @@ realpath() {
 
 IFS="
 "
-MACOS=$(echo $OSTYPE | grep darwin)
+MACOS=$(echo $OSTYPE | grep darwin || true)
 SRC=openquake
 PREFIX=/tmp/build-openquake-dist/qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
 
