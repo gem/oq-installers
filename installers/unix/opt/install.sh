@@ -34,14 +34,22 @@ HSD
 }
 
 realpath() {
-    cd $(eval echo "$1") &>/dev/null && pwd || {
-        echo -e "!! Please specify a valid destination." >&2
+
+    DIR=$(eval echo "$1")
+    if [ -d $DIR ]; then
+        echo -e "!! An installation already exists in $DIR. Please remove it first." >&2
         exit 1
-    }
+    else
+        mkdir $DIR &>/dev/null && cd $DIR &>/dev/null && pwd || {
+            echo -e "!! Please specify a valid destination." >&2
+            exit 1
+        }
+    fi
 }
 
 IFS="
 "
+MACOS=$(echo $OSTYPE | grep darwin)
 SRC=openquake
 PREFIX=/tmp/build-openquake-dist/qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
 
@@ -59,17 +67,13 @@ if [ ! -d $SRC ]; then
     exit 1
 fi
 if [ -z $DEST ]; then
-    PROMPT="Type the path where you want to install OpenQuake, followed by [ENTER]. Otherwise leave blank, it will be installed in $HOME: "
+    PROMPT="Type the path where you want to install OpenQuake, followed by [ENTER]. Otherwise leave blank, it will be installed in $HOME/openquake: "
     read -e -p "$PROMPT" DEST
-    [ -z "$DEST" ] && DEST=$HOME
+    [ -z "$DEST" ] && DEST=$HOME/openquake
 fi
 FDEST=$(realpath "$DEST")
-if [ -d $FDEST/openquake ]; then
-    echo -e "!! An installation already exists in $FDEST. Please remove it first." >&2
-    exit 1
-fi
 
-echo "Copying the files in $FDEST/openquake. Please wait."
+echo "Copying the files in $FDEST. Please wait."
 cp -R $SRC $FDEST
 
 PREFIX_COUNT=${#PREFIX}
@@ -81,17 +85,32 @@ for i in $(seq 1 $COUNT); do
     BLA=${BLA}' ' 
 done
 
+[ $MACOS ] && \
+    cat <<EOF >> $FDEST/env.sh
+    export LC_ALL=en_US.UTF-8
+    export LAN=en_US.UTF-8
+EOF
+
+source $FDEST/env.sh
 echo "Finalizing the installation. Please wait."
 
 REWRITE=':loop;s@'${PREFIX}'\([^\x00\x22\x27]*[\x27\x22]\)@'${FDEST}'\1'${BLA}'@g;s@'${PREFIX}'\([^\x00\x22\x27]*\x00\)@'${FDEST}'\1'${NUL}'@g;s@'${PREFIX}'\([^\x00\x22\x27]*\)$@'${FDEST}'\1'${BLA}'@g;t loop'
-find ${FDEST}/openquake -type f -exec ${FDEST}/openquake/bin/sed -i $REWRITE "{}" \;
+find ${FDEST} -type f -exec ${FDEST}/bin/sed -i $REWRITE "{}" \;
 
 PROMPT="Do you want to make the 'oq' command available by default? [Y/n]: "
 read -e -p "$PROMPT" OQ
 if [[ "$OQ" != 'N' && "$OQ" != 'n' ]]; then
-    sed -i'' '/alias oq=.*/d' $RC
-    echo "alias oq=\"${FDEST}/bin/oq\"" >> $HOME/.bashrc
+    if [ $MACOS ]; then
+        RC=$HOME/.profile;
+        SED_ARGS="-i ''"
+    else
+        RC=$HOME/.bashrc;
+        SED_ARGS="-i"
+    fi
+
+    [ -f $RC ] && sed $SED_ARGS '/alias oq=.*/d' $RC
+    echo "alias oq=\"${FDEST}/bin/oq\"" >> $RC
 fi
 
-echo "Installation completed. To enable it run 'source $FDEST/openquake/env.sh'"
+echo "Installation completed. To enable it run 'source $FDEST/env.sh'"
 exit 0
