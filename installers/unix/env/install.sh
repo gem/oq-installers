@@ -88,11 +88,10 @@ pip install wheelhouse/*.whl > /dev/null
 PROMPT="Do you want to make the 'oq' command available by default? [Y/n]: "
 read -e -p "$PROMPT" OQ
 if [[ "$OQ" != 'N' && "$OQ" != 'n' ]]; then
-    if [ $MACOS ]; then
-        echo "alias oq=\"${FDEST}/bin/oq\"" > $HOME/.profile
-    else
-        echo "alias oq=\"${FDEST}/bin/oq\"" > $HOME/.bashrc
-    fi
+    if [ $MACOS ]; then RC=$HOME/.profile; else RC=$HOME/.bashrc; fi
+
+    sed -i'' '/alias oq=.*/d' $RC
+    echo "alias oq=\"${FDEST}/bin/oq\"" >> $RC
 fi
 
 echo "Installation completed. To enable it run 'source $FDEST/env.sh'"

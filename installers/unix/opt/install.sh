@@ -89,7 +89,8 @@ find ${FDEST}/openquake -type f -exec ${FDEST}/openquake/bin/sed -i $REWRITE "{}
 PROMPT="Do you want to make the 'oq' command available by default? [Y/n]: "
 read -e -p "$PROMPT" OQ
 if [[ "$OQ" != 'N' && "$OQ" != 'n' ]]; then
-    echo "alias oq=\"${FDEST}/bin/oq\"" > $HOME/.bashrc
+    sed -i'' '/alias oq=.*/d' $RC
+    echo "alias oq=\"${FDEST}/bin/oq\"" >> $HOME/.bashrc
 fi
 
 echo "Installation completed. To enable it run 'source $FDEST/openquake/env.sh'"
