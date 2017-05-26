@@ -39,7 +39,7 @@ not_supported() {
 OQ_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 OQ_ROOT=/tmp/build-openquake-dist
 OQ_REL=qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
-OQ_PREFIX=${OQ_ROOT}/${OQ_REL}/openquake
+OQ_PREFIX=${OQ_ROOT}/${OQ_REL}/dist
 CLEANUP=true
 
 if [ $GEM_SET_NPROC ]; then
