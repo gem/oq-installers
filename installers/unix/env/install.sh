@@ -49,6 +49,8 @@ realpath() {
 
 IFS="
 "
+MACOS=$(echo $OSTYPE | grep darwin || true)
+
 while (( "$#" )); do
     case "$1" in
         -d|--dest) DEST="$2"; shift;;
@@ -68,25 +70,34 @@ echo "Creating a new python environment in $FDEST. Please wait."
 /usr/bin/python virtualenv/virtualenv.py $FDEST > /dev/null
 cp -R {README.md,LICENSE,demos,doc} $FDEST
 
-
-cat <<EOF >> $FDEST/env.sh
-. $FDEST/bin/activate
-EOF
-
-if $(echo $OSTYPE | grep -q darwin); then
+[ $MACOS ] && \
     cat <<EOF >> $FDEST/env.sh
     export LC_ALL=en_US.UTF-8
     export LAN=en_US.UTF-8
 EOF
-fi
 
 cat <<EOF >> $FDEST/env.sh
 . $FDEST/bin/activate
 EOF
 
-source $FDEST/bin/activate
+source $FDEST/env.sh
 echo "Installing the files in $FDEST. Please wait."
 pip install wheelhouse/*.whl > /dev/null
+
+PROMPT="Do you want to make the 'oq' command available by default? [Y/n]: "
+read -e -p "$PROMPT" OQ
+if [[ "$OQ" != 'N' && "$OQ" != 'n' ]]; then
+    if [ $MACOS ]; then
+        RC=$HOME/.profile;
+        SED_ARGS="-i ''"
+    else
+        RC=$HOME/.bashrc;
+        SED_ARGS="-i"
+    fi
+
+    [ -f $RC ] && sed $SED_ARGS '/alias oq=.*/d; /function oq().*/d' $RC
+    echo "function oq() { ( . ${FDEST}/env.sh && ${FDEST}/bin/oq \$* ) }" >> $RC
+fi
 
 echo "Installation completed. To enable it run 'source $FDEST/env.sh'"
 exit 0
