@@ -108,8 +108,8 @@ if [[ "$OQ" != 'N' && "$OQ" != 'n' ]]; then
         SED_ARGS="-i"
     fi
 
-    [ -f $RC ] && sed $SED_ARGS '/alias oq=.*/d' $RC
-    echo "alias oq=\"(. ${FDEST}/env.sh && ${FDEST}/bin/oq\")" >> $RC
+    [ -f $RC ] && sed $SED_ARGS '/alias oq=.*/d; /function oq().*/d' $RC
+    echo "function oq() { ( . ${FDEST}/env.sh && ${FDEST}/bin/oq \$* ) }" >> $RC
 fi
 
 echo "Installation completed. To enable it run 'source $FDEST/env.sh'"
