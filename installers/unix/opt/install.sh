@@ -50,8 +50,8 @@ realpath() {
 IFS="
 "
 MACOS=$(echo $OSTYPE | grep darwin || true)
-SRC=openquake
-PREFIX=/tmp/build-openquake-dist/qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
+SRC=dist
+PREFIX=/tmp/build-openquake-dist/qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq/${SRC}
 
 while (( "$#" )); do
     case "$1" in
@@ -74,7 +74,7 @@ fi
 FDEST=$(realpath "$DEST")
 
 echo "Copying the files in $FDEST. Please wait."
-cp -R $SRC $FDEST
+cp -R $SRC/* $FDEST
 
 PREFIX_COUNT=${#PREFIX}
 FDEST_COUNT=${#FDEST}
