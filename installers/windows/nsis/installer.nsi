@@ -40,10 +40,13 @@ Page custom PageReinstall PageLeaveReinstall
 !insertmacro MUI_LANGUAGE "English"
 
 !ifdef VER_MAJOR & VER_MINOR & VER_REVISION & VER_BUILD
-VIProductVersion ${PRODUCT_VERSION}
-VIAddVersionKey "FileVersion" "${VER_MAJOR}.${VER_MINOR}.${VER_REVISION}"
-VIAddVersionKey "FileDescription" "OpenQuake Setup"
+VIAddVersionKey "CompanyName" "${PUBLISHER}"
 VIAddVersionKey "LegalCopyright" "https://github.com/gem/oq-engine/blob/master/LICENSE"
+VIAddVersionKey "FileDescription" "OpenQuake Setup"
+VIAddVersionKey "ProductName" "${PRODUCT_NAME}"
+VIAddVersionKey "ProductVersion" "${VER_MAJOR}.${VER_MINOR}.${VER_REVISION}"
+VIAddVersionKey "FileVersion" "${VER_MAJOR}.${VER_MINOR}.${VER_REVISION}"
+VIProductVersion ${PRODUCT_VERSION}
 !endif
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
