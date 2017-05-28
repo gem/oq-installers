@@ -1,7 +1,7 @@
 !define /date MYTIMESTAMP "%y%m%d%H%M"
 !define PRODUCT_NAME "OpenQuake Engine"
 !define VER_MAJOR "2"
-!define VER_MINOR "4"
+!define VER_MINOR "5"
 !define VER_REVISION "0"
 !define VER_BUILD "${MYTIMESTAMP}"
 !define PRODUCT_VERSION "${VER_MAJOR}.${VER_MINOR}.${VER_REVISION}.${VER_BUILD}"
