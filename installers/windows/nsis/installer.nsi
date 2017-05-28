@@ -85,9 +85,6 @@ Section "!Core Files" SecCore
   SetOutPath "$INSTDIR\python2.7"
   File /r "python-dist\python2.7\*.*"
 
-  SetOutPath "$INSTDIR\lib"
-  File "checkifup.py"
-
   SetOutPath "$INSTDIR\lib\site-packages\openquake"
   File "src\__init__.py"
 SectionEnd
