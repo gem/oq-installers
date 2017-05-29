@@ -67,7 +67,7 @@ fi
 FDEST=$(realpath "$DEST")
 
 echo "Creating a new python environment in $FDEST. Please wait."
-/usr/bin/python virtualenv/virtualenv.py $FDEST > /dev/null
+/usr/bin/env python3.5 -m venv $FDEST > /dev/null
 cp -R {README.md,LICENSE,demos,doc} $FDEST
 
 [ $MACOS ] && \
@@ -82,7 +82,7 @@ EOF
 
 source $FDEST/env.sh
 echo "Installing the files in $FDEST. Please wait."
-pip install wheelhouse/*.whl > /dev/null
+/usr/bin/env pip install wheelhouse/*.whl > /dev/null
 
 PROMPT="Do you want to make the 'oq' command available by default? [Y/n]: "
 read -e -p "$PROMPT" OQ
