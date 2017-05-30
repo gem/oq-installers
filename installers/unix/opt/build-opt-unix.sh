@@ -22,6 +22,8 @@ if [ $GEM_SET_DEBUG ]; then
 fi
 set -e
 
+unset LD_LIBRARY_PATH
+
 check_dep() {
     for i in $*; do
         command -v $i &> /dev/null || {
@@ -36,7 +38,6 @@ not_supported() {
     exit 1
 }
 
-PYTHON=python3.5
 OQ_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 OQ_ROOT=/tmp/build-openquake-dist
 OQ_REL=qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
@@ -161,7 +162,7 @@ cd ..
 # make install
 # cd ..
 
-/usr/bin/env python3.5 src/get-pip.py
+$OQ_PREFIX/bin/python3.5 src/get-pip.py
 
 for g in hazardlib engine;
 do 
@@ -169,8 +170,8 @@ do
     git clone --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-${g}.git
     cd oq-${g}
     declare OQ_$(echo $g | tr '[:lower:]' '[:upper:]')_DEV=$(git rev-parse --short HEAD)
-    /usr/bin/env pip install -r requirements-py35-${BUILD_OS}.txt
-    /usr/bin/env pip install .
+    $OQ_PREFIX/bin/pip3.5 install -r requirements-py35-${BUILD_OS}.txt
+    $OQ_PREFIX/bin/pip3.5 install .
     cd ..
 done
 
