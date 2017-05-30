@@ -112,7 +112,7 @@ rm -Rf $OQ_ROOT/dist/doc/sphinx
 for d in hazard risk; do
     cd ${OQ_ROOT}/dist/demos/${d}
     for z in *; do
-        zip -r ${z}.zip $z
+        zip -q -r ${z}.zip $z
     done
     cd -
 done

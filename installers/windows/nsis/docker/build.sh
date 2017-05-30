@@ -62,7 +62,7 @@ cp -r src/oq-engine/demos .
 for d in hazard risk; do
     cd demos/${d}
     for z in *; do
-        zip -r ${z}.zip $z
+        zip -q -r ${z}.zip $z
     done
     cd -
 done

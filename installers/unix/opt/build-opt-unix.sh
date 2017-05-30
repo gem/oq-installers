@@ -187,7 +187,7 @@ rm -Rf $OQ_PREFIX/share/openquake/engine/doc/sphinx
 for d in hazard risk; do
     cd ${OQ_PREFIX}/share/openquake/engine/demos/${d}
     for z in *; do
-        zip -r ${z}.zip $z
+        zip -q -r ${z}.zip $z
     done
     cd -
 done
