@@ -82,8 +82,8 @@ Section "!Core Files" SecCore
       "" "$INSTDIR\openquake.ico"
   SetOutPath "$INSTDIR"
 
-  SetOutPath "$INSTDIR\python2.7"
-  File /r "python-dist\python2.7\*.*"
+  SetOutPath "$INSTDIR\python3.5"
+  File /r "src\python3.5\*.*"
 
   SetOutPath "$INSTDIR\lib\site-packages\openquake"
   File "src\__init__.py"
@@ -94,7 +94,7 @@ Section "!Python libraries" SecLib
   SetShellVarContext all
 
   SetOutPath "$INSTDIR\lib"
-  File /r /x "openquake*" "python-dist\lib\*.*"
+  File /r /x "openquake*" "src\lib\*.*"
 SectionEnd
 
 
@@ -102,7 +102,7 @@ Section "!OpenQuake Engine and Hazardlib" SecOQ
   SetOutPath "$INSTDIR"
   File "oq-server.bat"
   SetOutPath "$INSTDIR\lib\site-packages"
-  File /r "python-dist\lib\site-packages\openquake*.*"
+  File /r "src\lib\site-packages\openquake*.*"
   SetOutPath "$INSTDIR\demos"
   File /r /x ".gitignore" "demos\*.*"
   
@@ -128,7 +128,7 @@ SectionEnd
 Section -post
   ; Byte-compile Python files.
   DetailPrint "Byte-compiling Python modules..."
-  nsExec::ExecToLog '$INSTDIR\python2.7\python.exe -m compileall -q "$INSTDIR\lib"'
+  nsExec::ExecToLog '$INSTDIR\python3.5\python.exe -m compileall -q "$INSTDIR\lib"'
 
   WriteUninstaller $INSTDIR\uninstall.exe
 
@@ -158,7 +158,7 @@ Section "Uninstall"
   Delete $INSTDIR\uninstall.exe
   Delete "$INSTDIR\${PRODUCT_ICON}"
   RMDir /r "$INSTDIR\lib"
-  RMDir /r "$INSTDIR\python2.7"
+  RMDir /r "$INSTDIR\python3.5"
   ; Uninstall files
     Delete "$INSTDIR\README.html"
     Delete "$INSTDIR\LICENSE.txt"

@@ -1,7 +1,7 @@
 @echo off
 setlocal
 set mypath=%~dp0
-set PATH=%mypath%\python2.7;%PATH%
+set PATH=%mypath%\python3.5;%PATH%
 set PYTHONPATH=%mypath%\lib\site-packages
 
 doskey pip=python.exe -m pip $*
