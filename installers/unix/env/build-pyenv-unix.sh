@@ -61,12 +61,12 @@ cd $OQ_ROOT
 if $(echo $OSTYPE | grep -q linux); then
     BUILD_OS='linux64'
     if [ -f /etc/redhat-release ]; then
-        yum -y upgrade
-        yum -y install epel-release
-        yum -y install curl gcc git makeself zip
+        sudo yum -y upgrade
+        sudo yum -y install epel-release
+        sudo yum -y install curl gcc git makeself zip
         # CentOS (with SCL)
-        yum -y install centos-release-scl
-        yum -y install rh-python35
+        sudo yum -y install centos-release-scl
+        sudo yum -y install rh-python35
         export PATH=/opt/rh/rh-python35/root/usr/bin:$PATH
         export LD_LIBRARY_PATH=/opt/rh/rh-python35/root/usr/lib64
     else
