@@ -71,7 +71,7 @@ if $(echo $OSTYPE | grep -q linux); then
         sudo yum -y upgrade
         sudo yum -y groupinstall 'Development Tools'
         sudo yum -y install epel-release
-        sudo yum -y install autoconf bzip2-devel curl git gzip libtool makeself readline-devel spatialindex-devel sqlite-devel tar which xz zip zlib-devel
+        sudo yum -y install autoconf bzip2-devel curl git gzip libtool makeself readline-devel spatialindex-devel tar which xz zip zlib-devel
     else
         not_supported
     fi
@@ -93,6 +93,7 @@ cd build/src
 
 curl -LOz sed-4.2.2.tar.gz http://ftp.gnu.org/gnu/sed/sed-4.2.2.tar.gz
 curl -LOz openssl-1.0.2l.tar.gz https://www.openssl.org/source/openssl-1.0.2l.tar.gz
+curl -LOz sqlite-autoconf-3190200.tar.gz https://www.sqlite.org/2017/sqlite-autoconf-3190200.tar.gz
 curl -LOz Python-3.5.3.tar.xz https://www.python.org/ftp/python/3.5.3/Python-3.5.3.tar.xz
 # FIXME Rtree is currently unsupported
 # curl -LOz 1.8.5.tar.gz https://github.com/libspatialindex/libspatialindex/archive/1.8.5.tar.gz
@@ -139,6 +140,14 @@ else
     ./config shared --prefix=$OQ_PREFIX
 fi
 make -j $NPROC depend
+make -j $NPROC
+make install
+cd ..
+
+if $CLEANUP; then rm -Rf sqlite-autoconf-3190200; fi
+tar xvf src/sqlite-autoconf-3190200.tar.gz
+cd sqlite-autoconf-3190200
+./configure --prefix=$OQ_PREFIX
 make -j $NPROC
 make install
 cd ..
