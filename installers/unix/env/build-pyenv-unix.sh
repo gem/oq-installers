@@ -67,8 +67,8 @@ if $(echo $OSTYPE | grep -q linux); then
         # CentOS (with SCL)
         yum -y install centos-release-scl
         yum -y install rh-python35
-        export PATH=/opt/rh/python35/root/usr/bin:$PATH
-        export LD_LIBRARY_PATH=/opt/rh/python35/root/usr/lib64
+        export PATH=/opt/rh/rh-python35/root/usr/bin:$PATH
+        export LD_LIBRARY_PATH=/opt/rh/rh-python35/root/usr/lib64
     else
         not_supported
     fi
