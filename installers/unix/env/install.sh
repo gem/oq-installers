@@ -95,7 +95,9 @@ EOF
 
 source $FDEST/env.sh
 echo "Installing the files in $FDEST. Please wait."
-/usr/bin/env pip install wheelhouse/*.whl > /dev/null
+# Update pip first
+/usr/bin/env pip install --disable-pip-version-check -U wheelhouse/pip*.whl > /dev/null
+/usr/bin/env pip install --disable-pip-version-check wheelhouse/*.whl > /dev/null
 
 PROMPT="Do you want to make the 'oq' command available by default? [Y/n]: "
 read -e -p "$PROMPT" OQ
