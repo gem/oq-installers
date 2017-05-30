@@ -89,14 +89,19 @@ do
     git clone --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-${g}.git
 done
 
-/usr/bin/env pip install wheel
+/usr/bin/env pip install -U pip
+/usr/bin/env pip install -U wheel
+# Include an updated version of pip
+/usr/bin/env pip wheel --wheel-dir=$OQ_WHEEL pip
 /usr/bin/env pip wheel --wheel-dir=$OQ_WHEEL -r oq-engine/requirements-py35-${BUILD_OS}.txt
 /usr/bin/env pip install $OQ_WHEEL/*
  
 for g in hazardlib engine;
 do
-    /usr/bin/env pip wheel --no-deps oq-${g}/ -d $OQ_WHEEL
-    declare OQ_$(echo $g | tr '[:lower:]' '[:upper:]')_DEV=$(git -C oq-{g} rev-parse --short HEAD)
+    cd oq-${g}
+    /usr/bin/env pip wheel --no-deps . -w $OQ_WHEEL
+    declare OQ_$(echo $g | tr '[:lower:]' '[:upper:]')_DEV=$(git rev-parse --short HEAD)
+    cd ..
 done
 cp -R ${OQ_ROOT}/oq-engine/{README.md,LICENSE,demos,doc} ${OQ_ROOT}/dist
 rm -Rf $OQ_ROOT/dist/doc/sphinx
