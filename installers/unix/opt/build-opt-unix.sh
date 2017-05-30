@@ -146,7 +146,7 @@ cd ..
 if $CLEANUP; then rm -Rf Python-3.5.3; fi
 tar xJvf src/Python-3.5.3.tar.xz
 cd Python-3.5.3
-./configure --prefix=$OQ_PREFIX
+./configure --prefix=$OQ_PREFIX --with-ensurepip
 make -j $NPROC
 make install
 cd ..
