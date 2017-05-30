@@ -170,8 +170,8 @@ do
     git clone --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-${g}.git
     cd oq-${g}
     declare OQ_$(echo $g | tr '[:lower:]' '[:upper:]')_DEV=$(git rev-parse --short HEAD)
-    $OQ_PREFIX/bin/pip3.5 install -r requirements-py35-${BUILD_OS}.txt
-    $OQ_PREFIX/bin/pip3.5 install .
+    $OQ_PREFIX/bin/python3.5 -m pip install -r requirements-py35-${BUILD_OS}.txt
+    $OQ_PREFIX/bin/python3.5 -m pip install .
     cd ..
 done
 
