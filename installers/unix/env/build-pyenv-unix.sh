@@ -22,6 +22,8 @@ if [ $GEM_SET_DEBUG ]; then
 fi
 set -e
 
+PYTHON=python3.5
+
 check_dep() {
     for i in $*; do
         command -v $i &> /dev/null || {
@@ -80,7 +82,7 @@ else
     not_supported
 fi
 
-/usr/bin/env python3.5 -m venv pybuild
+/usr/bin/env $PYTHON -m venv pybuild
 source pybuild/bin/activate
 
 for g in hazardlib engine;
