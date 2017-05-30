@@ -36,6 +36,7 @@ not_supported() {
     exit 1
 }
 
+PYTHON=python3.5
 OQ_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 OQ_ROOT=/tmp/build-openquake-dist
 OQ_REL=qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
@@ -70,10 +71,6 @@ if $(echo $OSTYPE | grep -q linux); then
         sudo yum -y groupinstall 'Development Tools'
         sudo yum -y install epel-release
         sudo yum -y install autoconf bzip2-devel curl git gzip libtool makeself readline-devel spatialindex-devel sqlite-devel tar which xz zip zlib-devel
-    elif [ "$VENDOR" == "ubuntu" ]; then
-        sudo apt-get update
-        sudo apt-get upgrade -y
-        sudo apt-get install -y autoconf build-essential curl debianutils git gzip libbz2-dev libreadline-dev libspatialindex-dev libsqlite3-dev libtool makeself tar xz-utils zip zlib1g-dev
     else
         not_supported
     fi
@@ -94,8 +91,8 @@ cp install.sh build/
 cd build/src
 
 curl -LOz sed-4.2.2.tar.gz http://ftp.gnu.org/gnu/sed/sed-4.2.2.tar.gz
-curl -LOz openssl-1.0.2h.tar.gz https://www.openssl.org/source/openssl-1.0.2h.tar.gz
-curl -LOz Python-2.7.12.tar.xz https://www.python.org/ftp/python/2.7.12/Python-2.7.12.tar.xz
+curl -LOz openssl-1.0.2l.tar.gz https://www.openssl.org/source/openssl-1.0.2l.tar.gz
+curl -LOz Python-3.5.3.tar.xz https://www.python.org/ftp/python/3.5.3/Python-3.5.3.tar.xz
 # FIXME Rtree is currently unsupported
 # curl -LOz 1.8.5.tar.gz https://github.com/libspatialindex/libspatialindex/archive/1.8.5.tar.gz
 curl -LOz get-pip.py https://bootstrap.pypa.io/get-pip.py
@@ -132,9 +129,9 @@ make -j $NPROC
 make install
 cd ..
 
-if $CLEANUP; then rm -Rf openssl-1.0.2h; fi
-tar xvf src/openssl-1.0.2h.tar.gz
-cd openssl-1.0.2h/
+if $CLEANUP; then rm -Rf openssl-1.0.2l; fi
+tar xvf src/openssl-1.0.2l.tar.gz
+cd openssl-1.0.2l/
 if [ "$BUILD_OS" == "macos" ]; then
     ./Configure darwin64-x86_64-cc shared enable-ec_nistp_64_gcc_128 no-ssl2 no-ssl3 no-comp --prefix=$OQ_PREFIX
 else
@@ -145,10 +142,10 @@ make -j $NPROC
 make install
 cd ..
 
-if $CLEANUP; then rm -Rf Python-2.7.12; fi
-tar xJvf src/Python-2.7.12.tar.xz
-cd Python-2.7.12
-./configure --prefix=$OQ_PREFIX --enable-unicode=ucs4
+if $CLEANUP; then rm -Rf Python-3.5.3; fi
+tar xJvf src/Python-3.5.3.tar.xz
+cd Python-3.5.3
+./configure --prefix=$OQ_PREFIX
 make -j $NPROC
 make install
 cd ..
@@ -164,7 +161,7 @@ cd ..
 # make install
 # cd ..
 
-python src/get-pip.py
+/usr/bin/env python3.5 src/get-pip.py
 
 for g in hazardlib engine;
 do 
@@ -172,8 +169,8 @@ do
     git clone --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-${g}.git
     cd oq-${g}
     declare OQ_$(echo $g | tr '[:lower:]' '[:upper:]')_DEV=$(git rev-parse --short HEAD)
-    python -m pip install -r requirements-py27-${BUILD_OS}.txt
-    python -m pip install .
+    /usr/bin/env pip install -r requirements-py35-${BUILD_OS}.txt
+    /usr/bin/env pip install .
     cd ..
 done
 
@@ -195,6 +192,6 @@ done
 # utils is not copied for now, since it does not contain anything useful here
 cp install.sh ${OQ_ROOT}/${OQ_REL}
 
-makeself ${OQ_ROOT}/${OQ_REL} ../openquake-setup-${BUILD_OS}-${OQ_ENGINE_DEV}.run "installer for the OpenQuake Engine" ./install.sh
+makeself ${OQ_ROOT}/${OQ_REL} ../openquake-py35-${BUILD_OS}-${OQ_ENGINE_DEV}.run "installer for the OpenQuake Engine" ./install.sh
 
 exit 0
