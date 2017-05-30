@@ -2,6 +2,12 @@
 
 To support as most distros as possible the default build target for Linux is CentOS 6.
 
+To reduce the workload (downloading pre-requisites) a `Dockerfile` is provided to create a builder:
+
+```bash
+sudo docker build --rm=true -t centos6-builder -f Dockerfile.builder .
+```
+
 ### Automatic build
 
 ```bash
@@ -18,7 +24,7 @@ $ [GEM_SET_BRANCH='master'] bash /io/build-pyenv-unix.sh
 
 ## macOS
 
-https://www.python.org/ftp/python/3.5.3/python-3.5.3-macosx10.6.pkg must be installed first
+Xcode and (Python 3.5)[https://www.python.org/ftp/python/3.5.3/python-3.5.3-macosx10.6.pkg] must be installed first
 
 ```bash
 ./build-pyenv-unix.sh
