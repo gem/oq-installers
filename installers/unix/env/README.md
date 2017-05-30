@@ -1,29 +1,27 @@
 ## Docker
 
-To support as most distros as possible the default build target for Linux is CentOS 6 (`$GEM_SET_VENDOR='redhat'`).
+To support as most distros as possible the default build target for Linux is CentOS 6.
 
 ### Automatic build
 
 ```bash
-sudo docker run [-e GEM_SET_BRANCH='master'] --rm -v $(pwd):/io centos:6 /io/build-pyenv-unix.sh
+sudo docker run [-e GEM_SET_BRANCH='master'] --rm -v $(pwd):/io centos6-builder /io/build-pyenv-unix.sh
 ```
 
 ### Manual build
 
 ```bash
-sudo docker run --rm -t -i -v $(pwd):/io centos:6 /bin/bash
+sudo docker run --rm -t -i -v $(pwd):/io centos6-builder /bin/bash
 $ cd /io
-$ [GEM_SET_BRANCH='master'] bash build-pyenv-unix.sh
+$ [GEM_SET_BRANCH='master'] bash /io/build-pyenv-unix.sh
 ```
 
-## Bare-metal
+## macOS
 
-### On LXC, bare-metal or macOS
+https://www.python.org/ftp/python/3.5.3/python-3.5.3-macosx10.6.pkg must be installed first
 
 ```bash
-$ git clone https://github.com/gem/oq-installers.git
-$ cd oq-installers/unix/env
-$ [GEM_SET_BRANCH='master'] [GEM_SET_VENDOR='ubuntu|redhat'] bash build-pyenv-unix.sh
+./build-pyenv-unix.sh
 ```
 
 ## Script parameters

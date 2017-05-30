@@ -1,4 +1,5 @@
 # vi:syntax=dockerfile
+# name:centos6-builder
 FROM centos:6
 MAINTAINER Daniele Viganò <daniele@openquake.org>
 
