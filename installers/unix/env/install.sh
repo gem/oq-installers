@@ -22,6 +22,8 @@ if [ $GEM_SET_DEBUG ]; then
 fi
 set -e
 
+PYTHON=python3.5
+
 help() {
     cat <<HSD
 The command line arguments are as follows:
@@ -31,6 +33,15 @@ The command line arguments are as follows:
     -h, --help           This help
 HSD
     exit 0
+}
+
+check_dep() {
+    for i in $*; do
+        command -v $i &> /dev/null || {
+            echo -e "!! Please install $i first. Aborting." >&2
+            exit 1
+        }
+    done
 }
 
 realpath() {
@@ -59,6 +70,8 @@ while (( "$#" )); do
     shift
 done
 
+check_dep $PYTHON
+
 if [ -z $DEST ]; then
     PROMPT="Type the path where you want to install OpenQuake, followed by [ENTER]. Otherwise leave blank, it will be installed in $HOME/openquake: "
     read -e -p "$PROMPT" DEST
@@ -67,7 +80,7 @@ fi
 FDEST=$(realpath "$DEST")
 
 echo "Creating a new python environment in $FDEST. Please wait."
-/usr/bin/python virtualenv/virtualenv.py $FDEST > /dev/null
+/usr/bin/env $PYTHON -m venv $FDEST > /dev/null
 cp -R {README.md,LICENSE,demos,doc} $FDEST
 
 [ $MACOS ] && \
@@ -82,7 +95,9 @@ EOF
 
 source $FDEST/env.sh
 echo "Installing the files in $FDEST. Please wait."
-pip install wheelhouse/*.whl > /dev/null
+# Update pip first
+/usr/bin/env pip install --disable-pip-version-check -U wheelhouse/pip*.whl > /dev/null
+/usr/bin/env pip install --disable-pip-version-check wheelhouse/*.whl > /dev/null
 
 PROMPT="Do you want to make the 'oq' command available by default? [Y/n]: "
 read -e -p "$PROMPT" OQ

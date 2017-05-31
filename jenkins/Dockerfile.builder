@@ -1,1 +1,1 @@
-../installers/unix/opt/Dockerfile.builder
+../installers/unix/Dockerfile.builder

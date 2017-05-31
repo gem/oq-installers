@@ -74,61 +74,45 @@ Section "!Core Files" SecCore
   File "openquake_black.ico"
   File "LICENSE.txt"
   File "README.html"
-  File "OpenQuake manual.pdf"
   File "oq-console.bat"
+  File "oq-server.bat"
 
-  SetOutPath "$INSTDIR"
-    CreateShortCut "$SMPROGRAMS\OpenQuake Engine (webui).lnk" "$INSTDIR\oq-server.bat" \
-      "" "$INSTDIR\openquake.ico"
-  SetOutPath "$INSTDIR"
+  SetOutPath "$INSTDIR\python3.5"
+  File /r "src\python3.5\*.*"
 
-  SetOutPath "$INSTDIR\python2.7"
-  File /r "python-dist\python2.7\*.*"
-
-  SetOutPath "$INSTDIR\lib\site-packages\openquake"
+  SetOutPath "$INSTDIR\python3.5\lib\site-packages\openquake"
   File "src\__init__.py"
 SectionEnd
 
 
-Section "!Python libraries" SecLib
-  SetShellVarContext all
-
-  SetOutPath "$INSTDIR\lib"
-  File /r /x "openquake*" "python-dist\lib\*.*"
-SectionEnd
-
-
-Section "!OpenQuake Engine and Hazardlib" SecOQ
+Section "OpenQuake Engine demos and documentation" SecOQ
   SetOutPath "$INSTDIR"
-  File "oq-server.bat"
-  SetOutPath "$INSTDIR\lib\site-packages"
-  File /r "python-dist\lib\site-packages\openquake*.*"
+  File "OpenQuake manual.pdf"
   SetOutPath "$INSTDIR\demos"
   File /r /x ".gitignore" "demos\*.*"
+SectionEnd
   
+Section "OpenQuake Engine menu icons" SecMenu
   SetOutPath "$INSTDIR"
-    CreateShortCut "$SMPROGRAMS\OpenQuake Engine (console).lnk" "$INSTDIR\oq-console.bat" \
+  CreateShortCut "$SMPROGRAMS\OpenQuake Engine (webui).lnk" "$INSTDIR\oq-server.bat" \
+      "" "$INSTDIR\openquake.ico"
+  CreateShortCut "$SMPROGRAMS\OpenQuake Engine (console).lnk" "$INSTDIR\oq-console.bat" \
       "" "$INSTDIR\openquake_black.ico"
-  SetOutPath "$INSTDIR"
-
-  !define OQ_INSTALLED "true"
 SectionEnd
 
-Section "OpenQuake Engine desktop icon" SecIcon
+Section "OpenQuake Engine desktop icons" SecIcon
   SetOutPath "$INSTDIR"
   CreateShortCut "$DESKTOP\OpenQuake Engine (console).lnk" "$INSTDIR\oq-console.bat" \
       "" "$INSTDIR\openquake_black.ico"
-  StrCmp "${OQ_INSTALLED}" "" done
   
   CreateShortCut "$DESKTOP\OpenQuake Engine (webui).lnk" "$INSTDIR\oq-server.bat" \
       "" "$INSTDIR\openquake.ico"
-  done:
 SectionEnd
 
 Section -post
   ; Byte-compile Python files.
   DetailPrint "Byte-compiling Python modules..."
-  nsExec::ExecToLog '$INSTDIR\python2.7\python.exe -m compileall -q "$INSTDIR\lib"'
+  nsExec::ExecToLog '$INSTDIR\python3.5\python.exe -m compileall -q "$INSTDIR\python3.5\lib"'
 
   WriteUninstaller $INSTDIR\uninstall.exe
 
@@ -157,8 +141,7 @@ Section "Uninstall"
   SetShellVarContext all
   Delete $INSTDIR\uninstall.exe
   Delete "$INSTDIR\${PRODUCT_ICON}"
-  RMDir /r "$INSTDIR\lib"
-  RMDir /r "$INSTDIR\python2.7"
+  RMDir /r "$INSTDIR\python3.5"
   ; Uninstall files
     Delete "$INSTDIR\README.html"
     Delete "$INSTDIR\LICENSE.txt"
