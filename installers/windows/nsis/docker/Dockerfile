@@ -2,14 +2,12 @@
 FROM fedora:25
 MAINTAINER Daniele Viganò <daniele@openquake.org>
 
-ARG uid=1000
-
 RUN dnf -y install python-markdown python-wheel wget git zip unzip && \
     wget -qO- https://repos.wine-staging.com/wine/fedora/25/winehq.repo > /etc/yum.repos.d/winehq.repo && \
     dnf -y install wine-stable64
-    
 
-RUN useradd -u 1000 builder
+ARG uid=1000
+RUN useradd -u $uid builder
 
 USER builder
 ENV HOME /home/builder
