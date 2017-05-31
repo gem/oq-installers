@@ -60,29 +60,15 @@ cd $OQ_ROOT
 
 if $(echo $OSTYPE | grep -q linux); then
     BUILD_OS='linux64'
-    if [ $GEM_SET_VENDOR ]; then
-        VENDOR=$GEM_SET_VENDOR
-    else
-        VENDOR='redhat'
-    fi
-    if [ "$VENDOR" == "redhat" ]; then
-        yum -y upgrade
-        yum -y install epel-release
-        yum -y install curl gcc git makeself zip
-        if [ -f /usr/bin/python2.7 ]; then
-            # CentOS 7 (or Fedora)
-            yum -y install python-devel
-        else
-            # CentOS 6 (with SCL)
-            yum -y install centos-release-scl
-            yum -y install python27
-            export PATH=/opt/rh/python27/root/usr/bin:$PATH
-            export LD_LIBRARY_PATH=/opt/rh/python27/root/usr/lib64
-        fi
-    elif [ "$VENDOR" == "ubuntu" ]; then
-        sudo apt-get update
-        sudo apt-get upgrade -y
-        sudo apt-get install -y curl gcc git makeself python python-dev zip
+    if [ -f /etc/redhat-release ]; then
+        sudo yum -y upgrade
+        sudo yum -y install epel-release
+        sudo yum -y install curl gcc git makeself zip
+        # CentOS (with SCL)
+        sudo yum -y install centos-release-scl
+        sudo yum -y install rh-python27
+        export PATH=/opt/rh/rh-python27/root/usr/bin:$PATH
+        export LD_LIBRARY_PATH=/opt/rh/rh-python35/root/usr/lib64
     else
         not_supported
     fi
@@ -90,7 +76,6 @@ elif $(echo $OSTYPE | grep -q darwin); then
     BUILD_OS='macos'
     check_dep xcode-select makeself
     sudo xcode-select --install || true
-
 else
     not_supported
 fi
@@ -101,7 +86,7 @@ tar xzf ../virtualenv-15.0.2.tar.gz
 mv virtualenv-15.0.2 virtualenv
 cd ..
 
-python dist/virtualenv/virtualenv.py pybuild
+/usr/bin/env python dist/virtualenv/virtualenv.py pybuild
 source pybuild/bin/activate
 
 for g in hazardlib engine;
@@ -110,25 +95,17 @@ do
     git clone --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-${g}.git
 done
 
-curl -LOz get-pip.py https://bootstrap.pypa.io/get-pip.py
-python get-pip.py
-
-
-if [ "$BUILD_OS" == "linux64" ]; then
-    requirements=oq-engine/requirements-py27-linux64.txt
-elif [ "$BUILD_OS" == "macos" ]; then
-    requirements=oq-engine/requirements-py27-macos.txt
-else
-    exit 1
-fi
-pip wheel --wheel-dir=$OQ_WHEEL -r $requirements
-
-pip install $OQ_WHEEL/*
+/usr/bin/env pip install -U pip
+/usr/bin/env pip install -U wheel
+# Include an updated version of pip
+/usr/bin/env pip wheel --wheel-dir=$OQ_WHEEL pip
+/usr/bin/env pip wheel --wheel-dir=$OQ_WHEEL -r oq-engine/requirements-py27-${BUILD_OS}.txt
+/usr/bin/env pip install $OQ_WHEEL/*
  
 for g in hazardlib engine;
 do
     cd oq-${g}
-    python setup.py bdist_wheel -d $OQ_WHEEL
+    /usr/bin/env pip wheel --no-deps . -w $OQ_WHEEL
     declare OQ_$(echo $g | tr '[:lower:]' '[:upper:]')_DEV=$(git rev-parse --short HEAD)
     cd ..
 done
@@ -139,7 +116,7 @@ rm -Rf $OQ_ROOT/dist/doc/sphinx
 for d in hazard risk; do
     cd ${OQ_ROOT}/dist/demos/${d}
     for z in *; do
-        zip -r ${z}.zip $z
+        zip -q -r ${z}.zip $z
     done
     cd -
 done
