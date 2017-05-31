@@ -7,8 +7,8 @@ RUN yum -y upgrade && \
     yum -y groupinstall 'Development Tools' && \
     yum -y install centos-release-scl epel-release && \
     yum -y install autoconf bzip2-devel curl git gzip libtool makeself \
-                   readline-devel rh-python35 spatialindex-devel sudo \
-                   sqlite-devel tar which xz zip zlib-devel
+                   readline-devel rh-python27 rh-python35 spatialindex-devel \
+                   sudo sqlite-devel tar which xz zip zlib-devel
 
 ARG uid=107
 
@@ -18,8 +18,6 @@ echo 'builder ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 USER builder
 
 ENV HOME /home/builder
-ENV PATH=/opt/rh/rh-python35/root/usr/bin:$PATH
-ENV LD_LIBRARY_PATH=/opt/rh/rh-python35/root/usr/lib64
 
 WORKDIR ${HOME}
 
