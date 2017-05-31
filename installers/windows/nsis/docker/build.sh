@@ -53,7 +53,7 @@ for i in oq-engine oq-hazardlib; do
 done
 
 # Extract wheels to be included in the installation
-wine python3.5/Scripts/pip3.exe install --disable-pip-version-check --force-reinstall --ignore-installed --upgrade --no-deps --no-index --prefix . py/*.whl py35/*.whl openquake.*.whl
+wine python3.5/Scripts/pip3.exe install --disable-pip-version-check --force-reinstall --ignore-installed --upgrade --no-deps --no-index py/*.whl py35/*.whl openquake.*.whl
 
 cd ..
 
