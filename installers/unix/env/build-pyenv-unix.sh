@@ -66,9 +66,9 @@ if $(echo $OSTYPE | grep -q linux); then
         sudo yum -y install curl gcc git makeself zip
         # CentOS (with SCL)
         sudo yum -y install centos-release-scl
-        sudo yum -y install rh-python27
-        export PATH=/opt/rh/rh-python27/root/usr/bin:$PATH
-        export LD_LIBRARY_PATH=/opt/rh/rh-python35/root/usr/lib64
+        sudo yum -y install python27
+        export PATH=/opt/rh/python27/root/usr/bin:$PATH
+        export LD_LIBRARY_PATH=/opt/rh/python27/root/usr/lib64
     else
         not_supported
     fi

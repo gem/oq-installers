@@ -7,7 +7,7 @@ RUN yum -y upgrade && \
     yum -y groupinstall 'Development Tools' && \
     yum -y install centos-release-scl epel-release && \
     yum -y install autoconf bzip2-devel curl git gzip libtool makeself \
-                   readline-devel rh-python27 rh-python35 spatialindex-devel \
+                   readline-devel python27 rh-python35 spatialindex-devel \
                    sudo sqlite-devel tar which xz zip zlib-devel
 
 ARG uid=107
