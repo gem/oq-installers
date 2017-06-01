@@ -96,9 +96,9 @@ SectionEnd
 
 Section "OpenQuake Engine menu icons" SecMenu
   SetOutPath "$INSTDIR"
-  CreateShortCut "$SMPROGRAMS\OpenQuake Engine (webui).lnk" "$INSTDIR\oq-server.bat" \
+  CreateShortCut "$SMPROGRAMS\OpenQuake\OpenQuake Engine (webui).lnk" "$INSTDIR\oq-server.bat" \
       "" "$INSTDIR\openquake.ico"
-  CreateShortCut "$SMPROGRAMS\OpenQuake Engine (console).lnk" "$INSTDIR\oq-console.bat" \
+  CreateShortCut "$SMPROGRAMS\OpenQuake\OpenQuake Engine (console).lnk" "$INSTDIR\oq-console.bat" \
       "" "$INSTDIR\openquake_black.ico"
 SectionEnd
 
@@ -157,8 +157,8 @@ Section "Uninstall"
   ; Uninstall shortcuts
     Delete "$DESKTOP\OpenQuake Engine (webui).lnk"
     Delete "$DESKTOP\OpenQuake Engine (console).lnk"
-    Delete "$SMPROGRAMS\OpenQuake Engine (webui).lnk"
-    Delete "$SMPROGRAMS\OpenQuake Engine (console).lnk"
+    Delete "$SMPROGRAMS\OpenQuake\OpenQuake Engine (webui).lnk"
+    Delete "$SMPROGRAMS\OpenQuake\OpenQuake Engine (console).lnk"
   RMDir $INSTDIR
   DeleteRegKey HKLM "${REG_KEY}"
 SectionEnd
