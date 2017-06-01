@@ -29,7 +29,7 @@ for i in oq-engine oq-hazardlib; do
     if [ ! -d $i ]; then
         git clone --depth=1 https://github.com/gem/${i}.git
     fi
-    wine pip wheel --disable-pip-version-check --no-deps ./$i
+    wine pip -q wheel --disable-pip-version-check --no-deps ./$i
 done
 
 # Extract Python, to be included in the installation
@@ -40,7 +40,7 @@ fi
 wine msiexec /a $PY_MSI /qb TARGETDIR=../python-dist/python2.7
 
 # Extract wheels to be included in the installation
-wine pip install --disable-pip-version-check --force-reinstall --ignore-installed --upgrade --no-deps --no-index --prefix ../python-dist py/*.whl py27/*.whl openquake.*.whl
+wine pip -q install --disable-pip-version-check --force-reinstall --ignore-installed --upgrade --no-deps --no-index --prefix ../python-dist py/*.whl py27/*.whl openquake.*.whl
 
 cd ..
 

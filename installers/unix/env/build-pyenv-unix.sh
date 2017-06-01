@@ -61,12 +61,12 @@ cd $OQ_ROOT
 if $(echo $OSTYPE | grep -q linux); then
     BUILD_OS='linux64'
     if [ -f /etc/redhat-release ]; then
-        sudo yum -y upgrade
-        sudo yum -y install epel-release
-        sudo yum -y install curl gcc git makeself zip
+        sudo yum -y -q upgrade
+        sudo yum -y -q install epel-release
+        sudo yum -y -q install curl gcc git makeself zip
         # CentOS (with SCL)
-        sudo yum -y install centos-release-scl
-        sudo yum -y install python27
+        sudo yum -y -q install centos-release-scl
+        sudo yum -y -q install python27
         export PATH=/opt/rh/python27/root/usr/bin:$PATH
         export LD_LIBRARY_PATH=/opt/rh/python27/root/usr/lib64
     else
@@ -95,17 +95,17 @@ do
     git clone --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-${g}.git
 done
 
-/usr/bin/env pip install -U pip
-/usr/bin/env pip install -U wheel
+/usr/bin/env pip -q install -U pip
+/usr/bin/env pip -q install -U wheel
 # Include an updated version of pip
-/usr/bin/env pip wheel --wheel-dir=$OQ_WHEEL pip
-/usr/bin/env pip wheel --wheel-dir=$OQ_WHEEL -r oq-engine/requirements-py27-${BUILD_OS}.txt
-/usr/bin/env pip install $OQ_WHEEL/*
+/usr/bin/env pip -q wheel --wheel-dir=$OQ_WHEEL pip
+/usr/bin/env pip -q wheel --wheel-dir=$OQ_WHEEL -r oq-engine/requirements-py27-${BUILD_OS}.txt
+/usr/bin/env pip -q install $OQ_WHEEL/*
  
 for g in hazardlib engine;
 do
     cd oq-${g}
-    /usr/bin/env pip wheel --no-deps . -w $OQ_WHEEL
+    /usr/bin/env pip -q wheel --no-deps . -w $OQ_WHEEL
     declare OQ_$(echo $g | tr '[:lower:]' '[:upper:]')_DEV=$(git rev-parse --short HEAD)
     cd ..
 done
@@ -124,6 +124,6 @@ done
 ## utils is not copied for now, since it does not contain anything useful here
 cp $OQ_DIR/install.sh ${OQ_ROOT}/dist
 
-makeself ${OQ_ROOT}/dist ../openquake-py27-${BUILD_OS}-${OQ_ENGINE_DEV}.run "installer for the OpenQuake Engine" ./install.sh
+makeself -q ${OQ_ROOT}/dist ../openquake-py27-${BUILD_OS}-${OQ_ENGINE_DEV}.run "installer for the OpenQuake Engine" ./install.sh
 
 exit 0

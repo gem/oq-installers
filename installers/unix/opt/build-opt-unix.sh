@@ -68,10 +68,10 @@ if $(echo $OSTYPE | grep -q linux); then
     fi
     check_dep sudo
     if [ "$VENDOR" == "redhat" ]; then
-        sudo yum -y upgrade
-        sudo yum -y groupinstall 'Development Tools'
-        sudo yum -y install epel-release
-        sudo yum -y install autoconf bzip2-devel curl git gzip libtool makeself readline-devel spatialindex-devel tar which xz zip zlib-devel
+        sudo yum -q -y upgrade
+        sudo yum -q -y groupinstall 'Development Tools'
+        sudo yum -q -y install epel-release
+        sudo yum -q -y install autoconf bzip2-devel curl git gzip libtool makeself readline-devel spatialindex-devel tar which xz zip zlib-devel
     else
         not_supported
     fi
@@ -124,40 +124,40 @@ source $OQ_PREFIX/env.sh
 if $CLEANUP; then rm -Rf $HOME/.cache/pip; fi
 
 if $CLEANUP; then rm -Rf sed-4.2.2; fi
-tar xvf src/sed-4.2.2.tar.gz
+tar xf src/sed-4.2.2.tar.gz
 cd sed-4.2.2
 ./configure --prefix=$OQ_PREFIX
-make -j $NPROC
-make install
+make -s -j $NPROC
+make -s install
 cd ..
 
 if $CLEANUP; then rm -Rf openssl-1.0.2l; fi
-tar xvf src/openssl-1.0.2l.tar.gz
+tar xf src/openssl-1.0.2l.tar.gz
 cd openssl-1.0.2l/
 if [ "$BUILD_OS" == "macos" ]; then
     ./Configure darwin64-x86_64-cc shared enable-ec_nistp_64_gcc_128 no-ssl2 no-ssl3 no-comp --prefix=$OQ_PREFIX
 else
     ./config shared --prefix=$OQ_PREFIX
 fi
-make -j $NPROC depend
-make -j $NPROC
-make install
+make -s -j $NPROC depend
+make -s -j $NPROC
+make -s install
 cd ..
 
 if $CLEANUP; then rm -Rf sqlite-autoconf-3190200; fi
-tar xvf src/sqlite-autoconf-3190200.tar.gz
+tar xf src/sqlite-autoconf-3190200.tar.gz
 cd sqlite-autoconf-3190200
 ./configure --prefix=$OQ_PREFIX
-make -j $NPROC
-make install
+make -s -j $NPROC
+make -s install
 cd ..
 
 if $CLEANUP; then rm -Rf Python-2.7.13; fi
-tar xJvf src/Python-2.7.13.tar.xz
+tar xJf src/Python-2.7.13.tar.xz
 cd Python-2.7.13
 ./configure --prefix=$OQ_PREFIX --enable-unicode=ucs4 --with-ensurepip
-make -j $NPROC
-make install
+make -s -j $NPROC
+make -s install
 cd ..
 
 # FIXME Rtree is currently unsupported
@@ -167,8 +167,8 @@ cd ..
 # ./autogen.sh || true
 # ./autogen.sh
 # ./configure --prefix=$OQ_PREFIX
-# make -j $NPROC
-# make install
+# make -s -j $NPROC
+# make -s install
 # cd ..
 
 $OQ_PREFIX/bin/python src/get-pip.py
@@ -179,8 +179,8 @@ do
     git clone --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-${g}.git
     cd oq-${g}
     declare OQ_$(echo $g | tr '[:lower:]' '[:upper:]')_DEV=$(git rev-parse --short HEAD)
-    $OQ_PREFIX/bin/python2.7 -m pip install -r requirements-py27-${BUILD_OS}.txt
-    $OQ_PREFIX/bin/python2.7 -m pip install .
+    $OQ_PREFIX/bin/python2.7 -m pip -q install -r requirements-py27-${BUILD_OS}.txt
+    $OQ_PREFIX/bin/python2.7 -m pip -q install .
     cd ..
 done
 
@@ -202,6 +202,6 @@ done
 # utils is not copied for now, since it does not contain anything useful here
 cp install.sh ${OQ_ROOT}/${OQ_REL}
 
-makeself ${OQ_ROOT}/${OQ_REL} ../openquake-py27-${BUILD_OS}-${OQ_ENGINE_DEV}.run "installer for the OpenQuake Engine" ./install.sh
+makeself -q ${OQ_ROOT}/${OQ_REL} ../openquake-py27-${BUILD_OS}-${OQ_ENGINE_DEV}.run "installer for the OpenQuake Engine" ./install.sh
 
 exit 0

@@ -3,10 +3,10 @@
 FROM centos:6
 MAINTAINER Daniele Viganò <daniele@openquake.org>
 
-RUN yum -y upgrade && \
-    yum -y groupinstall 'Development Tools' && \
-    yum -y install centos-release-scl epel-release && \
-    yum -y install autoconf bzip2-devel curl git gzip libtool makeself \
+RUN yum -q -y upgrade && \
+    yum -q -y groupinstall 'Development Tools' && \
+    yum -q -y install centos-release-scl epel-release && \
+    yum -q -y install autoconf bzip2-devel curl git gzip libtool makeself \
                    readline-devel python27 rh-python35 spatialindex-devel \
                    sudo sqlite-devel tar which xz zip zlib-devel
 
