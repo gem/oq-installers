@@ -24,7 +24,7 @@ $ [GEM_SET_BRANCH='master'] bash /io/build-pyenv-unix.sh
 
 ## macOS
 
-Xcode and (Python 2.7)[https://www.python.org/ftp/python/2.17.13/python-2.7.13-macosx10.6.pkg] must be installed first
+Xcode and [Python 2.7](https://www.python.org/ftp/python/2.17.13/python-2.7.13-macosx10.6.pkg) must be installed first
 
 ```bash
 ./build-pyenv-unix.sh

@@ -11,14 +11,11 @@ RUN yum -y upgrade && \
                    sudo sqlite-devel tar which xz zip zlib-devel
 
 ARG uid=107
-
 RUN useradd -u $uid builder && \
 echo 'builder ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 USER builder
-
 ENV HOME /home/builder
-
 WORKDIR ${HOME}
 
 CMD /bin/bash
