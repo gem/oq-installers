@@ -1,6 +1,6 @@
 ## Docker
 
-To support as most distros as possible the default build target for Linux is CentOS 6 (`$GEM_SET_VENDOR='redhat'`).
+To support as most distros as possible the default build target for Linux is CentOS 6.
 
 To reduce the workload (downloading pre-requisites) a `Dockerfile` is provided to create a builder:
 
@@ -19,17 +19,15 @@ sudo docker run [-e GEM_SET_BRANCH='master'] --rm -v $(pwd):/io centos6-builder 
 ```bash
 sudo docker run --rm -t -i -v $(pwd):/io centos6-builder /bin/bash
 $ cd /io
-$ [GEM_SET_BRANCH='master'] bash build-opt-unix.sh
+$ [GEM_SET_BRANCH='master'] bash /io/build-opt-unix.sh
 ```
 
-## Bare-metal
+## macOS
 
-### On LXC, bare-metal or macOS
+Xcode must be installed first
 
 ```bash
-$ git clone https://github.com/gem/oq-installers.git
-$ cd oq-installers/unix/opt
-$ [GEM_SET_BRANCH='master'] [GEM_SET_VENDOR='ubuntu|redhat'] bash build-opt-unix.sh
+./build-pyenv-unix.sh
 ```
 
 ## Script parameters

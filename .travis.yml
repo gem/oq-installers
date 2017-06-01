@@ -13,6 +13,6 @@ script:
     - docker rmi openquake-centos7
     # NSIS installer
     - cd $TRAVIS_BUILD_DIR/installers/windows/nsis
-    - docker build --rm=true -t oq-nsis -f docker/Dockerfile .
-    - docker run --rm -t -i oq-nsis /usr/bin/wine python -c 'import pip; print(pip.__version__)'
-    - docker rmi oq-nsis
+    - docker build --rm=true -t f25-wine -f docker/Dockerfile .
+    - docker run --rm -t -i f25-wine /opt/wine-stable/bin/wine python -c 'import pip; print(pip.__version__)'
+    - docker rmi f25-wine

@@ -14,11 +14,11 @@ Microsoft Windows is not required.
 
 #### Build Docker image
 ```bash
-$ docker build --rm=true -t oq-nsis -f docker/Dockerfile .
+$ docker build --rm=true -t f25-wine -f docker/Dockerfile .
 ```
 ### Run the container
 ```bash
-$ docker run -v $(pwd):/io -t -i --rm oq-nsis
+$ docker run -v $(pwd):/io -t -i --rm f25-wine
 ```
 
 ### Manual installation 
