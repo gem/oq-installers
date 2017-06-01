@@ -4,3 +4,13 @@
 
 Powered by
 <img src="https://upload.wikimedia.org/wikipedia/commons/7/79/Docker_%28container_engine%29_logo.png" width="100px">
+
+* OpenQuake Docker image
+* Windows NSIS builder
+* Linxu/macOS (env) standalone builder
+* Linux (opt) standalone installer
+
+### Internals
+
+* Jenkis' Docker containers
+* wheel builders
