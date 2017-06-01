@@ -176,7 +176,7 @@ $OQ_PREFIX/bin/python src/get-pip.py
 for g in hazardlib engine;
 do 
     rm -Rf oq-${g}
-    git clone --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-${g}.git
+    git clone -q --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-${g}.git
     cd oq-${g}
     declare OQ_$(echo $g | tr '[:lower:]' '[:upper:]')_DEV=$(git rev-parse --short HEAD)
     $OQ_PREFIX/bin/python2.7 -m pip -q install -r requirements-py27-${BUILD_OS}.txt

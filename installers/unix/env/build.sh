@@ -92,7 +92,7 @@ source pybuild/bin/activate
 for g in hazardlib engine;
 do 
     rm -Rf oq-${g}
-    git clone --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-${g}.git
+    git clone -q --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-${g}.git
 done
 
 /usr/bin/env pip -q install -U pip

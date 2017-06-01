@@ -27,7 +27,7 @@ rm -Rf ../demos/*
 
 for i in oq-engine oq-hazardlib; do
     if [ ! -d $i ]; then
-        git clone --depth=1 https://github.com/gem/${i}.git
+        git clone -q --depth=1 https://github.com/gem/${i}.git
     fi
     wine pip -q wheel --disable-pip-version-check --no-deps ./$i
 done
