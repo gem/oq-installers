@@ -5,7 +5,7 @@ To support as most distros as possible the default build target for Linux is Cen
 To reduce the workload (downloading pre-requisites) a `Dockerfile` is provided to create a builder:
 
 ```bash
-sudo docker build --rm=true -t centos6-builder -f Dockerfile.builder .
+sudo docker build --build-arg uid=$(id -u) --rm=true -t centos6-builder -f Dockerfile.builder .
 ```
 
 ### Automatic build

@@ -12,11 +12,11 @@ script:
     - docker run --rm -i -t openquake-centos7 /opt/openquake/bin/oq --version
     - docker rmi openquake-centos7
     # docker builder
-    - cd $TRAVIS_BUILD_DIR/installers/unix && docker build --rm=true -t centos6-builder -f Dockerfile.builder .
+    - cd $TRAVIS_BUILD_DIR/installers/unix && docker build --build-arg uid=$(id -u) --rm=true -t centos6-builder -f Dockerfile.builder .
     # env builder
-    - cd $TRAVIS_BUILD_DIR/installers/unix/env && docker run --rm -v $(pwd):/io -t -i centos6-builder /io/build-pyenv-unix.sh
+    - cd $TRAVIS_BUILD_DIR/installers/unix/env && docker run --rm -v $(pwd):/io -t -i centos6-builder /io/build-pyenv-unix.sh && rm -Rf build
     # opt builder
-    - cd $TRAVIS_BUILD_DIR/installers/unix/opt && docker run --rm -v $(pwd):/io -t -i centos6-builder /io/build-opt-unix.sh
+    - cd $TRAVIS_BUILD_DIR/installers/unix/opt && docker run --rm -v $(pwd):/io -t -i centos6-builder /io/build-opt-unix.sh && rm -Rf build
     # cleanup
     - docker rmi centos6-builder
     # NSIS installer

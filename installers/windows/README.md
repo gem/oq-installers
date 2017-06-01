@@ -14,7 +14,7 @@ Microsoft Windows is not required.
 
 #### Build Docker image
 ```bash
-$ docker build --rm=true -t f25-wine -f docker/Dockerfile .
+$ docker build --build-arg uid=$(id -u) --rm=true -t f25-wine -f docker/Dockerfile .
 ```
 ### Run the container
 ```bash
