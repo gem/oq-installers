@@ -1,4 +1,5 @@
 # vi:syntax=dockerfile
+# name:f25-wine
 FROM fedora:25
 MAINTAINER Daniele Viganò <daniele@openquake.org>
 
