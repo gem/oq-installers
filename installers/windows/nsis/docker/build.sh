@@ -22,15 +22,12 @@ rm -Rf ../demos/*
 
 ## This is an alternative method that we cannot use because we need extra data
 ## not packaged in the python packages
-# pip wheel --no-deps https://github.com/gem/oq-hazardlib/archive/master.zip
 # pip wheel --no-deps https://github.com/gem/oq-engine/archive/master.zip
 
-for i in oq-engine oq-hazardlib; do
-    if [ ! -d $i ]; then
-        git clone -q --depth=1 https://github.com/gem/${i}.git
-    fi
-    wine pip -q wheel --disable-pip-version-check --no-deps ./$i
-done
+if [ ! -d oq-engine ]; then
+    git clone -q --depth=1 https://github.com/gem/oq-engine.git
+fi
+wine pip -q wheel --disable-pip-version-check --no-deps ./oq-engine
 
 # Extract Python, to be included in the installation
 if [ ! -f $PY_MSI ]; then
