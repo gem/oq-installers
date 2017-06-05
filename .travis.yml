@@ -6,21 +6,34 @@ python:
 services:
     - docker
 
-script:
-    - cd $TRAVIS_BUILD_DIR/oq-docker
-    - docker build --rm=true -t openquake-centos7 -f Dockerfile.centos .
-    - docker run --rm -i -t openquake-centos7 /opt/openquake/bin/oq --version
-    - docker rmi openquake-centos7
-    # docker builder
-    - cd $TRAVIS_BUILD_DIR/installers/unix && docker build --build-arg uid=$(id -u) --rm=true -t centos6-builder -f Dockerfile.builder .
-    # env builder
-    - cd $TRAVIS_BUILD_DIR/installers/unix/env && docker run --rm -v $(pwd):/io -t -i centos6-builder /io/build.sh && rm -Rf build
-    # opt builder
-    - cd $TRAVIS_BUILD_DIR/installers/unix/opt && docker run --rm -v $(pwd):/io -t -i centos6-builder /io/build.sh && rm -Rf build
-    # cleanup
-    - docker rmi centos6-builder
-    # NSIS installer
-    - cd $TRAVIS_BUILD_DIR/installers/windows/nsis
-    - docker build --rm=true -t f25-wine -f docker/Dockerfile .
-    - docker run --rm -t -i f25-wine /opt/wine-stable/bin/wine python -c 'import pip; print(pip.__version__)'
-    - docker rmi f25-wine
+
+jobs:
+  include:
+  - stage: docker
+    env: DOCKER
+    pre_script:
+        - cd $TRAVIS_BUILD_DIR/oq-docker
+        - docker build --rm=true -t openquake-centos7 -f Dockerfile.centos .
+    script:
+        - docker run --rm -i -t openquake-centos7 /opt/openquake/bin/oq --version
+    after_script:
+        - docker rmi openquake-centos7
+
+  - stage: builders
+    env: UNIX
+    pre_script:
+        - cd $TRAVIS_BUILD_DIR/installers/unix && docker build --build-arg uid=$(id -u) --rm=true -t centos6-builder -f Dockerfile.builder .
+    script:
+        - cd $TRAVIS_BUILD_DIR/installers/unix/env && docker run --rm -v $(pwd):/io -t -i centos6-builder /io/build.sh && rm -Rf build
+        - cd $TRAVIS_BUILD_DIR/installers/unix/opt && docker run --rm -v $(pwd):/io -t -i centos6-builder /io/build.sh && rm -Rf build
+    after_script:
+        - docker rmi centos6-builder
+  - stage: builders
+    env: WIN
+    pre_script:
+        - cd $TRAVIS_BUILD_DIR/installers/windows/nsis
+        - docker build --rm=true -t f25-wine -f docker/Dockerfile .
+    script:
+        - docker run --rm -t -i f25-wine /opt/wine-stable/bin/wine python -c 'import pip; print(pip.__version__)'
+    after_script:
+        - docker rmi f25-wine
