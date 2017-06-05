@@ -11,6 +11,14 @@ script:
     - docker build --rm=true -t openquake-centos7 -f Dockerfile.centos .
     - docker run --rm -i -t openquake-centos7 /opt/openquake/bin/oq --version
     - docker rmi openquake-centos7
+    # docker builder
+    - cd $TRAVIS_BUILD_DIR/installers/unix && docker build --build-arg uid=$(id -u) --rm=true -t centos6-builder -f Dockerfile.builder .
+    # env builder
+    - cd $TRAVIS_BUILD_DIR/installers/unix/env && docker run --rm -v $(pwd):/io -t -i centos6-builder /io/build.sh && rm -Rf build
+    # opt builder
+    - cd $TRAVIS_BUILD_DIR/installers/unix/opt && docker run --rm -v $(pwd):/io -t -i centos6-builder /io/build.sh && rm -Rf build
+    # cleanup
+    - docker rmi centos6-builder
     # NSIS installer
     - cd $TRAVIS_BUILD_DIR/installers/windows/nsis
     - docker build --rm=true -t f25-wine -f docker/Dockerfile .
