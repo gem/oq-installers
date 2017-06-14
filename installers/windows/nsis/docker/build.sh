@@ -42,6 +42,7 @@ wine pip -q install --disable-pip-version-check --force-reinstall --ignore-insta
 cd ..
 
 # Get the demo and the README
+cp -r src/oq-engine/demos .
 src/oq-engine/helpers/zipdemos.sh $(pwd)/demos
 
 python -m markdown src/oq-engine/README.md > README.html
