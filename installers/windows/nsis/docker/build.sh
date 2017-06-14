@@ -43,13 +43,7 @@ cd ..
 
 # Get the demo and the README
 cp -r src/oq-engine/demos .
-for d in hazard risk; do
-    cd demos/${d}
-    for z in *; do
-        zip -q -r ${z}.zip $z
-    done
-    cd -
-done
+src/oq-engine/helpers/zipdemos.sh $(pwd)/demos
 
 python -m markdown src/oq-engine/README.md > README.html
 
