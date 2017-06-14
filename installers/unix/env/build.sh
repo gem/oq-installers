@@ -89,11 +89,8 @@ cd ..
 /usr/bin/env python dist/virtualenv/virtualenv.py pybuild
 source pybuild/bin/activate
 
-for g in hazardlib engine;
-do 
-    rm -Rf oq-${g}
-    git clone -q --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-${g}.git
-done
+rm -Rf oq-engine
+git clone -q --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-engine.git
 
 /usr/bin/env pip -q install -U pip
 /usr/bin/env pip -q install -U wheel
@@ -102,13 +99,11 @@ done
 /usr/bin/env pip -q wheel --wheel-dir=$OQ_WHEEL -r oq-engine/requirements-py27-${BUILD_OS}.txt
 /usr/bin/env pip -q install $OQ_WHEEL/*
  
-for g in hazardlib engine;
-do
-    cd oq-${g}
-    /usr/bin/env pip -q wheel --no-deps . -w $OQ_WHEEL
-    declare OQ_$(echo $g | tr '[:lower:]' '[:upper:]')_DEV=$(git rev-parse --short HEAD)
-    cd ..
-done
+cd oq-engine
+/usr/bin/env pip -q wheel --no-deps . -w $OQ_WHEEL
+declare OQ_$(echo 'engine' | tr '[:lower:]' '[:upper:]')_DEV=$(git rev-parse --short HEAD)
+cd ..
+
 cp -R ${OQ_ROOT}/oq-engine/{README.md,LICENSE,demos,doc} ${OQ_ROOT}/dist
 rm -Rf $OQ_ROOT/dist/doc/sphinx
 

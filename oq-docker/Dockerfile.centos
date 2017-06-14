@@ -19,7 +19,6 @@ RUN wget -O- https://raw.githubusercontent.com/gem/oq-engine/$branch/requirement
     > /opt/openquake/requirements.txt 2>/dev/null && \
     pip -q install --force-reinstall --ignore-installed --upgrade --no-deps \
     --prefix /opt/openquake -r /opt/openquake/requirements.txt && \
-    pip -q install --prefix /opt/openquake https://github.com/gem/oq-hazardlib/archive/$branch.zip && \
     pip -q install --prefix /opt/openquake https://github.com/gem/oq-engine/archive/$branch.zip
 
 ADD openquake/__init__.py $PYTHONPATH/openquake
