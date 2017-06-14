@@ -188,13 +188,7 @@ cp -R oq-engine/doc $OQ_PREFIX/share/openquake/engine
 rm -Rf $OQ_PREFIX/share/openquake/engine/doc/sphinx
 
 # Make a zipped copy of each demo
-for d in hazard risk; do
-    cd ${OQ_PREFIX}/share/openquake/engine/demos/${d}
-    for z in *; do
-        zip -q -r ${z}.zip $z
-    done
-    cd -
-done
+oq-engine/helpers/zipdemos.sh ${OQ_PREFIX}/share/openquake/engine/demos
 
 # utils is not copied for now, since it does not contain anything useful here
 cp install.sh ${OQ_ROOT}/${OQ_REL}
