@@ -72,6 +72,9 @@ done
 
 check_dep $PYTHON
 
+# We do not support Anaconda using this installer. Anaconda users must install the Engine manually
+python -c "import sys; sys.exit('Anaconda Python isn\'t supported by this package. Please install the official Python from python.org.') if 'conda' in sys.version else ''"
+
 if [ -z $DEST ]; then
     PROMPT="Type the path where you want to install OpenQuake, followed by [ENTER]. Otherwise leave blank, it will be installed in $HOME/openquake: "
     read -e -p "$PROMPT" DEST
