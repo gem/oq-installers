@@ -28,9 +28,9 @@ if [ -z $OQ_ENV_SET ]; then source $MYDIR/../build-common.sh; fi
 
 cd /tmp/src
 
-curl -Lo basemap-master.tar.gz https://github.com/matplotlib/basemap/archive/master.tar.gz
-tar xf basemap-master.tar.gz
-cd basemap-master/geos-3.3.3
+curl -Lo basemap-1.1.0.tar.gz https://github.com/matplotlib/basemap/archive/v1.1.0.tar.gz
+tar xf basemap-1.1.0.tar.gz
+cd basemap-1.1.0/geos-3.3.3
 export GEOS_DIR=/usr/local
 ./configure --prefix=$GEOS_DIR
 make -j $NPROC
@@ -38,7 +38,7 @@ make install
 
 cd ..
 
-get numpy pyshp pyproj matplotlib==1.5.3 pillow
+get numpy
 build .
 
 post
