@@ -38,7 +38,7 @@ make install
 
 cd ..
 
-get numpy
+get numpy==1.11.1
 build .
 
 post

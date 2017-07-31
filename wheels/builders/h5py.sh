@@ -45,7 +45,7 @@ cd ..
 
 cd /tmp/wheelhouse
 
-get numpy
+get numpy==1.11.1
 build h5py==2.6.0
 
 post

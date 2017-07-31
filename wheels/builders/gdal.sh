@@ -100,7 +100,7 @@ cp $MYDIR/gdal/gdalinit.py /tmp/src/gdal-2.1.3/swig/python/osgeo/__init__.py
 
 cd  /tmp/src/gdal-2.1.3/swig/python
 
-get numpy
+get numpy==1.11.1
 build .
 
 post
