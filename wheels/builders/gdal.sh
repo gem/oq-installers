@@ -36,7 +36,7 @@ curl -f -L -O http://download.osgeo.org/geos/geos-3.6.1.tar.bz2
 tar jxf geos-3.6.1.tar.bz2
 cd geos-3.6.1
 ./configure
-make
+make -j $NPROC
 make install
 
 cd /tmp/src
@@ -44,7 +44,7 @@ curl -f -L -O http://download.osgeo.org/gdal/jasper-1.900.1.uuid.tar.gz
 tar xzf jasper-1.900.1.uuid.tar.gz
 cd jasper-1.900.1.uuid
 ./configure --disable-debug --enable-shared
-make
+make -j $NPROC
 make install
 
 cd /tmp/src
@@ -52,7 +52,7 @@ curl -f -L -O http://download.osgeo.org/proj/proj-4.9.3.tar.gz
 tar xzf proj-4.9.3.tar.gz
 cd proj-4.9.3
 ./configure
-make
+make -j $NPROC
 make install
 
 cd /tmp/src
@@ -87,7 +87,7 @@ cd gdal-2.1.3
  --with-libz=/usr \
  --with-curl=curl-config \
  --without-python
-make
+make -j $NPROC
 make install
 
 # Replace SWIG's setup.py with this modified one, which gets numpy in
