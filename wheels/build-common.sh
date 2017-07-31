@@ -52,7 +52,7 @@ export HDF5_DIR=/usr/local
 
 function get {
     REQ=$(echo $1 | cut -d "=" -f 1)
-    REQ_VER=$(echo $1 | cut -d "=" -f 1)
+    REQ_VER=$(echo $1 | cut -d "=" -f 3)
 
     for PYVER in $PY; do
         for PYBIN in /opt/python/cp${PYVER}*/bin; do
