@@ -31,7 +31,7 @@ else
     # FIXME '*27mu' is an ugly hack,
     # but in this way we can skip 'cp27'
     # builds which currently we don't need
-    PY="*27mu 35"
+    PY="*27mu 35 36"
 fi
 
 if [ $GEM_SET_NPROC ]; then
