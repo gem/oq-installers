@@ -51,10 +51,13 @@ export OQ_ENV_SET=true
 export HDF5_DIR=/usr/local
 
 function get {
+    REQ=$(echo $1 | cut -d "=" -f 1)
+    REQ_VER=$(echo $1 | cut -d "=" -f 1)
+
     for PYVER in $PY; do
         for PYBIN in /opt/python/cp${PYVER}*/bin; do
             # Download python dependencies
-            if cache=$(ls /io/wheelhouse/$1*${PYVER}*.whl); then
+            if cache=$(ls /io/wheelhouse/${REQ}-${REQ_VER}*${PYVER}*.whl); then
                 ${PYBIN}/pip install $cache
             else
                 ${PYBIN}/pip install $1
