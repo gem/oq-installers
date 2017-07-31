@@ -13,3 +13,14 @@
 ## Run an interactive Docker
 
 `sudo docker run --rm -t -i -v $(pwd):/io quay.io/pypa/manylinux1_x86_64 /bin/bash`
+
+## Dependencies
+
+Based on our current implementation, `numpy==1.11` is required:
+
+```bash
+cd wheelhouse
+wget http://cdn.ftp.openquake.org/wheelhouse/linux/py27/numpy-1.11.1-cp27-cp27mu-manylinux1_x86_64.whl \
+     http://cdn.ftp.openquake.org/wheelhouse/linux/py35/numpy-1.11.1-cp35-cp35m-manylinux1_x86_64.whl \
+     http://cdn.ftp.openquake.org/wheelhouse/linux/py36/numpy-1.11.1-cp36-cp36m-manylinux1_x86_64.whl
+```
