@@ -40,7 +40,7 @@ fi
 
 cd /tmp/wheelhouse
 
-get numpy==0.11.1
+get numpy==1.11.1
 build scipy==0.17.1
 
 post
