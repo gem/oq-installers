@@ -31,29 +31,9 @@ MYDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 if [ -z $OQ_ENV_SET ]; then source $MYDIR/../build-common.sh; fi
 
-cd /tmp/src
-curl -f -L -O http://download.osgeo.org/geos/geos-3.6.1.tar.bz2
-tar jxf geos-3.6.1.tar.bz2
-cd geos-3.6.1
-./configure
-make -j $NPROC
-make install
-
-cd /tmp/src
-curl -f -L -O http://download.osgeo.org/gdal/jasper-1.900.1.uuid.tar.gz
-tar xzf jasper-1.900.1.uuid.tar.gz
-cd jasper-1.900.1.uuid
-./configure --disable-debug --enable-shared
-make -j $NPROC
-make install
-
-cd /tmp/src
-curl -f -L -O http://download.osgeo.org/proj/proj-4.9.3.tar.gz
-tar xzf proj-4.9.3.tar.gz
-cd proj-4.9.3
-./configure
-make -j $NPROC
-make install
+build_dep geos
+build_dep jasper
+build_dep proj
 
 cd /tmp/src
 curl -f -L -O http://download.osgeo.org/gdal/2.1.3/gdal-2.1.3.tar.gz

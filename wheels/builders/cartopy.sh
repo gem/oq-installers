@@ -26,21 +26,8 @@ MYDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 if [ -z $OQ_ENV_SET ]; then source $MYDIR/../build-common.sh; fi
 
-cd /tmp/src
-curl -f -L -O http://download.osgeo.org/geos/geos-3.6.1.tar.bz2
-tar jxf geos-3.6.1.tar.bz2
-cd geos-3.6.1
-./configure
-make -j $NPROC
-make install
-
-cd /tmp/src
-curl -f -L -O http://download.osgeo.org/proj/proj-4.9.3.tar.gz
-tar xzf proj-4.9.3.tar.gz
-cd proj-4.9.3
-./configure
-make -j $NPROC
-make install
+build_dep geos
+build_dep proj
 
 get numpy==1.11.1 Cython
 build cartopy

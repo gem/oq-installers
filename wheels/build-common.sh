@@ -50,7 +50,7 @@ export NPROC
 export OQ_ENV_SET=true
 export HDF5_DIR=/usr/local
 
-function getlibtool {
+function build_libtool {
     if [ ! -f /usr/local/bin/libtool ]; then
         cd /tmp/src
         curl -O https://ftp.gnu.org/gnu/libtool/libtool-2.4.tar.gz
@@ -59,6 +59,38 @@ function getlibtool {
         ./configure
         make -j $NPROC && make install
     fi
+}
+
+function build_dep {
+    case $1 in
+        'geos')
+            cd /tmp/src
+            curl -f -L -O http://download.osgeo.org/geos/geos-3.6.1.tar.bz2
+            tar jxf geos-3.6.1.tar.bz2
+            cd geos-3.6.1
+            ./configure
+            make -j $NPROC
+            make install
+            ;;
+        'proj')
+            cd /tmp/src
+            curl -f -L -O http://download.osgeo.org/proj/proj-4.9.3.tar.gz
+            tar xzf proj-4.9.3.tar.gz
+            cd proj-4.9.3
+            ./configure
+            make -j $NPROC
+            make install
+            ;;
+        'jasper')
+            cd /tmp/src
+            curl -f -L -O http://download.osgeo.org/gdal/jasper-1.900.1.uuid.tar.gz
+            tar xzf jasper-1.900.1.uuid.tar.gz
+            cd jasper-1.900.1.uuid
+            ./configure --disable-debug --enable-shared
+            make -j $NPROC
+            make install
+            ;;
+    esac
 }
 
 function get {

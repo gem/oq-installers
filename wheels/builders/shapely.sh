@@ -28,19 +28,9 @@ if [ -z $OQ_ENV_SET ]; then source $MYDIR/../build-common.sh; fi
 
 
 yum install -y autoconf curl gzip tar
-getlibtool
+build_libtool
 
-cd /tmp/src
-
-curl -Lo libgeos-3.5.0.tar.gz https://github.com/libgeos/libgeos/archive/3.5.0.tar.gz
-tar xvf libgeos-3.5.0.tar.gz
-cd geos-3.5.0
-# Workaround for an autogen.sh bug
-./autogen.sh || true
-./autogen.sh
-./configure --prefix=/usr/local
-make -j $NPROC
-make install
+build_dep geos
 
 cd /tmp/wheelhouse
 
