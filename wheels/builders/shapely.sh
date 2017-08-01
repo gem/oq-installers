@@ -32,7 +32,7 @@ cd /tmp/src
 
 curl -Lo libgeos-3.5.0.tar.gz https://github.com/libgeos/libgeos/archive/3.5.0.tar.gz
 tar xvf libgeos-3.5.0.tar.gz
-cd libgeos-3.5.0
+cd geos-3.5.0
 # Workaround for an autogen.sh bug
 ./autogen.sh || true
 ./autogen.sh
