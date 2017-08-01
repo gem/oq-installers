@@ -50,6 +50,17 @@ export NPROC
 export OQ_ENV_SET=true
 export HDF5_DIR=/usr/local
 
+function getlibtool {
+    if [ ! -f /usr/local/bin/libtool ]; then
+        cd /tmp/src
+        curl -O https://ftp.gnu.org/gnu/libtool/libtool-2.4.tar.gz
+        tar xzf libtool-2.4.tar.gz
+        cd libtool-2.4
+        ./configure
+        make -j $NPROC && make install
+    fi
+}
+
 function get {
     REQ=$(echo $1 | cut -d "=" -f 1)
     REQ_VER=$(echo $1 | cut -d "=" -f 3)

@@ -26,7 +26,8 @@ MYDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 if [ -z $OQ_ENV_SET ]; then source $MYDIR/../build-common.sh; fi
 
-yum install -y autoconf curl gzip libtool tar
+yum install -y autoconf curl gzip tar
+getlibtool
 
 cd /tmp/src
 
