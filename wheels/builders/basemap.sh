@@ -32,18 +32,9 @@ build_dep geos
 
 curl -Lo basemap-1.1.0.tar.gz https://github.com/matplotlib/basemap/archive/v1.1.0.tar.gz
 tar xf basemap-1.1.0.tar.gz
-#cd basemap-1.1.0/geos-3.3.3
-#export GEOS_DIR=$(mktemp -d)
-#export LD_LIBRARY_PATH=$GEOS_DIR
-#./configure --prefix=$GEOS_DIR
-#make -j $NPROC
-#make install
-
-#cd ..
+cd basemap-1.1.0
 
 get numpy==1.11.1
 build .
 
 post
-
-#unset LD_LIBRARY_PATH
