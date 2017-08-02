@@ -31,7 +31,7 @@ else
     # FIXME '*27mu' is an ugly hack,
     # but in this way we can skip 'cp27'
     # builds which currently we don't need
-    PY="*27mu 35"
+    PY="*27mu 35 36"
 fi
 
 if [ $GEM_SET_NPROC ]; then
@@ -50,11 +50,63 @@ export NPROC
 export OQ_ENV_SET=true
 export HDF5_DIR=/usr/local
 
+function build_libtool {
+    if [ ! -f /usr/local/bin/libtool ]; then
+        cd /tmp/src
+        curl -O https://ftp.gnu.org/gnu/libtool/libtool-2.4.tar.gz
+        tar xzf libtool-2.4.tar.gz
+        cd libtool-2.4
+        ./configure
+        make -j $NPROC && make install
+    fi
+}
+
+function build_dep {
+    case $1 in
+        'geos')
+            if [ ! -f /usr/local/lib/libgeos-3.6.1.so ]; then
+                cd /tmp/src
+                curl -f -L -O http://download.osgeo.org/geos/geos-3.6.1.tar.bz2
+                tar jxf geos-3.6.1.tar.bz2
+                cd geos-3.6.1
+                ./configure
+                make -j $NPROC
+                make install
+            fi
+            ;;
+        'proj')
+            if [ ! -f /usr/local/lib/libproj.so.12.0.0 ]; then
+                cd /tmp/src
+                curl -f -L -O http://download.osgeo.org/proj/proj-4.9.3.tar.gz
+                tar xzf proj-4.9.3.tar.gz
+                cd proj-4.9.3
+                ./configure
+                make -j $NPROC
+                make install
+            fi
+            ;;
+        'jasper')
+            if [ ! -f /usr/local/lib/libjasper.so.1.0.0 ]; then
+                cd /tmp/src
+                curl -f -L -O http://download.osgeo.org/gdal/jasper-1.900.1.uuid.tar.gz
+                tar xzf jasper-1.900.1.uuid.tar.gz
+                cd jasper-1.900.1.uuid
+                ./configure --disable-debug --enable-shared
+                make -j $NPROC
+                make install
+            fi
+            ;;
+    esac
+}
+
 function get {
+    REQ=$(echo $1 | cut -d "=" -f 1)
+    REQ_VER=$(echo $1 | cut -d "=" -f 3)
+
     for PYVER in $PY; do
         for PYBIN in /opt/python/cp${PYVER}*/bin; do
             # Download python dependencies
-            if cache=$(ls /io/wheelhouse/$1*${PYVER}*.whl); then
+            if cache=$(ls /io/wheelhouse/${REQ}-${REQ_VER}*${PYVER}*.whl); then
                 ${PYBIN}/pip install $cache
             else
                 ${PYBIN}/pip install $1

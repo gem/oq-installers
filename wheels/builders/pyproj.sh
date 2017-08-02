@@ -26,19 +26,10 @@ MYDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 if [ -z $OQ_ENV_SET ]; then source $MYDIR/../build-common.sh; fi
 
-yum install -y autoconf curl gzip libtool tar
+yum install -y autoconf curl gzip tar
+build_libtool
 
-cd /tmp/src
-
-curl -Lo proj-4.8.0.tar.gz https://github.com/OSGeo/proj.4/archive/4.8.0.tar.gz
-tar xvf proj-4.8.0.tar.gz
-cd proj.4-4.8.0
-# Workaround for an autogen.sh bug
-./autogen.sh || true
-./autogen.sh
-./configure --prefix=/usr/local
-make -j $NPROC
-make install
+build_dep proj
 
 cd /tmp/wheelhouse
 

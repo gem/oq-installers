@@ -28,17 +28,13 @@ if [ -z $OQ_ENV_SET ]; then source $MYDIR/../build-common.sh; fi
 
 cd /tmp/src
 
+build_dep geos
+
 curl -Lo basemap-1.1.0.tar.gz https://github.com/matplotlib/basemap/archive/v1.1.0.tar.gz
 tar xf basemap-1.1.0.tar.gz
-cd basemap-1.1.0/geos-3.3.3
-export GEOS_DIR=/usr/local
-./configure --prefix=$GEOS_DIR
-make -j $NPROC
-make install
+cd basemap-1.1.0
 
-cd ..
-
-get numpy
+get numpy==1.11.1
 build .
 
 post

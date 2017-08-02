@@ -25,6 +25,7 @@ set -e
 MYDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 if [ -z $OQ_ENV_SET ]; then source $MYDIR/../build-common.sh; fi
+export PY="*27mu"
 
 cd /tmp/wheelhouse
 

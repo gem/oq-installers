@@ -25,7 +25,13 @@ set -e
 MYDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 cd $MYDIR/builders
-for s in *.sh; do
+
+# Numpy must be run before any other wheel because is a required
+# dependency for many of them
+echo "Running numpy.sh"
+./numpy.sh
+
+for s in $(find -maxdepth 1 -name \*.sh ! -name numpy.sh); do
     echo "Running $s"
     ./$s
 done
