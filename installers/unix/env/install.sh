@@ -66,8 +66,8 @@ MACOS=$(echo $OSTYPE | grep darwin || true)
 while (( "$#" )); do
     case "$1" in
         -d|--dest) DEST="$2"; shift;;
-        -y|--yes) FORCE="y"; shift;;
-        -n|--no) FORCE="n"; shift;;
+        -y|--yes) FORCE="y";;
+        -n|--no) FORCE="n";;
         -h|--help) help;;
     esac
     shift

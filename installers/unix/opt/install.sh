@@ -59,8 +59,8 @@ while (( "$#" )); do
     case "$1" in
         -s|--src) SRC="$2"; shift;;
         -d|--dest) DEST="$2"; shift;;
-        -y|--yes) FORCE="y"; shift;;
-        -n|--no) FORCE="n"; shift;;
+        -y|--yes) FORCE="y";;
+        -n|--no) FORCE="n";;
         -h|--help) help;;
     esac
     shift
