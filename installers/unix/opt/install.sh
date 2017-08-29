@@ -28,6 +28,8 @@ The command line arguments are as follows:
 
     -s, --src            Path to the installation source (.tar.gz)
     -d, --dest           Path to the destination folder
+    -y, --yes            Force 'yes' answers
+    -n, --no             Force 'no' answers
     -h, --help           This help
 HSD
     exit 0
@@ -57,6 +59,8 @@ while (( "$#" )); do
     case "$1" in
         -s|--src) SRC="$2"; shift;;
         -d|--dest) DEST="$2"; shift;;
+        -y|--yes) FORCE="y"; shift;;
+        -n|--no) FORCE="n"; shift;;
         -h|--help) help;;
     esac
     shift
@@ -97,8 +101,13 @@ echo "Finalizing the installation. Please wait."
 REWRITE=':loop;s@'${PREFIX}'\([^\x00\x22\x27]*[\x27\x22]\)@'${FDEST}'\1'${BLA}'@g;s@'${PREFIX}'\([^\x00\x22\x27]*\x00\)@'${FDEST}'\1'${NUL}'@g;s@'${PREFIX}'\([^\x00\x22\x27]*\)$@'${FDEST}'\1'${BLA}'@g;t loop'
 find ${FDEST} -type f -exec ${FDEST}/bin/sed -i $REWRITE "{}" \;
 
-PROMPT="Do you want to make the 'oq' command available by default? [Y/n]: "
-read -e -p "$PROMPT" OQ
+if [ -z $FORCE ]; then
+    PROMPT="Do you want to make the 'oq' command available by default? [Y/n]: "
+    read -e -p "$PROMPT" OQ
+else
+    OQ=$FORCE
+fi
+
 if [[ "$OQ" != 'N' && "$OQ" != 'n' ]]; then
     if [ $MACOS ]; then
         RC=$HOME/.profile;
