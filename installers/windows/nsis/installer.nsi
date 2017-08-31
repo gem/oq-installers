@@ -85,7 +85,6 @@ Section "!Core Files" SecCore
 
   SetOutPath "$INSTDIR\lib\site-packages\openquake"
   File "src\__init__.py"
-
 SectionEnd
 
 Section "OpenQuake Tools" SecTools
