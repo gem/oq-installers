@@ -24,10 +24,12 @@ rm -Rf ../demos/*
 ## not packaged in the python packages
 # pip wheel --no-deps https://github.com/gem/oq-engine/archive/master.zip
 
-if [ ! -d oq-engine ]; then
-    git clone -q --depth=1 https://github.com/gem/oq-engine.git
-fi
-wine pip -q wheel --disable-pip-version-check --no-deps ./oq-engine
+for app in oq-engine oq-platform-standalone oq-platform-ipt oq-platform-taxtweb oq-platform-taxonomy; do
+    if [ ! -d $app ]; then
+        git clone -q --depth=1 https://github.com/gem/${app}.git
+    fi
+    wine pip -q wheel --disable-pip-version-check --no-deps ./${app}
+done
 
 # Extract Python, to be included in the installation
 if [ ! -f $PY_MSI ]; then
@@ -37,7 +39,7 @@ fi
 wine msiexec /a $PY_MSI /qb TARGETDIR=../python-dist/python2.7
 
 # Extract wheels to be included in the installation
-wine pip -q install --disable-pip-version-check --force-reinstall --ignore-installed --upgrade --no-deps --no-index --prefix ../python-dist py/*.whl py27/*.whl openquake.*.whl
+wine pip -q install --disable-pip-version-check --force-reinstall --ignore-installed --upgrade --no-deps --no-index --prefix ../python-dist py/*.whl py27/*.whl openquake.*.whl oq_platform*.whl
 
 cd ..
 
