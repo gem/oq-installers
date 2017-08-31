@@ -11,7 +11,7 @@ sudo docker build --build-arg uid=$(id -u) --rm=true -t centos6-builder -f Docke
 ### Automatic build
 
 ```bash
-sudo docker run [-e GEM_SET_BRANCH='master'] --rm -v $(pwd):/io centos6-builder /io/build-opt-unix.sh
+sudo docker run [-e GEM_SET_BRANCH='master'] --rm -t -i -v $(pwd):/io centos6-builder /io/build.sh
 ```
 
 ### Manual build
@@ -19,7 +19,7 @@ sudo docker run [-e GEM_SET_BRANCH='master'] --rm -v $(pwd):/io centos6-builder 
 ```bash
 sudo docker run --rm -t -i -v $(pwd):/io centos6-builder /bin/bash
 $ cd /io
-$ [GEM_SET_BRANCH='master'] bash /io/build-opt-unix.sh
+$ [GEM_SET_BRANCH='master'] bash /io/build.sh
 ```
 
 ## macOS
@@ -27,7 +27,7 @@ $ [GEM_SET_BRANCH='master'] bash /io/build-opt-unix.sh
 Xcode must be installed first
 
 ```bash
-./build-pyenv-unix.sh
+./build.sh
 ```
 
 ## Script parameters
