@@ -1,7 +1,7 @@
 !define /date MYTIMESTAMP "%y%m%d%H%M"
 !define PRODUCT_NAME "OpenQuake Engine"
 !define VER_MAJOR "2"
-!define VER_MINOR "5"
+!define VER_MINOR "6"
 !define VER_REVISION "0"
 !define VER_BUILD "${MYTIMESTAMP}"
 !define PRODUCT_VERSION "${VER_MAJOR}.${VER_MINOR}.${VER_REVISION}.${VER_BUILD}"
@@ -81,10 +81,18 @@ Section "!Core Files" SecCore
   File /r "python-dist\python2.7\*.*"
 
   SetOutPath "$INSTDIR\lib"
-  File /r "python-dist\lib\*.*"
+  File /r /x "python-dist\lib\site-packages\oq_platform*" /x "python-dist\lib\site-packages\openquakeplatform*" "python-dist\lib\*.*"
 
   SetOutPath "$INSTDIR\lib\site-packages\openquake"
   File "src\__init__.py"
+SectionEnd
+
+Section "OpenQuake Tools" SecTools
+  SetOutPath "$INSTDIR\lib\site-packages"
+  File /r "python-dist\lib\site-packages\oq_platform*" "python-dist\lib\site-packages\openquakeplatform*"
+
+  SetOutPath "$INSTDIR\lib\site-packages\openquake\server"
+  File /oname=local_settings.py "python-dist\lib\site-packages\openquake\server\local_settings.py.standalone"
 SectionEnd
 
 Section "OpenQuake Engine demos and documentation" SecOQ
