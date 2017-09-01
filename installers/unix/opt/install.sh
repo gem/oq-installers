@@ -52,7 +52,7 @@ realpath() {
 IFS="
 "
 MACOS=$(echo $OSTYPE | grep darwin || true)
-SRC=dist
+SRC=prefix
 PREFIX=/tmp/build-openquake-dist/qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq/${SRC}
 
 while (( "$#" )); do
@@ -95,11 +95,30 @@ done
     export LAN=en_US.UTF-8
 EOF
 
-source $FDEST/env.sh
-echo "Finalizing the installation. Please wait."
+#source $FDEST/env.sh
+echo "Updating the installation. Please wait."
 
 REWRITE=':loop;s@'${PREFIX}'\([^\x00\x22\x27]*[\x27\x22]\)@'${FDEST}'\1'${BLA}'@g;s@'${PREFIX}'\([^\x00\x22\x27]*\x00\)@'${FDEST}'\1'${NUL}'@g;s@'${PREFIX}'\([^\x00\x22\x27]*\)$@'${FDEST}'\1'${BLA}'@g;t loop'
 find ${FDEST} -type f -exec ${FDEST}/bin/sed -i $REWRITE "{}" \;
+
+source $FDEST/env.sh
+
+echo "Installing the OpenQuake Engine. Please wait."
+/usr/bin/env pip install --disable-pip-version-check wheelhouse/*.whl > /dev/null
+cp -R src/{README.md,LICENSE,demos,doc} $FDEST/share
+
+## Tools installation
+if [ -z $FORCE ]; then
+    PROMPT="Do you want to install the OpenQuake Tools (IPT, TaxtWeb, Taxonomy Glossary)? [Y/n]: "
+    read -e -p "$PROMPT" TOOLS
+else
+    TOOLS=$FORCE
+fi
+if [[ "$TOOLS" != 'N' && "$TOOLS" != 'n' ]]; then
+    PYPREFIX=$(python -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())')
+    /usr/bin/env pip install --disable-pip-version-check wheelhouse/tools/*.whl > /dev/null
+    cp ${PYPREFIX}/openquake/server/local_settings.py.standalone ${PYPREFIX}/openquake/server/local_settings.py
+fi
 
 if [ -z $FORCE ]; then
     PROMPT="Do you want to make the 'oq' command available by default? [Y/n]: "

@@ -40,8 +40,9 @@ not_supported() {
 
 OQ_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 OQ_ROOT=/tmp/build-openquake-dist
-OQ_REL=qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
-OQ_PREFIX=${OQ_ROOT}/${OQ_REL}/dist
+OQ_DIST=${OQ_ROOT}/qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
+OQ_PREFIX=${OQ_DIST}/prefix
+OQ_WHEEL=${OQ_DIST}/wheelhouse
 CLEANUP=true
 
 if [ $GEM_SET_NPROC ]; then
@@ -87,8 +88,6 @@ fi
 mkdir -p build/src
 mkdir -p $OQ_PREFIX
 
-cp install.sh build/
-
 cd build/src
 
 curl -LOz sed-4.2.2.tar.gz http://ftp.gnu.org/gnu/sed/sed-4.2.2.tar.gz
@@ -107,9 +106,6 @@ PREFIX=$OQ_PREFIX
 export LD_LIBRARY_PATH=\${PREFIX}/lib
 export CPATH=\${PREFIX}/include
 export PATH=\${PREFIX}/bin:\${PATH}
-# FIXME Rtree is currently unsupported
-# export SPATIALINDEX_LIBRARY=\$LD_LIBRARY_PATH/libspatialindex.so
-# export SPATIALINDEX_C_LIBRARY=\$LD_LIBRARY_PATH/libspatialindex_c.so
 export PS1=(openquake)\${PS1}
 EOF
 if [ "$BUILD_OS" == "macos" ]; then
@@ -160,39 +156,42 @@ make -s -j $NPROC
 make -s install
 cd ..
 
-# FIXME Rtree is currently unsupported
-# if $CLEANUP; then rm -Rf 1.8.5; fi
-# tar xvf src/1.8.5.tar.gz
-# cd libspatialindex-1.8.5
-# ./autogen.sh || true
-# ./autogen.sh
-# ./configure --prefix=$OQ_PREFIX
-# make -s -j $NPROC
-# make -s install
-# cd ..
-
 $OQ_PREFIX/bin/python src/get-pip.py
+
+cd $OQ_ROOT
+mkdir -p $OQ_DIST/{wheelhouse,src}
 
 rm -Rf oq-engine
 git clone -q --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-engine.git
+
+rm -Rf oq-platform*
+git clone -q --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-platform-standalone.git
+git clone -q --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-platform-ipt.git
+git clone -q --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-platform-taxtweb.git
+git clone -q --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-platform-taxonomy.git
+
+$OQ_PREFIX/bin/python2.7 -m pip -q wheel -r oq-engine/requirements-py27-${BUILD_OS}.txt -w $OQ_WHEEL
+
 cd oq-engine
+$OQ_PREFIX/bin/python2.7 -m pip -q wheel --no-deps . -w $OQ_WHEEL
 declare OQ_$(echo 'engine' | tr '[:lower:]' '[:upper:]')_DEV=$(git rev-parse --short HEAD)
-$OQ_PREFIX/bin/python2.7 -m pip -q install -r requirements-py27-${BUILD_OS}.txt
-$OQ_PREFIX/bin/python2.7 -m pip -q install .
 cd ..
 
-mkdir -p $OQ_PREFIX/share/openquake/engine
-cp oq-engine/README.md oq-engine/LICENSE $OQ_PREFIX
-cp -R oq-engine/demos $OQ_PREFIX/share/openquake/engine
-cp -R oq-engine/doc $OQ_PREFIX/share/openquake/engine
-rm -Rf $OQ_PREFIX/share/openquake/engine/doc/sphinx
+mkdir ${OQ_WHEEL}/tools
+for app in oq-platform-*; do
+    $OQ_PREFIX/bin/python2.7 -m pip -q wheel --no-deps ${app}/ -w ${OQ_WHEEL}/tools
+done
+
+cp -R ${OQ_ROOT}/oq-engine/{README.md,LICENSE,demos,doc} ${OQ_DIST}/src
+rm -Rf ${OQ_DIST}/src/doc/sphinx
 
 # Make a zipped copy of each demo
-oq-engine/helpers/zipdemos.sh ${OQ_PREFIX}/share/openquake/engine/demos
+${OQ_ROOT}/oq-engine/helpers/zipdemos.sh ${OQ_DIST}/src/demos
 
-# utils is not copied for now, since it does not contain anything useful here
-cp install.sh ${OQ_ROOT}/${OQ_REL}
+## utils is not copied for now, since it does not contain anything useful here
+cp ${OQ_DIR}/install.sh ${OQ_DIST}
 
-makeself -q ${OQ_ROOT}/${OQ_REL} ../openquake-py27-${BUILD_OS}-${OQ_ENGINE_DEV}.run "installer for the OpenQuake Engine" ./install.sh
+echo "Creating installation package"
+makeself -q ${OQ_DIST} ${OQ_DIR}/openquake-py27-${BUILD_OS}-${OQ_ENGINE_DEV}.run "installer for the OpenQuake Engine" ./install.sh
 
 exit 0
