@@ -89,7 +89,6 @@ curl -LO http://ftp.gnu.org/gnu/sed/sed-4.2.2.tar.gz
 curl -LO https://www.openssl.org/source/openssl-1.0.2l.tar.gz
 curl -LO https://www.sqlite.org/2017/sqlite-autoconf-3190200.tar.gz
 curl -LO https://www.python.org/ftp/python/2.7.13/Python-2.7.13.tar.xz
-curl -LO get-pip.py https://bootstrap.pypa.io/get-pip.py
 
 cat <<EOF >> $OQ_PREFIX/env.sh
 PREFIX=$OQ_PREFIX
@@ -141,7 +140,7 @@ make -s -j $NPROC
 make -s install
 cd ..
 
-$OQ_PREFIX/bin/python get-pip.py
+$OQ_PREFIX/bin/python2.7 -m pip -q install wheel
 
 mkdir -p $OQ_DIST/{wheelhouse,src}
 rm -Rf oq-engine

@@ -104,7 +104,7 @@ echo "Installing the OpenQuake Engine. Please wait."
 # Update pip first
 /usr/bin/env pip install --disable-pip-version-check -U wheelhouse/pip*.whl > /dev/null
 /usr/bin/env pip install --disable-pip-version-check wheelhouse/*.whl > /dev/null
-mkdir $FDEST/share
+mkdir -p $FDEST/share
 cp -R src/{README.md,LICENSE,demos,doc} $FDEST/share
 
 ## Tools installation

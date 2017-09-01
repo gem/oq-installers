@@ -84,7 +84,7 @@ fi
 FDEST=$(realpath "$DEST")
 
 echo "Installing Python in $FDEST. Please wait."
-cp -R src/* $FDEST
+cp -R prefix/* $FDEST
 
 PREFIX_COUNT=${#PREFIX}
 FDEST_COUNT=${#FDEST}
@@ -108,7 +108,7 @@ find ${FDEST} -type f -exec ${FDEST}/bin/sed -i $REWRITE "{}" \;
 source ${FDEST}/env.sh
 echo "Installing the OpenQuake Engine. Please wait."
 /usr/bin/env pip install --disable-pip-version-check wheelhouse/*.whl > /dev/null
-mkdir $FDEST/share
+mkdir -p $FDEST/share
 cp -R src/{README.md,LICENSE,demos,doc} $FDEST/share
 
 ## Tools installation
