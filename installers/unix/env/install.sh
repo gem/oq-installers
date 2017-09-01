@@ -105,13 +105,26 @@ echo "Installing the files in $FDEST. Please wait."
 /usr/bin/env pip install --disable-pip-version-check -U wheelhouse/pip*.whl > /dev/null
 /usr/bin/env pip install --disable-pip-version-check wheelhouse/*.whl > /dev/null
 
+## Tools installation
+if [ -z $FORCE ]; then
+    PROMPT="Do you want to install the OpenQuake Tools (IPT, TaxtWeb, Taxonomy Glossary)? [Y/n]: "
+    read -e -p "$PROMPT" TOOLS
+else
+    TOOLS=$FORCE
+fi
+if [[ "$TOOLS" != 'N' && "$TOOLS" != 'n' ]]; then
+    PYPREFIX=$(python -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())')
+    /usr/bin/env pip install --disable-pip-version-check wheelhouse/tools/*.whl > /dev/null
+    cp $PYPREFIX/openquake/server/local_settings.py.standalone $PYPREFIX/openquake/server/local_settings.py
+fi
+
+## 'oq' command alias
 if [ -z $FORCE ]; then
     PROMPT="Do you want to make the 'oq' command available by default? [Y/n]: "
     read -e -p "$PROMPT" OQ
 else
     OQ=$FORCE
 fi
-
 if [[ "$OQ" != 'N' && "$OQ" != 'n' ]]; then
     if [ $MACOS ]; then
         RC=$HOME/.profile;

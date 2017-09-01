@@ -53,6 +53,12 @@ else
     OQ_BRANCH=master
 fi
 
+if [ $GEM_SET_BRANCH_TOOLS ]; then
+    TOOLS_BRANCH=$GEM_SET_BRANCH_TOOLS
+else
+    TOOLS_BRANCH=$OQ_BRANCH
+fi
+
 rm -Rf $OQ_ROOT
 
 mkdir -p $OQ_WHEEL
@@ -92,6 +98,12 @@ source pybuild/bin/activate
 rm -Rf oq-engine
 git clone -q --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-engine.git
 
+rm -Rf oq-platform*
+git clone -q --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-platform-standalone.git
+git clone -q --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-platform-ipt.git
+git clone -q --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-platform-taxtweb.git
+git clone -q --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-platform-taxonomy.git
+
 /usr/bin/env pip -q install -U pip
 /usr/bin/env pip -q install -U wheel
 # Include an updated version of pip
@@ -103,6 +115,11 @@ cd oq-engine
 /usr/bin/env pip -q wheel --no-deps . -w $OQ_WHEEL
 declare OQ_$(echo 'engine' | tr '[:lower:]' '[:upper:]')_DEV=$(git rev-parse --short HEAD)
 cd ..
+
+mkdir $OQ_WHEEL/tools
+for app in oq-platform-*; do
+    /usr/bin/env pip -q wheel --no-deps ${app}/ -w $OQ_WHEEL/tools
+done
 
 cp -R ${OQ_ROOT}/oq-engine/{README.md,LICENSE,demos,doc} ${OQ_ROOT}/dist
 rm -Rf $OQ_ROOT/dist/doc/sphinx
