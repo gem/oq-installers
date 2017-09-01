@@ -105,7 +105,7 @@ echo "Installing the OpenQuake Engine. Please wait."
 /usr/bin/env pip install --disable-pip-version-check -U wheelhouse/pip*.whl > /dev/null
 /usr/bin/env pip install --disable-pip-version-check wheelhouse/*.whl > /dev/null
 mkdir $FDEST/share
-cp -R {README.md,LICENSE,demos,doc} $FDEST/share
+cp -R src/{README.md,LICENSE,demos,doc} $FDEST/share
 
 ## Tools installation
 if [ -z $FORCE ]; then

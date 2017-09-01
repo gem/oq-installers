@@ -43,7 +43,6 @@ OQ_ROOT=/tmp/build-openquake-dist
 OQ_DIST=${OQ_ROOT}/qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
 OQ_PREFIX=${OQ_DIST}/prefix
 OQ_WHEEL=${OQ_DIST}/wheelhouse
-CLEANUP=true
 
 if [ $GEM_SET_NPROC ]; then
     NPROC=$GEM_SET_NPROC
@@ -57,18 +56,16 @@ else
     OQ_BRANCH=master
 fi
 
-rm -Rf $OQ_ROOT
-cd $OQ_DIR
+if [ $GEM_SET_BRANCH_TOOLS ]; then
+    TOOLS_BRANCH=$GEM_SET_BRANCH_TOOLS
+else
+    TOOLS_BRANCH=$OQ_BRANCH
+fi
 
 if $(echo $OSTYPE | grep -q linux); then
     BUILD_OS='linux64'
-    if [ $GEM_SET_VENDOR ]; then
-        VENDOR=$GEM_SET_VENDOR
-    else
-        VENDOR='redhat'
-    fi
-    check_dep sudo
-    if [ "$VENDOR" == "redhat" ]; then
+    if [ -f /etc/redhat-release ]; then
+        check_dep sudo
         sudo yum -q -y upgrade
         sudo yum -q -y groupinstall 'Development Tools'
         sudo yum -q -y install epel-release
@@ -80,25 +77,19 @@ elif $(echo $OSTYPE | grep -q darwin); then
     BUILD_OS='macos'
     check_dep xcode-select makeself
     sudo xcode-select --install || true
-
 else
     not_supported
 fi
 
-mkdir -p build/src
+rm -Rf $OQ_ROOT
 mkdir -p $OQ_PREFIX
+cd $OQ_ROOT
 
-cd build/src
-
-curl -LOz sed-4.2.2.tar.gz http://ftp.gnu.org/gnu/sed/sed-4.2.2.tar.gz
-curl -LOz openssl-1.0.2l.tar.gz https://www.openssl.org/source/openssl-1.0.2l.tar.gz
-curl -LOz sqlite-autoconf-3190200.tar.gz https://www.sqlite.org/2017/sqlite-autoconf-3190200.tar.gz
-curl -LOz Python-2.7.13.tar.xz https://www.python.org/ftp/python/2.7.13/Python-2.7.13.tar.xz
-# FIXME Rtree is currently unsupported
-# curl -LOz 1.8.5.tar.gz https://github.com/libspatialindex/libspatialindex/archive/1.8.5.tar.gz
-curl -LOz get-pip.py https://bootstrap.pypa.io/get-pip.py
-
-cd ..
+curl -LO http://ftp.gnu.org/gnu/sed/sed-4.2.2.tar.gz
+curl -LO https://www.openssl.org/source/openssl-1.0.2l.tar.gz
+curl -LO https://www.sqlite.org/2017/sqlite-autoconf-3190200.tar.gz
+curl -LO https://www.python.org/ftp/python/2.7.13/Python-2.7.13.tar.xz
+curl -LO get-pip.py https://bootstrap.pypa.io/get-pip.py
 
 cat <<EOF >> $OQ_PREFIX/env.sh
 PREFIX=$OQ_PREFIX
@@ -117,18 +108,14 @@ fi
 
 source $OQ_PREFIX/env.sh
 
-if $CLEANUP; then rm -Rf $HOME/.cache/pip; fi
-
-if $CLEANUP; then rm -Rf sed-4.2.2; fi
-tar xf src/sed-4.2.2.tar.gz
+tar xf sed-4.2.2.tar.gz
 cd sed-4.2.2
 ./configure --prefix=$OQ_PREFIX
 make -s -j $NPROC
 make -s install
 cd ..
 
-if $CLEANUP; then rm -Rf openssl-1.0.2l; fi
-tar xf src/openssl-1.0.2l.tar.gz
+tar xf openssl-1.0.2l.tar.gz
 cd openssl-1.0.2l/
 if [ "$BUILD_OS" == "macos" ]; then
     ./Configure darwin64-x86_64-cc shared enable-ec_nistp_64_gcc_128 no-ssl2 no-ssl3 no-comp --prefix=$OQ_PREFIX
@@ -140,27 +127,23 @@ make -s -j $NPROC
 make -s install
 cd ..
 
-if $CLEANUP; then rm -Rf sqlite-autoconf-3190200; fi
-tar xf src/sqlite-autoconf-3190200.tar.gz
+tar xf sqlite-autoconf-3190200.tar.gz
 cd sqlite-autoconf-3190200
 ./configure --prefix=$OQ_PREFIX
 make -s -j $NPROC
 make -s install
 cd ..
 
-if $CLEANUP; then rm -Rf Python-2.7.13; fi
-tar xJf src/Python-2.7.13.tar.xz
+tar xJf Python-2.7.13.tar.xz
 cd Python-2.7.13
 ./configure --prefix=$OQ_PREFIX --enable-unicode=ucs4 --with-ensurepip
 make -s -j $NPROC
 make -s install
 cd ..
 
-$OQ_PREFIX/bin/python src/get-pip.py
+$OQ_PREFIX/bin/python get-pip.py
 
-cd $OQ_ROOT
 mkdir -p $OQ_DIST/{wheelhouse,src}
-
 rm -Rf oq-engine
 git clone -q --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-engine.git
 

@@ -37,7 +37,7 @@ not_supported() {
 }
 
 OQ_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-OQ_ROOT=${OQ_DIR}/build
+OQ_ROOT=/tmp/build-openquake-dist
 OQ_DIST=${OQ_ROOT}/dist
 OQ_WHEEL=${OQ_DIST}/wheelhouse
 CLEANUP=true
@@ -60,14 +60,10 @@ else
     TOOLS_BRANCH=$OQ_BRANCH
 fi
 
-rm -Rf $OQ_ROOT
-
-mkdir -p $OQ_WHEEL
-cd $OQ_ROOT
-
 if $(echo $OSTYPE | grep -q linux); then
     BUILD_OS='linux64'
     if [ -f /etc/redhat-release ]; then
+        check_dep sudo
         sudo yum -y -q upgrade
         sudo yum -y -q install epel-release
         sudo yum -y -q install curl gcc git makeself zip
@@ -87,8 +83,12 @@ else
     not_supported
 fi
 
+rm -Rf $OQ_ROOT
+mkdir -p $OQ_DIST
+cd $OQ_ROOT
+
 curl -Lo virtualenv-15.0.2.tar.gz https://github.com/pypa/virtualenv/archive/15.0.2.tar.gz
-cd ${OQ_DIST}
+cd $OQ_DIST
 tar xzf ../virtualenv-15.0.2.tar.gz
 mv virtualenv-15.0.2 virtualenv
 cd ..
@@ -96,6 +96,7 @@ cd ..
 /usr/bin/env python dist/virtualenv/virtualenv.py pybuild
 source pybuild/bin/activate
 
+mkdir -p $OQ_DIST/{wheelhouse,src}
 rm -Rf oq-engine
 git clone -q --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-engine.git
 
@@ -121,15 +122,16 @@ for app in oq-platform-*; do
     /usr/bin/env pip -q wheel --no-deps ${app}/ -w ${OQ_WHEEL}/tools
 done
 
-cp -R ${OQ_ROOT}/oq-engine/{README.md,LICENSE,demos,doc} ${OQ_DIST}
-rm -Rf ${OQ_DIST}/doc/sphinx
+cp -R ${OQ_ROOT}/oq-engine/{README.md,LICENSE,demos,doc} ${OQ_DIST}/src
+rm -Rf ${OQ_DIST}/src/doc/sphinx
 
 # Make a zipped copy of each demo
-${OQ_ROOT}/oq-engine/helpers/zipdemos.sh ${OQ_DIST}/demos
+${OQ_ROOT}/oq-engine/helpers/zipdemos.sh ${OQ_DIST}/src/demos
 
 ## utils is not copied for now, since it does not contain anything useful here
 cp ${OQ_DIR}/install.sh ${OQ_DIST}
 
-makeself -q ${OQ_DIST} ../openquake-py27-${BUILD_OS}-${OQ_ENGINE_DEV}.run "installer for the OpenQuake Engine" ./install.sh
+echo "Creating installation package"
+makeself -q ${OQ_DIST} ${OQ_DIR}/openquake-py27-${BUILD_OS}-${OQ_ENGINE_DEV}.run "installer for the OpenQuake Engine" ./install.sh
 
 exit 0
