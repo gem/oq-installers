@@ -37,8 +37,8 @@ not_supported() {
 }
 
 OQ_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-OQ_ROOT=$OQ_DIR/build
-OQ_WHEEL=$OQ_ROOT/dist/wheelhouse
+OQ_ROOT=${OQ_DIR}/build
+OQ_WHEEL=${OQ_ROOT}/dist/wheelhouse
 CLEANUP=true
 
 if [ $GEM_SET_NPROC ]; then
@@ -87,7 +87,7 @@ else
 fi
 
 curl -Lo virtualenv-15.0.2.tar.gz https://github.com/pypa/virtualenv/archive/15.0.2.tar.gz
-cd $OQ_ROOT/dist
+cd ${OQ_ROOT}/dist
 tar xzf ../virtualenv-15.0.2.tar.gz
 mv virtualenv-15.0.2 virtualenv
 cd ..
@@ -107,28 +107,28 @@ git clone -q --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-platform-taxonomy
 /usr/bin/env pip -q install -U pip
 /usr/bin/env pip -q install -U wheel
 # Include an updated version of pip
-/usr/bin/env pip -q wheel --wheel-dir=$OQ_WHEEL pip
-/usr/bin/env pip -q wheel --wheel-dir=$OQ_WHEEL -r oq-engine/requirements-py27-${BUILD_OS}.txt
-/usr/bin/env pip -q install $OQ_WHEEL/*
+/usr/bin/env pip -q wheel pip -w $OQ_WHEEL
+/usr/bin/env pip -q wheel -r oq-engine/requirements-py27-${BUILD_OS}.txt -w $OQ_WHEEL
+/usr/bin/env pip -q install ${OQ_WHEEL}/*
  
 cd oq-engine
 /usr/bin/env pip -q wheel --no-deps . -w $OQ_WHEEL
 declare OQ_$(echo 'engine' | tr '[:lower:]' '[:upper:]')_DEV=$(git rev-parse --short HEAD)
 cd ..
 
-mkdir $OQ_WHEEL/tools
+mkdir ${OQ_WHEEL}/tools
 for app in oq-platform-*; do
-    /usr/bin/env pip -q wheel --no-deps ${app}/ -w $OQ_WHEEL/tools
+    /usr/bin/env pip -q wheel --no-deps ${app}/ -w ${OQ_WHEEL}/tools
 done
 
 cp -R ${OQ_ROOT}/oq-engine/{README.md,LICENSE,demos,doc} ${OQ_ROOT}/dist
-rm -Rf $OQ_ROOT/dist/doc/sphinx
+rm -Rf ${OQ_ROOT}/dist/doc/sphinx
 
 # Make a zipped copy of each demo
 ${OQ_ROOT}/oq-engine/helpers/zipdemos.sh ${OQ_ROOT}/dist/demos
 
 ## utils is not copied for now, since it does not contain anything useful here
-cp $OQ_DIR/install.sh ${OQ_ROOT}/dist
+cp ${OQ_DIR}/install.sh ${OQ_ROOT}/dist
 
 makeself -q ${OQ_ROOT}/dist ../openquake-py27-${BUILD_OS}-${OQ_ENGINE_DEV}.run "installer for the OpenQuake Engine" ./install.sh
 
