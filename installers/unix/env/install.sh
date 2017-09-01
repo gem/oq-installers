@@ -87,7 +87,7 @@ FDEST=$(realpath "$DEST")
 
 echo "Creating a new python environment in ${FDEST}. Please wait."
 /usr/bin/env $PYTHON virtualenv/virtualenv.py $FDEST > /dev/null
-cp -R {README.md,LICENSE,demos,doc} $FDEST
+
 
 [ $MACOS ] && \
     cat <<EOF >> ${FDEST}/env.sh
@@ -100,10 +100,12 @@ cat <<EOF >> ${FDEST}/env.sh
 EOF
 
 source ${FDEST}/env.sh
-echo "Installing the files in ${FDEST}. Please wait."
+echo "Installing the OpenQuake Engine. Please wait."
 # Update pip first
 /usr/bin/env pip install --disable-pip-version-check -U wheelhouse/pip*.whl > /dev/null
 /usr/bin/env pip install --disable-pip-version-check wheelhouse/*.whl > /dev/null
+mkdir $FDEST/share
+cp -R {README.md,LICENSE,demos,doc} $FDEST/share
 
 ## Tools installation
 if [ -z $FORCE ]; then
