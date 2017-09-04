@@ -32,8 +32,14 @@ build_libtool
 
 build_dep geos
 
-cd /tmp/wheelhouse
+cd /tmp/src
 
-build Shapely==1.5.13
+# Shapely 1.5 needs a patch to be able to use libgeos included by auditwheel.
+# This patch has been included in the 1.6 release tree.
+curl -Lo Shapely-1.5.13.tar.gz https://github.com/Toblerity/Shapely/archive/1.5.13.tar.gz
+tar xf Shapely-1.5.13
+cd Shapely-1.5.13
+patch -p1 < $MYDIR/shapely/libgeos_wheel.patch
+build .
 
 post
