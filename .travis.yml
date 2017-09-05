@@ -9,28 +9,42 @@ services:
 
 jobs:
   include:
+  - stage: wheels
+    env: WHEELS
+    script:
+        - if echo "$TRAVIS_COMMIT_MESSAGE" | grep -q '\[wheels\]' || test "$BRANCH" == "master"; then
+            cd $TRAVIS_BUILD_DIR/wheels &&
+            docker run --rm -i -t -v $(pwd):/io quay.io/pypa/manylinux1_x86_64 /io/build-wheels-docker.sh;
+          fi
+    after_script:
+        - docker rmi openquake-centos7 || true
   - stage: docker
     env: DOCKER
     script:
-        - cd $TRAVIS_BUILD_DIR/oq-docker
-        - docker build --rm=true -t openquake-centos7 -f Dockerfile.centos .
-        - docker run --rm -i -t openquake-centos7 /opt/openquake/bin/oq --version
+        - if echo "$TRAVIS_COMMIT_MESSAGE" | grep -q '\[docker\]' || test "$BRANCH" == "master"; then
+            cd $TRAVIS_BUILD_DIR/oq-docker &&
+            docker build --rm=true -t openquake-centos7 -f Dockerfile.centos . &&
+            docker run --rm -i -t openquake-centos7 /opt/openquake/bin/oq --version;
+          fi
     after_script:
-        - docker rmi openquake-centos7
-
+        - docker rmi openquake-centos7 || true
   - stage: builders
     env: UNIX
     script:
-        - cd $TRAVIS_BUILD_DIR/installers/unix && docker build --build-arg uid=$(id -u) --rm=true -t centos6-builder -f Dockerfile.builder .
-        - cd $TRAVIS_BUILD_DIR/installers/unix/env && docker run --rm -v $(pwd):/io -t -i centos6-builder /io/build.sh && rm -Rf build
-        - cd $TRAVIS_BUILD_DIR/installers/unix/opt && docker run --rm -v $(pwd):/io -t -i centos6-builder /io/build.sh && rm -Rf build
+        - if echo "$TRAVIS_COMMIT_MESSAGE" | grep -q '\[unix\]' || test "$BRANCH" == "master"; then
+            cd $TRAVIS_BUILD_DIR/installers/unix && docker build --build-arg uid=$(id -u) --rm=true -t centos6-builder -f Dockerfile.builder . &&
+            cd $TRAVIS_BUILD_DIR/installers/unix/env && docker run --rm -v $(pwd):/io -t -i centos6-builder /io/build.sh && rm -Rf build &&
+            cd $TRAVIS_BUILD_DIR/installers/unix/opt && docker run --rm -v $(pwd):/io -t -i centos6-builder /io/build.sh && rm -Rf build;
+          fi
     after_script:
-        - docker rmi centos6-builder
+        - docker rmi centos6-builder || true
   - stage: builders
     env: WIN
     script:
-        - cd $TRAVIS_BUILD_DIR/installers/windows/nsis
-        - docker build --rm=true -t f25-wine -f docker/Dockerfile .
-        - docker run --rm -t -i f25-wine /opt/wine-stable/bin/wine python -c 'import pip; print(pip.__version__)'
+        - if echo "$TRAVIS_COMMIT_MESSAGE" | grep -q '\[win\]' || test "$BRANCH" == "master"; then
+            cd $TRAVIS_BUILD_DIR/installers/windows/nsis && 
+            docker build --rm=true -t f25-wine -f docker/Dockerfile . &&
+            docker run --rm -t -i f25-wine /opt/wine-stable/bin/wine python -c 'import pip; print(pip.__version__)';
+          fi
     after_script:
-        - docker rmi f25-wine
+        - docker rmi f25-wine || true
