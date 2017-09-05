@@ -6,7 +6,6 @@ python:
 services:
     - docker
 
-
 jobs:
   include:
   - stage: wheels
@@ -17,7 +16,7 @@ jobs:
             docker run --rm -i -t -v $(pwd):/io quay.io/pypa/manylinux1_x86_64 /io/build-wheels-docker.sh;
           fi
     after_script:
-        - docker rmi openquake-centos7 || true
+        - docker rmi quay.io/pypa/manylinux1_x86_64 || true
   - stage: docker
     env: DOCKER
     script:
@@ -48,3 +47,6 @@ jobs:
           fi
     after_script:
         - docker rmi f25-wine || true
+        
+before_install:
+    - if [ "$TRAVIS_PULL_REQUEST_BRANCH" != "" ]; then BRANCH=$TRAVIS_PULL_REQUEST_BRANCH; else BRANCH=$TRAVIS_BRANCH; fi
