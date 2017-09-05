@@ -40,6 +40,7 @@ curl -Lo Shapely-1.5.13.tar.gz https://github.com/Toblerity/Shapely/archive/1.5.
 tar xf Shapely-1.5.13.tar.gz
 cd Shapely-1.5.13
 patch -p0 < $MYDIR/shapely/libgeos_wheel.patch
+cp $MYDIR/shapely/_speedups.c shapely/speedups/
 build .
 
 post
