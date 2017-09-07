@@ -1,10 +1,10 @@
 # vi:syntax=dockerfile
-# name:f25-wine
-FROM fedora:25
+# name:f26-wine
+FROM fedora:26
 MAINTAINER Daniele Viganò <daniele@openquake.org>
 
 RUN dnf -q -y install python-markdown python-wheel wget git zip unzip && \
-    wget -qO- https://repos.wine-staging.com/wine/fedora/25/winehq.repo > /etc/yum.repos.d/winehq.repo && \
+    wget -qO- https://repos.wine-staging.com/wine/fedora/26/winehq.repo > /etc/yum.repos.d/winehq.repo && \
     dnf -q -y install wine-stable64
 
 ARG uid=1000

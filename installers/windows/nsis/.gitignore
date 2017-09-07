@@ -5,6 +5,7 @@ python-dist/Lib
 *.msi
 *.exe
 *.pdf
+*.zip
 README.txt
 README.md
 README.html
