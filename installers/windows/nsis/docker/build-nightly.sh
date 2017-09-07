@@ -44,10 +44,14 @@ echo "Extracting python wheels"
 wine pip -q install --disable-pip-version-check --force-reinstall --ignore-installed --upgrade --no-deps --no-index --prefix ../python-dist py/*.whl py27/*.whl
 
 ZIP="OpenQuake_Engine_win64_dev$(date '+%y%m%d%H%M').zip"
+OQPYPATH='s/PYTHONPATH=%mypath%\\lib\\site-packages/PYTHONPATH=%mypath%\\oq-engine;%mypath%\\lib\\site-packages/g'
 
 echo "Generating zip archive"
+for b in oq-console.bat oq-server.bat; do
+    sed "$OQPYPATH" ../${b} > $b
+    zip -qr ../${ZIP} $b
+    rm $b
+done
 zip -qr ../${ZIP} oq-engine
 cd ../python-dist
 zip -qr ../${ZIP} Lib python2.7
-cd ..
-zip -qr ${ZIP} *.bat
