@@ -42,11 +42,11 @@ jobs:
     script:
         - if echo "$TRAVIS_COMMIT_MESSAGE" | grep -q '\[win\]' || test "$BRANCH" == "master"; then
             cd $TRAVIS_BUILD_DIR/installers/windows/nsis && 
-            docker build --rm=true -t f25-wine -f docker/Dockerfile . &&
-            docker run --rm -t -i f25-wine /opt/wine-stable/bin/wine python -c 'import pip; print(pip.__version__)';
+            docker build --rm=true -t f26-wine -f docker/Dockerfile . &&
+            docker run --rm -t -i f26-wine /opt/wine-stable/bin/wine python -c 'import pip; print(pip.__version__)';
           fi
     after_script:
-        - docker rmi f25-wine || true
+        - docker rmi f26-wine || true
         
 before_install:
     - if [ "$TRAVIS_PULL_REQUEST_BRANCH" != "" ]; then BRANCH=$TRAVIS_PULL_REQUEST_BRANCH; else BRANCH=$TRAVIS_BRANCH; fi
