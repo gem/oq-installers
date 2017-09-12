@@ -32,14 +32,9 @@ fi
 PY="2.7.13"
 PY_MSI="python-$PY.amd64.msi"
 
-
+TMPDIR=$(mktemp -d)
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
 cd $DIR && pwd
-
-if [ ! -d py -o ! -d py27 ]; then
-    echo "Please download python dependencies first."
-    exit 1
-fi
 
 # Cleanup
 rm -Rf python-dist/python2.7/*
@@ -51,11 +46,16 @@ rm -Rf demos/*
 # pip wheel --no-deps https://github.com/gem/oq-engine/archive/master.zip
 
 cd src
-for app in oq-engine oq-platform-standalone oq-platform-ipt oq-platform-taxtweb oq-platform-taxonomy; do
+if [ ! -d py -o ! -d py27 ]; then
+    echo "Please download python dependencies first."
+    exit 1
+fi
+
+for app in oq-engine; do
     if [ ! -d $app ]; then
         git clone -q -b $OQ_BRANCH --depth=1 https://github.com/gem/${app}.git
     fi
-    wine pip -q wheel --disable-pip-version-check --no-deps ./${app}
+    git -C $app archive --prefix=$app/ HEAD | tar -C $TMPDIR -xf -
 done
 
 # Extract Python, to be included in the installation
@@ -67,20 +67,17 @@ wine msiexec /a $PY_MSI /qb TARGETDIR=../python-dist/python2.7
 
 # Extract wheels to be included in the installation
 echo "Extracting python wheels"
-wine pip -q install --disable-pip-version-check --force-reinstall --ignore-installed --upgrade --no-deps --no-index --prefix ../python-dist py/*.whl py27/*.whl openquake.*.whl oq_platform*.whl
+wine pip -q install --disable-pip-version-check --force-reinstall --ignore-installed --upgrade --no-deps --no-index --prefix ../python-dist py/*.whl py27/*.whl
 
-cd $DIR
+ZIP="OpenQuake_Engine_win64_dev$(date '+%y%m%d%H%M').zip"
+OQPYPATH='s/PYTHONPATH=%mypath%\\lib\\site-packages/PYTHONPATH=%mypath%\\oq-engine;%mypath%\\lib\\site-packages/g'
 
-# Get the demo and the README
-cp -r src/oq-engine/demos .
-src/oq-engine/helpers/zipdemos.sh $(pwd)/demos
-
-python -m markdown src/oq-engine/README.md > README.html
-
-# Get a copy of the OQ manual if not yet available
-if [ ! -f OpenQuake\ manual.pdf ]; then
-    wget -O- https://ci.openquake.org/job/builders/job/pdf-builder/lastSuccessfulBuild/artifact/oq-engine/doc/manual/oq-manual.pdf > OpenQuake\ manual.pdf
-fi
-
-echo "Generating NSIS installer"
-wine ${HOME}/.wine/drive_c/Program\ Files\ \(x86\)/NSIS/makensis /V4 installer.nsi
+cd $TMPDIR
+echo "Generating zip archive"
+for b in oq-console.bat oq-server.bat; do
+    sed "$OQPYPATH" ${DIR}/${b} > $b
+    zip -qr $DIR/${ZIP} $b
+done
+zip -qr $DIR/$ZIP oq-engine
+cd $DIR/python-dist
+zip -qr $DIR/$ZIP Lib python2.7

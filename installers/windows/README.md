@@ -14,11 +14,11 @@ Microsoft Windows is not required.
 
 #### Build Docker image
 ```bash
-$ docker build --build-arg uid=$(id -u) --rm=true -t f25-wine -f docker/Dockerfile .
+$ docker build --build-arg uid=$(id -u) --rm=true -t f26-wine -f docker/Dockerfile .
 ```
 ### Run the container
 ```bash
-$ docker run -v $(pwd):/io -t -i --rm f25-wine
+$ docker run -v $(pwd):/io -t -i --rm f26-wine
 ```
 
 ### Manual installation 
