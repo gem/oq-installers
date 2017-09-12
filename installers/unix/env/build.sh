@@ -100,10 +100,10 @@ rm -Rf oq-engine
 git clone -q --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-engine.git
 
 rm -Rf oq-platform*
-git clone -q --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-platform-standalone.git
-git clone -q --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-platform-ipt.git
-git clone -q --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-platform-taxtweb.git
-git clone -q --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-platform-taxonomy.git
+git clone -q --depth=1 -b $TOOLS_BRANCH https://github.com/gem/oq-platform-standalone.git
+git clone -q --depth=1 -b $TOOLS_BRANCH https://github.com/gem/oq-platform-ipt.git
+git clone -q --depth=1 -b $TOOLS_BRANCH https://github.com/gem/oq-platform-taxtweb.git
+git clone -q --depth=1 -b $TOOLS_BRANCH https://github.com/gem/oq-platform-taxonomy.git
 
 /usr/bin/env pip -q install -U pip
 /usr/bin/env pip -q install -U wheel
