@@ -114,7 +114,7 @@ cp -R src/{README.md,LICENSE,demos,doc} $FDEST/share
 ## Tools installation
 # A question Y/N is prompt to the user: if answer is Y tools (IPT...) will be installed together with
 # the OpenQuake Engine, otherwise with N only the Engine is installed and configured.
-# To allow unattended installationis a "force" flag can be passed, either force Y (--yes) or force N (--no)
+# To allow unattended installations a "force" flag can be passed, either force Y (--yes) or force N (--no)
 if [ -z $FORCE ]; then
     PROMPT="Do you want to install the OpenQuake Tools (IPT, TaxtWeb, Taxonomy Glossary)? [Y/n]: "
     read -e -p "$PROMPT" TOOLS
