@@ -116,7 +116,7 @@ cp -R src/{README.md,LICENSE,demos,doc} $FDEST/share
 # the OpenQuake Engine, otherwise with N only the Engine is installed and configured.
 # To allow unattended installations a "force" flag can be passed, either force Y (--yes) or force N (--no)
 if [ -z $FORCE ]; then
-    while ! (echo "$TOOLS" | grep '^[nNyY]$'); do
+    while ! (echo "$TOOLS" | grep -qE '^[nNyY]$'); do
         PROMPT="Do you want to install the OpenQuake Tools (IPT, TaxtWeb, Taxonomy Glossary)? [Y/n]: "
         read -e -p "$PROMPT" TOOLS
     done
@@ -131,7 +131,7 @@ fi
 
 ## 'oq' command alias
 if [ -z $FORCE ]; then
-    while ! (echo "$OQ" | grep '^[nNyY]$'); do
+    while ! (echo "$OQ" | grep -qE '^[nNyY]$'); do
         PROMPT="Do you want to make the 'oq' command available by default? [Y/n]: "
         read -e -p "$PROMPT" OQ
     done
