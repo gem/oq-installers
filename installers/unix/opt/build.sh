@@ -82,7 +82,7 @@ else
 fi
 
 rm -Rf $OQ_ROOT
-mkdir -p $OQ_PREFIX
+mkdir -p $OQ_PREFIX $OQ_DIST/{wheelhouse,src}
 cd $OQ_ROOT
 
 curl -LO http://ftp.gnu.org/gnu/sed/sed-4.2.2.tar.gz
@@ -142,7 +142,6 @@ cd ..
 
 $OQ_PREFIX/bin/python2.7 -m pip -q install wheel
 
-mkdir -p $OQ_DIST/{wheelhouse,src}
 rm -Rf oq-engine
 git clone -q --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-engine.git
 

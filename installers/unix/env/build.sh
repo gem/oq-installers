@@ -84,7 +84,7 @@ else
 fi
 
 rm -Rf $OQ_ROOT
-mkdir -p $OQ_DIST
+mkdir -p $OQ_DIST/{wheelhouse,src}
 cd $OQ_ROOT
 
 curl -Lo virtualenv-15.0.2.tar.gz https://github.com/pypa/virtualenv/archive/15.0.2.tar.gz
@@ -96,7 +96,6 @@ cd ..
 /usr/bin/env python dist/virtualenv/virtualenv.py pybuild
 source pybuild/bin/activate
 
-mkdir -p $OQ_DIST/{wheelhouse,src}
 rm -Rf oq-engine
 git clone -q --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-engine.git
 
