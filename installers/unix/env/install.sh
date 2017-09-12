@@ -120,7 +120,7 @@ if [ -z $FORCE ]; then
 else
     TOOLS=$FORCE
 fi
-if [[ "$TOOLS" != 'N' && "$TOOLS" != 'n' ]]; then
+if [[ "$TOOLS" == 'Y' || "$TOOLS" == 'y' ]]; then
     PYPREFIX=$(python -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())')
     /usr/bin/env pip install --disable-pip-version-check wheelhouse/tools/*.whl > /dev/null
     cp ${PYPREFIX}/openquake/server/local_settings.py.standalone ${PYPREFIX}/openquake/server/local_settings.py
@@ -135,7 +135,7 @@ if [ -z $FORCE ]; then
 else
     OQ=$FORCE
 fi
-if [[ "$OQ" != 'N' && "$OQ" != 'n' ]]; then
+if [[ "$OQ" == 'Y' || "$OQ" == 'y' ]]; then
     if [ $MACOS ]; then
         RC=$HOME/.profile;
         SED_ARGS="-i ''"
