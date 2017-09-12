@@ -14,3 +14,16 @@ Powered by
 
 * Jenkis' Docker containers
 * wheel builders
+
+
+## Testing on Travis
+
+All the builders and installers are tested via Travis + Docker with the following logic:
+
+- master branch: all the tests are run. Build may take a while
+- other branches: no tests are run unless one of these tags are added to the commit message
+   - `[WHEELS]`: run wheels builder
+   - `[DOCKER]`: run Docker for OpenQuake Engine generator
+   - `[UNIX]`: build unix installers (env/opt)
+   - `[WIN]`: build NSIS Windows installer
+
