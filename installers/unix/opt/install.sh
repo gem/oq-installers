@@ -116,12 +116,14 @@ cp -R src/{README.md,LICENSE,demos,doc} $FDEST/share
 # the OpenQuake Engine, otherwise with N only the Engine is installed and configured.
 # To allow unattended installations a "force" flag can be passed, either force Y (--yes) or force N (--no)
 if [ -z $FORCE ]; then
-    PROMPT="Do you want to install the OpenQuake Tools (IPT, TaxtWeb, Taxonomy Glossary)? [Y/n]: "
-    read -e -p "$PROMPT" TOOLS
+    while $(echo $TOOLS | grep -ivqE [^y$|^n$]); do
+        PROMPT="Do you want to install the OpenQuake Tools (IPT, TaxtWeb, Taxonomy Glossary)? [Y/n]: "
+        read -e -p "$PROMPT" TOOLS
+    done
 else
     TOOLS=$FORCE
 fi
-if [[ "$TOOLS" != 'N' && "$TOOLS" != 'n' ]]; then
+if [[ "$TOOLS" == 'Y' || "$TOOLS" == 'y' ]]; then
     PYPREFIX=$(python -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())')
     /usr/bin/env pip install --disable-pip-version-check wheelhouse/tools/*.whl > /dev/null
     cp ${PYPREFIX}/openquake/server/local_settings.py.standalone ${PYPREFIX}/openquake/server/local_settings.py
@@ -129,12 +131,14 @@ fi
 
 ## 'oq' command alias
 if [ -z $FORCE ]; then
-    PROMPT="Do you want to make the 'oq' command available by default? [Y/n]: "
-    read -e -p "$PROMPT" OQ
+    while $(echo $OQ | grep -ivqE [^y$|^n$]); do
+        PROMPT="Do you want to make the 'oq' command available by default? [Y/n]: "
+        read -e -p "$PROMPT" OQ
+    done
 else
     OQ=$FORCE
 fi
-if [[ "$OQ" != 'N' && "$OQ" != 'n' ]]; then
+if [[ "$OQ" == 'Y' || "$OQ" == 'y' ]]; then
     if [ $MACOS ]; then
         RC=$HOME/.profile;
         SED_ARGS="-i ''"
