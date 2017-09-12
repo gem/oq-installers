@@ -22,17 +22,27 @@ if [ $GEM_SET_DEBUG ]; then
 fi
 set -e
 
+PYTHON=python2.7
+
 help() {
     cat <<HSD
 The command line arguments are as follows:
 
-    -s, --src            Path to the installation source (.tar.gz)
     -d, --dest           Path to the destination folder
     -y, --yes            Force 'yes' answers
     -n, --no             Force 'no' answers
     -h, --help           This help
 HSD
     exit 0
+}
+
+check_dep() {
+    for i in $*; do
+        command -v $i &> /dev/null || {
+            echo -e "!! Please install $i first. Aborting." >&2
+            exit 1
+        }
+    done
 }
 
 realpath() {
@@ -52,12 +62,10 @@ realpath() {
 IFS="
 "
 MACOS=$(echo $OSTYPE | grep darwin || true)
-SRC=dist
-PREFIX=/tmp/build-openquake-dist/qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq/${SRC}
+PREFIX=/tmp/build-openquake-dist/qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq/prefix
 
 while (( "$#" )); do
     case "$1" in
-        -s|--src) SRC="$2"; shift;;
         -d|--dest) DEST="$2"; shift;;
         -y|--yes) FORCE="y";;
         -n|--no) FORCE="n";;
@@ -66,19 +74,17 @@ while (( "$#" )); do
     shift
 done
 
-if [ ! -d $SRC ]; then
-    echo -e "!! Please specify a valid source." >&2
-    exit 1
-fi
+check_dep find
+
 if [ -z $DEST ]; then
-    PROMPT="Type the path where you want to install OpenQuake, followed by [ENTER]. Otherwise leave blank, it will be installed in $HOME/openquake: "
+    PROMPT="Type the path where you want to install OpenQuake, followed by [ENTER]. Otherwise leave blank, it will be installed in ${HOME}/openquake: "
     read -e -p "$PROMPT" DEST
     [ -z "$DEST" ] && DEST=$HOME/openquake
 fi
 FDEST=$(realpath "$DEST")
 
-echo "Copying the files in $FDEST. Please wait."
-cp -R $SRC/* $FDEST
+echo "Installing Python in $FDEST. Please wait."
+cp -R prefix/* $FDEST
 
 PREFIX_COUNT=${#PREFIX}
 FDEST_COUNT=${#FDEST}
@@ -90,25 +96,49 @@ for i in $(seq 1 $COUNT); do
 done
 
 [ $MACOS ] && \
-    cat <<EOF >> $FDEST/env.sh
+    cat <<EOF >> ${FDEST}/env.sh
     export LC_ALL=en_US.UTF-8
     export LAN=en_US.UTF-8
 EOF
 
-source $FDEST/env.sh
-echo "Finalizing the installation. Please wait."
-
+echo "Updating the installation. Please wait."
 REWRITE=':loop;s@'${PREFIX}'\([^\x00\x22\x27]*[\x27\x22]\)@'${FDEST}'\1'${BLA}'@g;s@'${PREFIX}'\([^\x00\x22\x27]*\x00\)@'${FDEST}'\1'${NUL}'@g;s@'${PREFIX}'\([^\x00\x22\x27]*\)$@'${FDEST}'\1'${BLA}'@g;t loop'
 find ${FDEST} -type f -exec ${FDEST}/bin/sed -i $REWRITE "{}" \;
 
+source ${FDEST}/env.sh
+echo "Installing the OpenQuake Engine. Please wait."
+/usr/bin/env pip install --disable-pip-version-check wheelhouse/*.whl > /dev/null
+mkdir -p $FDEST/share
+cp -R src/{README.md,LICENSE,demos,doc} $FDEST/share
+
+## Tools installation
+# A question Y/N is prompt to the user: if answer is Y tools (IPT...) will be installed together with
+# the OpenQuake Engine, otherwise with N only the Engine is installed and configured.
+# To allow unattended installations a "force" flag can be passed, either force Y (--yes) or force N (--no)
 if [ -z $FORCE ]; then
-    PROMPT="Do you want to make the 'oq' command available by default? [Y/n]: "
-    read -e -p "$PROMPT" OQ
+    while ! (echo "$TOOLS" | grep -qE '^[nNyY]$'); do
+        PROMPT="Do you want to install the OpenQuake Tools (IPT, TaxtWeb, Taxonomy Glossary)? [y/n]: "
+        read -e -p "$PROMPT" TOOLS
+    done
+else
+    TOOLS=$FORCE
+fi
+if [[ "$TOOLS" == 'Y' || "$TOOLS" == 'y' ]]; then
+    PYPREFIX=$(python -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())')
+    /usr/bin/env pip install --disable-pip-version-check wheelhouse/tools/*.whl > /dev/null
+    cp ${PYPREFIX}/openquake/server/local_settings.py.standalone ${PYPREFIX}/openquake/server/local_settings.py
+fi
+
+## 'oq' command alias
+if [ -z $FORCE ]; then
+    while ! (echo "$OQ" | grep -qE '^[nNyY]$'); do
+        PROMPT="Do you want to make the 'oq' command available by default? [y/n]: "
+        read -e -p "$PROMPT" OQ
+    done
 else
     OQ=$FORCE
 fi
-
-if [[ "$OQ" != 'N' && "$OQ" != 'n' ]]; then
+if [[ "$OQ" == 'Y' || "$OQ" == 'y' ]]; then
     if [ $MACOS ]; then
         RC=$HOME/.profile;
         SED_ARGS="-i ''"
@@ -121,5 +151,5 @@ if [[ "$OQ" != 'N' && "$OQ" != 'n' ]]; then
     echo "function oq() { ( . ${FDEST}/env.sh && ${FDEST}/bin/oq \$* ) }" >> $RC
 fi
 
-echo "Installation completed. To enable it run 'source $FDEST/env.sh'"
+echo "Installation completed. To enable it run 'source ${FDEST}/env.sh'"
 exit 0

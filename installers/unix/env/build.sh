@@ -37,8 +37,9 @@ not_supported() {
 }
 
 OQ_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-OQ_ROOT=$OQ_DIR/build
-OQ_WHEEL=$OQ_ROOT/dist/wheelhouse
+OQ_ROOT=/tmp/build-openquake-dist
+OQ_DIST=${OQ_ROOT}/dist
+OQ_WHEEL=${OQ_DIST}/wheelhouse
 CLEANUP=true
 
 if [ $GEM_SET_NPROC ]; then
@@ -53,14 +54,16 @@ else
     OQ_BRANCH=master
 fi
 
-rm -Rf $OQ_ROOT
-
-mkdir -p $OQ_WHEEL
-cd $OQ_ROOT
+if [ $GEM_SET_BRANCH_TOOLS ]; then
+    TOOLS_BRANCH=$GEM_SET_BRANCH_TOOLS
+else
+    TOOLS_BRANCH=$OQ_BRANCH
+fi
 
 if $(echo $OSTYPE | grep -q linux); then
     BUILD_OS='linux64'
     if [ -f /etc/redhat-release ]; then
+        check_dep sudo
         sudo yum -y -q upgrade
         sudo yum -y -q install epel-release
         sudo yum -y -q install curl gcc git makeself zip
@@ -80,8 +83,12 @@ else
     not_supported
 fi
 
+rm -Rf $OQ_ROOT
+mkdir -p $OQ_DIST/{wheelhouse,src}
+cd $OQ_ROOT
+
 curl -Lo virtualenv-15.0.2.tar.gz https://github.com/pypa/virtualenv/archive/15.0.2.tar.gz
-cd $OQ_ROOT/dist
+cd $OQ_DIST
 tar xzf ../virtualenv-15.0.2.tar.gz
 mv virtualenv-15.0.2 virtualenv
 cd ..
@@ -92,27 +99,38 @@ source pybuild/bin/activate
 rm -Rf oq-engine
 git clone -q --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-engine.git
 
+rm -Rf oq-platform*
+git clone -q --depth=1 -b $TOOLS_BRANCH https://github.com/gem/oq-platform-standalone.git
+git clone -q --depth=1 -b $TOOLS_BRANCH https://github.com/gem/oq-platform-ipt.git
+git clone -q --depth=1 -b $TOOLS_BRANCH https://github.com/gem/oq-platform-taxtweb.git
+git clone -q --depth=1 -b $TOOLS_BRANCH https://github.com/gem/oq-platform-taxonomy.git
+
 /usr/bin/env pip -q install -U pip
 /usr/bin/env pip -q install -U wheel
 # Include an updated version of pip
-/usr/bin/env pip -q wheel --wheel-dir=$OQ_WHEEL pip
-/usr/bin/env pip -q wheel --wheel-dir=$OQ_WHEEL -r oq-engine/requirements-py27-${BUILD_OS}.txt
-/usr/bin/env pip -q install $OQ_WHEEL/*
+/usr/bin/env pip -q wheel pip -w $OQ_WHEEL
+/usr/bin/env pip -q wheel -r oq-engine/requirements-py27-${BUILD_OS}.txt -w $OQ_WHEEL
  
 cd oq-engine
 /usr/bin/env pip -q wheel --no-deps . -w $OQ_WHEEL
 declare OQ_$(echo 'engine' | tr '[:lower:]' '[:upper:]')_DEV=$(git rev-parse --short HEAD)
 cd ..
 
-cp -R ${OQ_ROOT}/oq-engine/{README.md,LICENSE,demos,doc} ${OQ_ROOT}/dist
-rm -Rf $OQ_ROOT/dist/doc/sphinx
+mkdir ${OQ_WHEEL}/tools
+for app in oq-platform-*; do
+    /usr/bin/env pip -q wheel --no-deps ${app}/ -w ${OQ_WHEEL}/tools
+done
+
+cp -R ${OQ_ROOT}/oq-engine/{README.md,LICENSE,demos,doc} ${OQ_DIST}/src
+rm -Rf ${OQ_DIST}/src/doc/sphinx
 
 # Make a zipped copy of each demo
-${OQ_ROOT}/oq-engine/helpers/zipdemos.sh ${OQ_ROOT}/dist/demos
+${OQ_ROOT}/oq-engine/helpers/zipdemos.sh ${OQ_DIST}/src/demos
 
 ## utils is not copied for now, since it does not contain anything useful here
-cp $OQ_DIR/install.sh ${OQ_ROOT}/dist
+cp ${OQ_DIR}/install.sh ${OQ_DIST}
 
-makeself -q ${OQ_ROOT}/dist ../openquake-py27-${BUILD_OS}-${OQ_ENGINE_DEV}.run "installer for the OpenQuake Engine" ./install.sh
+echo "Creating installation package"
+makeself -q ${OQ_DIST} ${OQ_DIR}/openquake-py27-${BUILD_OS}-${OQ_ENGINE_DEV}.run "installer for the OpenQuake Engine" ./install.sh
 
 exit 0

@@ -79,40 +79,62 @@ check_dep $PYTHON
 python -c "import sys; sys.exit('Anaconda Python isn\'t supported by this package. Please install the official Python from python.org.') if 'conda' in sys.version else ''"
 
 if [ -z $DEST ]; then
-    PROMPT="Type the path where you want to install OpenQuake, followed by [ENTER]. Otherwise leave blank, it will be installed in $HOME/openquake: "
+    PROMPT="Type the path where you want to install OpenQuake, followed by [ENTER]. Otherwise leave blank, it will be installed in ${HOME}/openquake: "
     read -e -p "$PROMPT" DEST
     [ -z "$DEST" ] && DEST=$HOME/openquake
 fi
 FDEST=$(realpath "$DEST")
 
-echo "Creating a new python environment in $FDEST. Please wait."
+echo "Creating a new python environment in ${FDEST}. Please wait."
 /usr/bin/env $PYTHON virtualenv/virtualenv.py $FDEST > /dev/null
-cp -R {README.md,LICENSE,demos,doc} $FDEST
+
 
 [ $MACOS ] && \
-    cat <<EOF >> $FDEST/env.sh
+    cat <<EOF >> ${FDEST}/env.sh
     export LC_ALL=en_US.UTF-8
     export LAN=en_US.UTF-8
 EOF
 
-cat <<EOF >> $FDEST/env.sh
-. $FDEST/bin/activate
+cat <<EOF >> ${FDEST}/env.sh
+. ${FDEST}/bin/activate
 EOF
 
-source $FDEST/env.sh
-echo "Installing the files in $FDEST. Please wait."
+source ${FDEST}/env.sh
+echo "Installing the OpenQuake Engine. Please wait."
 # Update pip first
 /usr/bin/env pip install --disable-pip-version-check -U wheelhouse/pip*.whl > /dev/null
 /usr/bin/env pip install --disable-pip-version-check wheelhouse/*.whl > /dev/null
+mkdir -p $FDEST/share
+cp -R src/{README.md,LICENSE,demos,doc} $FDEST/share
 
+## Tools installation
+# A question Y/N is prompt to the user: if answer is Y tools (IPT...) will be installed together with
+# the OpenQuake Engine, otherwise with N only the Engine is installed and configured.
+# To allow unattended installations a "force" flag can be passed, either force Y (--yes) or force N (--no)
 if [ -z $FORCE ]; then
-    PROMPT="Do you want to make the 'oq' command available by default? [Y/n]: "
-    read -e -p "$PROMPT" OQ
+    while ! (echo "$TOOLS" | grep -qE '^[nNyY]$'); do
+        PROMPT="Do you want to install the OpenQuake Tools (IPT, TaxtWeb, Taxonomy Glossary)? [y/n]: "
+        read -e -p "$PROMPT" TOOLS
+    done
+else
+    TOOLS=$FORCE
+fi
+if [[ "$TOOLS" == 'Y' || "$TOOLS" == 'y' ]]; then
+    PYPREFIX=$(python -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())')
+    /usr/bin/env pip install --disable-pip-version-check wheelhouse/tools/*.whl > /dev/null
+    cp ${PYPREFIX}/openquake/server/local_settings.py.standalone ${PYPREFIX}/openquake/server/local_settings.py
+fi
+
+## 'oq' command alias
+if [ -z $FORCE ]; then
+    while ! (echo "$OQ" | grep -qE '^[nNyY]$'); do
+        PROMPT="Do you want to make the 'oq' command available by default? [y/n]: "
+        read -e -p "$PROMPT" OQ
+    done
 else
     OQ=$FORCE
 fi
-
-if [[ "$OQ" != 'N' && "$OQ" != 'n' ]]; then
+if [[ "$OQ" == 'Y' || "$OQ" == 'y' ]]; then
     if [ $MACOS ]; then
         RC=$HOME/.profile;
         SED_ARGS="-i ''"
@@ -125,5 +147,5 @@ if [[ "$OQ" != 'N' && "$OQ" != 'n' ]]; then
     echo "function oq() { ( . ${FDEST}/env.sh && ${FDEST}/bin/oq \$* ) }" >> $RC
 fi
 
-echo "Installation completed. To enable it run 'source $FDEST/env.sh'"
+echo "Installation completed. To enable it run 'source ${FDEST}/env.sh'"
 exit 0
