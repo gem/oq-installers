@@ -30,6 +30,13 @@ Exposes the WebUI and a `oq` cli.
 >$ sudo docker stop myoqcontainer
 ```
 
+## Custom build args
+
+```bash
+-e branch=master      ## oq-engine branch
+-e tools_branch=mater ## oq standalone tools branch
+```
+
 
 ## Disclaimer ##
 
