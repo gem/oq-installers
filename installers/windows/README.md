@@ -21,6 +21,12 @@ $ docker build --build-arg uid=$(id -u) --rm=true -t f26-wine -f docker/Dockerfi
 $ docker run -v $(pwd):/io -t -i --rm f26-wine
 ```
 
+#### Custom branches
+```bash
+$ docker run -e GEM_SET_BRANCH=branch -e GEM_SET_BRANCH_TOOLS=branch -v $(pwd):/io -t -i --rm f26-wine
+```
+otherwise `master` is used.
+
 ### Manual installation 
 
 #### Setup WINE prefix
