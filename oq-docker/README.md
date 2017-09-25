@@ -33,11 +33,8 @@ Exposes the WebUI and a `oq` cli.
 ## Custom build args
 
 ```bash
--e branch=master      ## oq-engine branch
--e tools_branch=mater ## oq standalone tools branch
+--build-arg oq_branch=master      ## oq-engine branch
+--build-arg tools_branch=mater ## oq standalone tools branch
 ```
 
-
-## Disclaimer ##
-
-This work is experimental and is not supported by GEM. Use at your own risk.
+See also https://github.com/gem/oq-engine/blob/master/doc/installing/docker.md
