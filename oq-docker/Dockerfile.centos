@@ -23,7 +23,8 @@ RUN wget -O- https://raw.githubusercontent.com/gem/oq-engine/$branch/requirement
     pip -q install --prefix /opt/openquake https://github.com/gem/oq-platform-standalone/archive/$branch.zip || pip -q install --prefix /opt/openquake https://github.com/oq-platform-standalone/archive/master.zip && \
     pip -q install --prefix /opt/openquake https://github.com/gem/oq-platform-ipt/archive/$branch.zip || pip -q install --prefix /opt/openquake https://github.com/oq-platform-ipt/archive/master.zip && \
     pip -q install --prefix /opt/openquake https://github.com/gem/oq-platform-taxtweb/archive/$branch.zip || pip -q install --prefix /opt/openquake https://github.com/oq-platform-taxtweb/archive/master.zip && \
-    pip -q install --prefix /opt/openquake https://github.com/gem/oq-platform-taxonomy/archive/$branch.zip || pip -q install --prefix /opt/openquake https://github.com/oq-platform-taxonomy/archive/master.zip
+    pip -q install --prefix /opt/openquake https://github.com/gem/oq-platform-taxonomy/archive/$branch.zip || pip -q install --prefix /opt/openquake https://github.com/oq-platform-taxonomy/archive/master.zip && \
+    cp /opt/openquake/lib/python2.7/site-packages/openquake/server/local_settings.py.standalone /opt/openquake/lib/python2.7/site-packages/openquake/server/local_settings.py
 
 ADD openquake/__init__.py $PYTHONPATH/openquake
 ADD oqrun.sh /opt/openquake/
