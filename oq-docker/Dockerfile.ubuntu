@@ -6,7 +6,7 @@ ARG oq_branch=master
 ARG tools_branch=master
 
 RUN apt-get -qq update && apt-get -qq install -y \
-    python python-pip wget && \
+    python python-pip curl && \
     pip -q install -U pip wheel
 
 RUN mkdir -p /opt/openquake/lib && \
