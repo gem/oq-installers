@@ -28,6 +28,12 @@ else
     OQ_BRANCH=master
 fi
 
+if [ $GEM_SET_BRANCH_TOOLS ]; then
+    TOOLS_BRANCH=$GEM_SET_BRANCH_TOOLS
+else
+    TOOLS_BRANCH=$OQ_BRANCH
+fi
+
 # Default software distribution
 PY="2.7.13"
 PY_MSI="python-$PY.amd64.msi"
@@ -36,25 +42,31 @@ PY_MSI="python-$PY.amd64.msi"
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
 cd $DIR && pwd
 
+# pre-cleanup
+rm -Rf src/oq-*
+rm -Rf python-dist/python2.7/*
+rm -Rf python-dist/Lib/*
+rm -Rf demos/*
+
+cd src
 if [ ! -d py -o ! -d py27 ]; then
     echo "Please download python dependencies first."
     exit 1
 fi
 
-# Cleanup
-rm -Rf python-dist/python2.7/*
-rm -Rf python-dist/Lib/*
-rm -Rf demos/*
-
 ## This is an alternative method that we cannot use because we need extra data
 ## not packaged in the python packages
 # pip wheel --no-deps https://github.com/gem/oq-engine/archive/master.zip
 
-cd src
-for app in oq-engine oq-platform-standalone oq-platform-ipt oq-platform-taxtweb oq-platform-taxonomy; do
-    if [ ! -d $app ]; then
-        git clone -q -b $OQ_BRANCH --depth=1 https://github.com/gem/${app}.git
-    fi
+## Core apps
+for app in oq-engine; do
+    git clone -q -b $OQ_BRANCH --depth=1 https://github.com/gem/${app}.git
+    wine pip -q wheel --disable-pip-version-check --no-deps ./${app}
+done
+
+## Standalone apps
+for app in oq-platform-standalone oq-platform-ipt oq-platform-taxtweb oq-platform-taxonomy; do
+    git clone -q -b $TOOLS_BRANCH --depth=1 https://github.com/gem/${app}.git
     wine pip -q wheel --disable-pip-version-check --no-deps ./${app}
 done
 
