@@ -36,14 +36,11 @@ TMPDIR=$(mktemp -d)
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
 cd $DIR && pwd
 
-# Cleanup
+# pre-cleanup
+rm -Rf src/oq-*
 rm -Rf python-dist/python2.7/*
 rm -Rf python-dist/Lib/*
 rm -Rf demos/*
-
-## This is an alternative method that we cannot use because we need extra data
-## not packaged in the python packages
-# pip wheel --no-deps https://github.com/gem/oq-engine/archive/master.zip
 
 cd src
 if [ ! -d py -o ! -d py27 ]; then
@@ -51,10 +48,13 @@ if [ ! -d py -o ! -d py27 ]; then
     exit 1
 fi
 
+## This is an alternative method that we cannot use because we need extra data
+## not packaged in the python packages
+# pip wheel --no-deps https://github.com/gem/oq-engine/archive/master.zip
+
+## Core apps
 for app in oq-engine; do
-    if [ ! -d $app ]; then
-        git clone -q -b $OQ_BRANCH --depth=1 https://github.com/gem/${app}.git
-    fi
+    git clone -q -b $OQ_BRANCH --depth=1 https://github.com/gem/${app}.git
     git -C $app archive --prefix=$app/ HEAD | tar -C $TMPDIR -xf -
 done
 
