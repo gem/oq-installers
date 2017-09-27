@@ -48,15 +48,12 @@ if [ ! -d py -o ! -d py27 ]; then
     exit 1
 fi
 
-## This is an alternative method that we cannot use because we need extra data
-## not packaged in the python packages
-# pip wheel --no-deps https://github.com/gem/oq-engine/archive/master.zip
-
 ## Core apps
-for app in oq-engine; do
-    git clone -q -b $OQ_BRANCH --depth=1 https://github.com/gem/${app}.git
-    git -C $app archive --prefix=$app/ HEAD | tar -C $TMPDIR -xf -
-done
+## oq-engine isn't included in the zip and must be downloaded manually
+# for app in oq-engine; do
+#     git clone -q -b $OQ_BRANCH --depth=1 https://github.com/gem/${app}.git
+#     git -C $app archive --prefix=$app/ HEAD | tar -C $TMPDIR -xf -
+# done
 
 # Extract Python, to be included in the installation
 if [ ! -f $PY_MSI ]; then
@@ -68,16 +65,24 @@ wine msiexec /a $PY_MSI /qb TARGETDIR=../python-dist/python2.7
 # Extract wheels to be included in the installation
 echo "Extracting python wheels"
 wine pip -q install --disable-pip-version-check --force-reinstall --ignore-installed --upgrade --no-deps --no-index --prefix ../python-dist py/*.whl py27/*.whl
+# Development tools
+if [ -d py27-dev ]; then
+   wine pip -q install --disable-pip-version-check --force-reinstall --ignore-installed --upgrade --no-deps --no-index --prefix ../python-dist py27-dev/*.whl
+fi
 
 ZIP="OpenQuake_Engine_win64_dev$(date '+%y%m%d%H%M').zip"
-OQPYPATH='s/PYTHONPATH=%mypath%\\lib\\site-packages/PYTHONPATH=%mypath%\\oq-engine;%mypath%\\lib\\site-packages/g'
 
-cd $TMPDIR
 echo "Generating zip archive"
-for b in oq-console.bat oq-server.bat; do
-    sed "$OQPYPATH" ${DIR}/${b} > $b
-    zip -qr $DIR/${ZIP} $b
-done
-zip -qr $DIR/$ZIP oq-engine
+cd $TMPDIR
+cat > README_FIRST.txt <<EOF
+## You must clone the oq-engine repo inside this folder first: ##
+
+git clone https://github.com/gem/oq-engine.git
+EOF
+zip -qr $DIR/${ZIP} README_FIRST.txt
+cd $DIR
+zip -qr $DIR/${ZIP} oq-console-dev.bat
+## Disabled
+# zip -qr $DIR/$ZIP oq-engine
 cd $DIR/python-dist
 zip -qr $DIR/$ZIP Lib python2.7
