@@ -25,8 +25,7 @@ RUN curl -so /opt/openquake/requirements.txt https://raw.githubusercontent.com/g
         else \
            pip -q install --prefix /opt/openquake https://github.com/gem/${app}/archive/master.zip; \
         fi \
-    done && \
-    cp /opt/openquake/lib/python2.7/site-packages/openquake/server/local_settings.py.standalone /opt/openquake/lib/python2.7/site-packages/openquake/server/local_settings.py
+    done
 
 ADD openquake/__init__.py $PYTHONPATH/openquake
 ADD oqrun.sh /opt/openquake/

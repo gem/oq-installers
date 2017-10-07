@@ -122,7 +122,6 @@ fi
 if [[ "$TOOLS" == 'Y' || "$TOOLS" == 'y' ]]; then
     PYPREFIX=$(python -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())')
     /usr/bin/env pip install --disable-pip-version-check wheelhouse/tools/*.whl > /dev/null
-    cp ${PYPREFIX}/openquake/server/local_settings.py.standalone ${PYPREFIX}/openquake/server/local_settings.py
 fi
 
 ## 'oq' command alias
