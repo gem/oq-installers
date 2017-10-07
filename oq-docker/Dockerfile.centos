@@ -2,9 +2,10 @@
 FROM centos:centos7
 MAINTAINER Daniele Viganò <daniele@openquake.org>
 
-ARG branch=master
+ARG oq_branch=master
+ARG tools_branch=master
 
-RUN yum -q -y install epel-release python wget && \
+RUN yum -q -y install epel-release python curl && \
     yum -q -y install python-pip && \
     pip -q install -U pip wheel
 
@@ -14,12 +15,18 @@ RUN mkdir -p /opt/openquake/lib && \
 ENV PYTHONPATH /opt/openquake/lib/python2.7/site-packages/
 ENV PATH /opt/openquake/bin/:$PATH
 
-ADD https://api.github.com/repos/gem/oq-engine/git/refs/heads/$branch /tmp/nocache.json
-RUN wget -O- https://raw.githubusercontent.com/gem/oq-engine/$branch/requirements-py27-linux64.txt \
-    > /opt/openquake/requirements.txt 2>/dev/null && \
-    pip -q install --force-reinstall --ignore-installed --upgrade --no-deps \
-    --prefix /opt/openquake -r /opt/openquake/requirements.txt && \
-    pip -q install --prefix /opt/openquake https://github.com/gem/oq-engine/archive/$branch.zip
+ADD https://api.github.com/repos/gem/oq-engine/git/refs/heads/$oq_branch /tmp/nocache.json
+RUN curl -so /opt/openquake/requirements.txt https://raw.githubusercontent.com/gem/oq-engine/$oq_branch/requirements-py27-linux64.txt && \
+    pip -q install --force-reinstall --ignore-installed --upgrade --no-deps --prefix /opt/openquake -r /opt/openquake/requirements.txt && \
+    pip -q install --prefix /opt/openquake https://github.com/gem/oq-engine/archive/$oq_branch.zip && \
+    for app in oq-platform-standalone oq-platform-ipt oq-platform-taxtweb oq-platform-taxonomy; do \
+        if curl --output /dev/null --silent --head --fail --location https://github.com/gem/${app}/archive/$tools_branch.zip ; then \
+           pip -q install --prefix /opt/openquake https://github.com/gem/${app}/archive/$tools_branch.zip; \
+        else \
+           pip -q install --prefix /opt/openquake https://github.com/gem/${app}/archive/master.zip; \
+        fi \
+    done && \
+    cp /opt/openquake/lib/python2.7/site-packages/openquake/server/local_settings.py.standalone /opt/openquake/lib/python2.7/site-packages/openquake/server/local_settings.py
 
 ADD openquake/__init__.py $PYTHONPATH/openquake
 ADD oqrun.sh /opt/openquake/
