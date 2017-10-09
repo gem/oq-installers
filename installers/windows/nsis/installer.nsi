@@ -108,9 +108,6 @@ SectionEnd
 Section "OpenQuake Tools" SecTools
   SetOutPath "$INSTDIR\lib\site-packages"
   File /r "python-dist\lib\site-packages\oq_platform*" "python-dist\lib\site-packages\openquakeplatform*"
-
-  SetOutPath "$INSTDIR\lib\site-packages\openquake\server"
-  File /oname=local_settings.py "python-dist\lib\site-packages\openquake\server\local_settings.py.standalone"
 SectionEnd
 
 Section "OpenQuake Engine demos and documentation" SecOQ
