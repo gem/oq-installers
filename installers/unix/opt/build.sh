@@ -160,7 +160,7 @@ $OQ_PREFIX/bin/python2.7 -m pip -q wheel -r oq-engine/requirements-py27-${BUILD_
 cd oq-engine
 $OQ_PREFIX/bin/python2.7 -m pip -q wheel --no-deps . -w $OQ_WHEEL
 if [ $PKG_REL ]; then
-    OQ_VERSION="$(cat openquake/baselib/__init__.py | sed -n "s/^__version__[  ]*=[    ]*['\"]\([^'\"]\+\)['\"].*/\1/gp")-${PKG_RELEASE}"
+    OQ_VERSION="$(cat openquake/baselib/__init__.py | sed -n "s/^__version__[  ]*=[    ]*['\"]\([^'\"]\+\)['\"].*/\1/gp")-${PKG_REL}"
 else
     OQ_VERSION=$(git rev-parse --short HEAD)
 fi

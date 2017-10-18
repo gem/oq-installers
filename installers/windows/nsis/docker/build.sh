@@ -93,7 +93,7 @@ ini_vers="$(cat src/oq-engine/openquake/baselib/__init__.py | sed -n "s/^__versi
 
 sed -i "s/\${MYVERSION}/$ini_vers/g" installer.nsi
 if [ $PKG_REL ]; then
-    sed -i "s/\${MYVERSION}/$PKG_REL/g" installer.nsi
+    sed -i "s/\${MYTIMESTAMP}/$PKG_REL/g" installer.nsi
 fi
 
 # Get the demo and the README
