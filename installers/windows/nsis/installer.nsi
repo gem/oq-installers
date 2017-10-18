@@ -19,7 +19,7 @@
 !define /date MYTIMESTAMP "%y%m%d%H%M"
 !define MYVERSION "2.99.0" # OpenQuake 2 tree
 !define PRODUCT_NAME "OpenQuake Engine"
-!define VER_CODE "2.7.0"
+!define VER_CODE "${MYVERSION}"
 !define VER_BUILD "${MYTIMESTAMP}"
 !define PRODUCT_VERSION "${VER_CODE}.${VER_BUILD}"
 !define PUBLISHER "GEM Foundation"

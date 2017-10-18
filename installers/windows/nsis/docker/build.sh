@@ -34,12 +34,8 @@ else
     TOOLS_BRANCH=$OQ_BRANCH
 fi
 
-if [[ $1 == -r ]]; then
-    if [[ $2 =~ ^[0-9]+$ ]]; then
-          PKG_REL=$2
-    else
-        echo "Missing or bad release number"
-    fi
+if [[ $GEM_SET_RELEASE =~ ^[0-9]+$ ]]; then
+    PKG_REL=$GEM_SET_RELEASE
 fi
 
 # Default software distribution
@@ -94,12 +90,10 @@ wine pip -q install --disable-pip-version-check --force-reinstall --ignore-insta
 cd $DIR
 
 ini_vers="$(cat src/oq-engine/openquake/baselib/__init__.py | sed -n "s/^__version__[  ]*=[    ]*['\"]\([^'\"]\+\)['\"].*/\1/gp")"
-ini_maj="$(echo "$ini_vers" | sed -n 's/^\([0-9]\+\).*/\1/gp')"
-ini_min="$(echo "$ini_vers" | sed -n 's/^[0-9]\+\.\([0-9]\+\).*/\1/gp')"
 
 sed -i "s/\${MYVERSION}/$ini_vers/g" installer.nsi
 if [ $PKG_REL ]; then
-    sed -i "s/\${MYRELEASE}/$PKG_REL/g" installer.nsi
+    sed -i "s/\${MYVERSION}/$PKG_REL/g" installer.nsi
 fi
 
 # Get the demo and the README

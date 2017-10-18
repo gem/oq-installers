@@ -28,7 +28,7 @@ otherwise `master` is used.
 
 #### Release mode
 ```bash
-$ docker run -e GEM_SET_BRANCH=engine-X.Y -v $(pwd):/io -t -i --rm f26-wine /io/docker/build.sh -r Z
+$ docker run -e GEM_SET_BRANCH=engine-X.Y -e GEM_SET_RELEASE=Z -v $(pwd):/io -t -i --rm f26-wine /io/docker/build.sh
 ```
 where `Z` is the build number for the package. 
 

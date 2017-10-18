@@ -24,7 +24,7 @@ $ [GEM_SET_BRANCH='master'] bash /io/build.sh
 
 ## macOS
 
-Xcode and (Python 2.7)[https://www.python.org/ftp/python/2.17.13/python-2.7.13-macosx10.6.pkg] must be installed first
+Xcode, GNU sed and (Python 2.7)[https://www.python.org/ftp/python/2.17.13/python-2.7.13-macosx10.6.pkg] must be installed first
 
 ```bash
 ./build.sh
@@ -37,3 +37,4 @@ The following environment variables are understood by the script:
 - GEM_SET_DEBUG=<true|false>: enable debug (set -x)
 - GEM_SET_NPROC=n: it will pass 'n' to `make -j` (default is 2)
 - GEM_SET_BRANCH='branch': build the selected branch (by default is master)
+- GEM_SET_RELEASE=n: it set the builder to 'release mode'
