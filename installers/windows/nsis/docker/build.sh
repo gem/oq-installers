@@ -34,6 +34,14 @@ else
     TOOLS_BRANCH=$OQ_BRANCH
 fi
 
+if [[ $1 == -r ]]; then
+    if [[ $2 =~ ^[0-9]+$ ]]; then
+          PKG_REL=$2
+    else
+        echo "Missing or bad release number"
+    fi
+fi
+
 # Default software distribution
 PY="2.7.13"
 PY_MSI="python-$PY.amd64.msi"
@@ -59,12 +67,14 @@ fi
 # pip wheel --no-deps https://github.com/gem/oq-engine/archive/master.zip
 
 ## Core apps
+echo "Downloading core apps"
 for app in oq-engine; do
     git clone -q -b $OQ_BRANCH --depth=1 https://github.com/gem/${app}.git
     wine pip -q wheel --disable-pip-version-check --no-deps ./${app}
 done
 
 ## Standalone apps
+echo "Downloading standalone apps"
 for app in oq-platform-standalone oq-platform-ipt oq-platform-taxtweb oq-platform-taxonomy; do
     git clone -q -b $TOOLS_BRANCH --depth=1 https://github.com/gem/${app}.git
     wine pip -q wheel --disable-pip-version-check --no-deps ./${app}
@@ -82,6 +92,15 @@ echo "Extracting python wheels"
 wine pip -q install --disable-pip-version-check --force-reinstall --ignore-installed --upgrade --no-deps --no-index --prefix ../python-dist py/*.whl py27/*.whl openquake.*.whl oq_platform*.whl
 
 cd $DIR
+
+ini_vers="$(cat src/oq-engine/openquake/baselib/__init__.py | sed -n "s/^__version__[  ]*=[    ]*['\"]\([^'\"]\+\)['\"].*/\1/gp")"
+ini_maj="$(echo "$ini_vers" | sed -n 's/^\([0-9]\+\).*/\1/gp')"
+ini_min="$(echo "$ini_vers" | sed -n 's/^[0-9]\+\.\([0-9]\+\).*/\1/gp')"
+
+sed -i "s/\${MYVERSION}/$ini_vers/g" installer.nsi
+if [ $PKG_REL ]; then
+    sed -i "s/\${MYRELEASE}/$PKG_REL/g" installer.nsi
+fi
 
 # Get the demo and the README
 cp -r src/oq-engine/demos .
