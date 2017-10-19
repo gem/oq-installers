@@ -30,7 +30,11 @@ Exposes the WebUI and a `oq` cli.
 >$ sudo docker stop myoqcontainer
 ```
 
+## Custom build args
 
-## Disclaimer ##
+```bash
+--build-arg oq_branch=master      ## oq-engine branch
+--build-arg tools_branch=mater ## oq standalone tools branch
+```
 
-This work is experimental and is not supported by GEM. Use at your own risk.
+See also https://github.com/gem/oq-engine/blob/master/doc/installing/docker.md
