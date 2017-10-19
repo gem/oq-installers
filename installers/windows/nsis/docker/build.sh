@@ -90,7 +90,7 @@ wine pip -q install --disable-pip-version-check --force-reinstall --ignore-insta
 cd $DIR
 
 ini_vers="$(cat src/oq-engine/openquake/baselib/__init__.py | sed -n "s/^__version__[  ]*=[    ]*['\"]\([^'\"]\+\)['\"].*/\1/gp")"
-git_time="$(git -C src/oq-engine log --format=%ct -1)"
+git_time="$(date -d @$(git -C src/oq-engine log --format=%ct -1) '+%y%m%d%H%M')"
 
 sed -i "s/\${MYVERSION}/$ini_vers/g" installer.nsi
 if [ $PKG_REL ]; then
