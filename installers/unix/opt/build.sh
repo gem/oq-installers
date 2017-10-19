@@ -181,6 +181,6 @@ ${OQ_ROOT}/oq-engine/helpers/zipdemos.sh ${OQ_DIST}/src/demos
 cp ${OQ_DIR}/install.sh ${OQ_DIST}
 
 echo "Creating installation package"
-makeself -q ${OQ_DIST} ${OQ_DIR}/openquake-py27-${BUILD_OS}-${OQ_VERSION}.run "installer for the OpenQuake Engine" ./install.sh
+makeself -q ${OQ_DIST} ${OQ_DIR}/openquake-setup-${BUILD_OS}-${OQ_VERSION}.run "installer for the OpenQuake Engine" ./install.sh
 
 exit 0
