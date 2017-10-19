@@ -62,6 +62,10 @@ else
     TOOLS_BRANCH=$OQ_BRANCH
 fi
 
+if [[ $GEM_SET_RELEASE =~ ^[0-9]+$ ]]; then
+    PKG_REL=$GEM_SET_RELEASE
+fi
+
 if $(echo $OSTYPE | grep -q linux); then
     BUILD_OS='linux64'
     if [ -f /etc/redhat-release ]; then
@@ -155,7 +159,11 @@ $OQ_PREFIX/bin/python2.7 -m pip -q wheel -r oq-engine/requirements-py27-${BUILD_
 
 cd oq-engine
 $OQ_PREFIX/bin/python2.7 -m pip -q wheel --no-deps . -w $OQ_WHEEL
-declare OQ_$(echo 'engine' | tr '[:lower:]' '[:upper:]')_DEV=$(git rev-parse --short HEAD)
+if [ $PKG_REL ]; then
+    OQ_VERSION="$(cat openquake/baselib/__init__.py | sed -n "s/^__version__[  ]*=[    ]*['\"]\([^'\"]\+\)['\"].*/\1/gp")-${PKG_REL}"
+else
+    OQ_VERSION=$(git rev-parse --short HEAD)
+fi
 cd ..
 
 mkdir ${OQ_WHEEL}/tools
@@ -173,6 +181,6 @@ ${OQ_ROOT}/oq-engine/helpers/zipdemos.sh ${OQ_DIST}/src/demos
 cp ${OQ_DIR}/install.sh ${OQ_DIST}
 
 echo "Creating installation package"
-makeself -q ${OQ_DIST} ${OQ_DIR}/openquake-py27-${BUILD_OS}-${OQ_ENGINE_DEV}.run "installer for the OpenQuake Engine" ./install.sh
+makeself -q ${OQ_DIST} ${OQ_DIR}/openquake-py27-${BUILD_OS}-${OQ_VERSION}.run "installer for the OpenQuake Engine" ./install.sh
 
 exit 0

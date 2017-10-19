@@ -37,3 +37,4 @@ The following environment variables are understood by the script:
 - GEM_SET_DEBUG=<true|false>: enable debug (set -x)
 - GEM_SET_NPROC=n: it will pass 'n' to `make -j` (default is 2)
 - GEM_SET_BRANCH='branch': build the selected branch (by default is master)
+- GEM_SET_RELEASE=n: it set the builder to 'release mode'

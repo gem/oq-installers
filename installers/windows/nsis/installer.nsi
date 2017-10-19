@@ -17,16 +17,15 @@
 # along with OpenQuake. If not, see <http://www.gnu.org/licenses/>.
 
 !define /date MYTIMESTAMP "%y%m%d%H%M"
+!define MYVERSION "2.99.0" # OpenQuake 2 tree
 !define PRODUCT_NAME "OpenQuake Engine"
-!define VER_MAJOR "2"
-!define VER_MINOR "6"
-!define VER_REVISION "0"
+!define VER_CODE "${MYVERSION}"
 !define VER_BUILD "${MYTIMESTAMP}"
-!define PRODUCT_VERSION "${VER_MAJOR}.${VER_MINOR}.${VER_REVISION}.${VER_BUILD}"
+!define PRODUCT_VERSION "${VER_CODE}.${VER_BUILD}"
 !define PUBLISHER "GEM Foundation"
 !define BITNESS "64"
 !define ARCH_TAG ""
-!define INSTALLER_NAME "OpenQuake_Engine_${VER_MAJOR}.${VER_MINOR}.${VER_REVISION}-${VER_BUILD}.exe"
+!define INSTALLER_NAME "OpenQuake_Engine_${VER_CODE}-${VER_BUILD}.exe"
 !define PRODUCT_ICON "openquake.ico"
 # WOW6432Node is needed because we are running 64bit software. It's hardcoded since we support only
 # installations on 64bit systems (code is 64bit only)
@@ -48,7 +47,7 @@ RequestExecutionLevel admin
 ; UI pages
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_LICENSE "LICENSE.txt"
-!ifdef VER_MAJOR & VER_MINOR & VER_REVISION & VER_BUILD
+!ifdef VER_CODE & VER_BUILD
 Page custom PageReinstall PageLeaveReinstall
 !endif
 !insertmacro MUI_PAGE_COMPONENTS
@@ -57,13 +56,13 @@ Page custom PageReinstall PageLeaveReinstall
 !insertmacro MUI_PAGE_FINISH
 !insertmacro MUI_LANGUAGE "English"
 
-!ifdef VER_MAJOR & VER_MINOR & VER_REVISION & VER_BUILD
+!ifdef VER_CODE & VER_BUILD
 VIAddVersionKey "CompanyName" "${PUBLISHER}"
 VIAddVersionKey "LegalCopyright" "https://github.com/gem/oq-engine/blob/master/LICENSE"
 VIAddVersionKey "FileDescription" "OpenQuake Setup"
 VIAddVersionKey "ProductName" "${PRODUCT_NAME}"
-VIAddVersionKey "ProductVersion" "${VER_MAJOR}.${VER_MINOR}.${VER_REVISION}"
-VIAddVersionKey "FileVersion" "${VER_MAJOR}.${VER_MINOR}.${VER_REVISION}"
+VIAddVersionKey "ProductVersion" "${VER_CODE}"
+VIAddVersionKey "FileVersion" "${VER_CODE}"
 VIProductVersion ${PRODUCT_VERSION}
 !endif
 
@@ -187,7 +186,7 @@ Section "Uninstall"
 SectionEnd
 
 
-!ifdef VER_MAJOR & VER_MINOR & VER_REVISION & VER_BUILD
+!ifdef VER_CODE & VER_BUILD
 
 Var ReinstallPageCheck
 
@@ -204,7 +203,7 @@ Function PageReinstall
   ReadRegDWORD $R3 HKLM "Software\${PRODUCT_NAME}" "VersionBuild"
   StrCpy $R0 $R0.$R1.$R2.$R3
 
-  ${VersionCompare} ${VER_MAJOR}.${VER_MINOR}.${VER_REVISION}.${VER_BUILD} $R0 $R0
+  ${VersionCompare} ${VER_CODE}.${VER_BUILD} $R0 $R0
   ${If} $R0 == 0
     StrCpy $R1 "${PRODUCT_NAME} ${PRODUCT_VERSION} is already installed. Select the operation you want to perform and click Next to continue."
     StrCpy $R2 "Add/Reinstall components"
