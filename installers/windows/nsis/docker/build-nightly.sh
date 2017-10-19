@@ -49,11 +49,13 @@ if [ ! -d py -o ! -d py27 ]; then
 fi
 
 ## Core apps
-## oq-engine isn't included in the zip and must be downloaded manually
-# for app in oq-engine; do
-#     git clone -q -b $OQ_BRANCH --depth=1 https://github.com/gem/${app}.git
-#     git -C $app archive --prefix=$app/ HEAD | tar -C $TMPDIR -xf -
-# done
+for app in oq-engine; do
+    git clone -q -b $OQ_BRANCH --depth=1 https://github.com/gem/${app}.git
+    declare "${app//-}_commit=$(git -C $app rev-parse --short HEAD)"
+    declare "${app//-}_date=$(date -d @$(git -C $app log --format=%ct -1) '+%y%m%d%H%M')"
+    # Convert to a plain tree
+    rm -Rf $app/.git
+done
 
 # Extract Python, to be included in the installation
 if [ ! -f $PY_MSI ]; then
@@ -70,19 +72,22 @@ if [ -d py27-dev ]; then
    wine pip -q install --disable-pip-version-check --force-reinstall --ignore-installed --upgrade --no-deps --no-index --prefix ../python-dist py27-dev/*.whl
 fi
 
-ZIP="OpenQuake_Engine_win64_dev$(date '+%y%m%d%H%M').zip"
+# Get the demo and the README
+./oq-engine/helpers/zipdemos.sh oq-engine/demos
+
+ZIP="OpenQuake_Engine_win64_${oqengine_commit}_${oqengine_date}.zip"
 
 echo "Generating zip archive"
 cd $TMPDIR
 cat > README_FIRST.txt <<EOF
-## You must clone the oq-engine repo inside this folder first: ##
+## To use git remove 'oq-engine' and then make a fresh clone the oq-engine repo: ##
 
 git clone https://github.com/gem/oq-engine.git
 EOF
 zip -qr $DIR/${ZIP} README_FIRST.txt
 cd $DIR
 zip -qr $DIR/${ZIP} oq-console-dev.bat
-## Disabled
-# zip -qr $DIR/$ZIP oq-engine
 cd $DIR/python-dist
-zip -qr $DIR/$ZIP Lib python2.7
+zip -qr $DIR/${ZIP} Lib python2.7
+cd $DIR/src
+zip -qr $DIR/${ZIP} oq-engine
