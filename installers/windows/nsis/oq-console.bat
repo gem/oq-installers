@@ -6,7 +6,6 @@ set PYTHONPATH=%mypath%\lib\site-packages
 
 doskey pip=python.exe -m pip $*
 doskey oq=python.exe -m openquake.commands $*
-doskey oq-engine=python.exe -m openquake.commands engine $*
 
 echo OpenQuake environment loaded
 echo To see versions of installed software run 'pip freeze'
