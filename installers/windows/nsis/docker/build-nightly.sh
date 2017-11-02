@@ -48,14 +48,13 @@ if [ ! -d py -o ! -d py27 ]; then
     exit 1
 fi
 
-## This is an alternative method that we cannot use because we need extra data
-## not packaged in the python packages
-# pip wheel --no-deps https://github.com/gem/oq-engine/archive/master.zip
-
 ## Core apps
 for app in oq-engine; do
     git clone -q -b $OQ_BRANCH --depth=1 https://github.com/gem/${app}.git
-    git -C $app archive --prefix=$app/ HEAD | tar -C $TMPDIR -xf -
+    declare "${app//-}_commit=$(git -C $app rev-parse --short HEAD)"
+    declare "${app//-}_date=$(date -d @$(git -C $app log --format=%ct -1) '+%y%m%d%H%M')"
+    # Convert to a plain tree
+    rm -Rf $app/.git
 done
 
 # Extract Python, to be included in the installation
@@ -68,16 +67,27 @@ wine msiexec /a $PY_MSI /qb TARGETDIR=../python-dist/python2.7
 # Extract wheels to be included in the installation
 echo "Extracting python wheels"
 wine pip -q install --disable-pip-version-check --force-reinstall --ignore-installed --upgrade --no-deps --no-index --prefix ../python-dist py/*.whl py27/*.whl
+# Development tools
+if [ -d py27-dev ]; then
+   wine pip -q install --disable-pip-version-check --force-reinstall --ignore-installed --upgrade --no-deps --no-index --prefix ../python-dist py27-dev/*.whl
+fi
 
-ZIP="OpenQuake_Engine_win64_dev$(date '+%y%m%d%H%M').zip"
-OQPYPATH='s/PYTHONPATH=%mypath%\\lib\\site-packages/PYTHONPATH=%mypath%\\oq-engine;%mypath%\\lib\\site-packages/g'
+# Get the demo and the README
+./oq-engine/helpers/zipdemos.sh oq-engine/demos
 
-cd $TMPDIR
+ZIP="OpenQuake_Engine_win64_${oqengine_commit}_${oqengine_date}.zip"
+
 echo "Generating zip archive"
-for b in oq-console.bat oq-server.bat; do
-    sed "$OQPYPATH" ${DIR}/${b} > $b
-    zip -qr $DIR/${ZIP} $b
-done
-zip -qr $DIR/$ZIP oq-engine
+cd $TMPDIR
+cat > README_FIRST.txt <<EOF
+## To use git remove 'oq-engine' and then make a fresh clone the oq-engine repo: ##
+
+git clone https://github.com/gem/oq-engine.git
+EOF
+zip -qr $DIR/${ZIP} README_FIRST.txt
+cd $DIR
+zip -qr $DIR/${ZIP} oq-console-dev.bat
 cd $DIR/python-dist
-zip -qr $DIR/$ZIP Lib python2.7
+zip -qr $DIR/${ZIP} Lib python2.7
+cd $DIR/src
+zip -qr $DIR/${ZIP} oq-engine
