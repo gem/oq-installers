@@ -10,7 +10,7 @@ RUN yum -q -y upgrade && \
                    readline-devel python27 rh-python35 spatialindex-devel \
                    sudo sqlite-devel tar which xz zip zlib-devel
 
-ARG uid=1000
+ARG uid=107
 
 RUN useradd -u $uid builder && \
 echo 'builder ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
