@@ -73,9 +73,9 @@ if $(echo $OSTYPE | grep -q linux); then
         sudo yum -y -q install curl gcc git makeself zip
         # CentOS (with SCL)
         sudo yum -y -q install centos-release-scl
-        sudo yum -y -q install python27
-        export PATH=/opt/rh/python27/root/usr/bin:$PATH
-        export LD_LIBRARY_PATH=/opt/rh/python27/root/usr/lib64
+        sudo yum -y -q install python35
+        export PATH=/opt/rh/python35/root/usr/bin:$PATH
+        export LD_LIBRARY_PATH=/opt/rh/python35/root/usr/lib64
     else
         not_supported
     fi
@@ -91,13 +91,7 @@ rm -Rf $OQ_ROOT
 mkdir -p $OQ_DIST/{wheelhouse,src}
 cd $OQ_ROOT
 
-curl -Lo virtualenv-15.0.2.tar.gz https://github.com/pypa/virtualenv/archive/15.0.2.tar.gz
-cd $OQ_DIST
-tar xzf ../virtualenv-15.0.2.tar.gz
-mv virtualenv-15.0.2 virtualenv
-cd ..
-
-/usr/bin/env python dist/virtualenv/virtualenv.py pybuild
+/usr/bin/env python3.5 -m venv pybuild
 source pybuild/bin/activate
 
 rm -Rf oq-engine
@@ -113,7 +107,7 @@ git clone -q --depth=1 -b $TOOLS_BRANCH https://github.com/gem/oq-platform-taxon
 /usr/bin/env pip -q install -U wheel
 # Include an updated version of pip
 /usr/bin/env pip -q wheel pip -w $OQ_WHEEL
-/usr/bin/env pip -q wheel -r oq-engine/requirements-py27-${BUILD_OS}.txt -w $OQ_WHEEL
+/usr/bin/env pip -q wheel -r oq-engine/requirements-py35-${BUILD_OS}.txt -w $OQ_WHEEL
  
 cd oq-engine
 /usr/bin/env pip -q wheel --no-deps . -w $OQ_WHEEL

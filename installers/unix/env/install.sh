@@ -22,7 +22,7 @@ if [ $GEM_SET_DEBUG ]; then
 fi
 set -e
 
-PYTHON=python2.7
+PYTHON=python3.5
 
 help() {
     cat <<HSD

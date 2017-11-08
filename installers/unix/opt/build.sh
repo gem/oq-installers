@@ -38,6 +38,7 @@ not_supported() {
     exit 1
 }
 
+PYTHON=python3.5
 OQ_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 OQ_ROOT=/tmp/build-openquake-dist
 OQ_DIST=${OQ_ROOT}/qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
@@ -92,7 +93,7 @@ cd $OQ_ROOT
 curl -LO http://ftp.gnu.org/gnu/sed/sed-4.2.2.tar.gz
 curl -LO https://www.openssl.org/source/openssl-1.0.2l.tar.gz
 curl -LO https://www.sqlite.org/2017/sqlite-autoconf-3190200.tar.gz
-curl -LO https://www.python.org/ftp/python/2.7.13/Python-2.7.13.tar.xz
+curl -LO https://www.python.org/ftp/python/3.5.4/Python-3.5.4.tar.xz
 
 cat <<EOF >> $OQ_PREFIX/env.sh
 PREFIX=$OQ_PREFIX
@@ -137,14 +138,14 @@ make -s -j $NPROC
 make -s install
 cd ..
 
-tar xJf Python-2.7.13.tar.xz
-cd Python-2.7.13
-./configure --prefix=$OQ_PREFIX --enable-unicode=ucs4 --with-ensurepip
+tar xJf Python-3.5.4.tar.xz
+cd Python-3.5.4
+./configure --prefix=$OQ_PREFIX --with-ensurepip
 make -s -j $NPROC
 make -s install
 cd ..
 
-$OQ_PREFIX/bin/python2.7 -m pip -q install wheel
+$OQ_PREFIX/bin/$PYTHON -m pip -q install wheel
 
 rm -Rf oq-engine
 git clone -q --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-engine.git
@@ -155,10 +156,10 @@ git clone -q --depth=1 -b $TOOLS_BRANCH https://github.com/gem/oq-platform-ipt.g
 git clone -q --depth=1 -b $TOOLS_BRANCH https://github.com/gem/oq-platform-taxtweb.git
 git clone -q --depth=1 -b $TOOLS_BRANCH https://github.com/gem/oq-platform-taxonomy.git
 
-$OQ_PREFIX/bin/python2.7 -m pip -q wheel -r oq-engine/requirements-py27-${BUILD_OS}.txt -w $OQ_WHEEL
+$OQ_PREFIX/bin/$PYTHON -m pip -q wheel -r oq-engine/requirements-py35-${BUILD_OS}.txt -w $OQ_WHEEL
 
 cd oq-engine
-$OQ_PREFIX/bin/python2.7 -m pip -q wheel --no-deps . -w $OQ_WHEEL
+$OQ_PREFIX/bin/$PYTHON -m pip -q wheel --no-deps . -w $OQ_WHEEL
 if [ $PKG_REL ]; then
     OQ_VERSION="$(cat openquake/baselib/__init__.py | sed -n "s/^__version__[  ]*=[    ]*['\"]\([^'\"]\+\)['\"].*/\1/gp")-${PKG_REL}"
 else
@@ -168,7 +169,7 @@ cd ..
 
 mkdir ${OQ_WHEEL}/tools
 for app in oq-platform-*; do
-    $OQ_PREFIX/bin/python2.7 -m pip -q wheel --no-deps ${app}/ -w ${OQ_WHEEL}/tools
+    $OQ_PREFIX/bin/$PYTHON -m pip -q wheel --no-deps ${app}/ -w ${OQ_WHEEL}/tools
 done
 
 cp -R ${OQ_ROOT}/oq-engine/{README.md,LICENSE,demos,doc} ${OQ_DIST}/src
