@@ -94,8 +94,8 @@ Section "!Core Files" SecCore
   File "oq-console.bat"
   File "oq-server.bat"
 
-  SetOutPath "$INSTDIR\python2.7"
-  File /r "python-dist\python2.7\*.*"
+  SetOutPath "$INSTDIR\python3.5"
+  File /r "python-dist\python3.5\*.*"
 
   SetOutPath "$INSTDIR\lib"
   File /r /x "python-dist\lib\site-packages\oq_platform*" /x "python-dist\lib\site-packages\openquakeplatform*" "python-dist\lib\*.*"
@@ -135,7 +135,8 @@ SectionEnd
 Section -post
   ; Byte-compile Python files.
   DetailPrint "Byte-compiling Python modules..."
-  nsExec::ExecToLog '$INSTDIR\python2.7\python.exe -m compileall -q "$INSTDIR\lib"'
+  nsExec::ExecToLog '$INSTDIR\python3.5\python.exe -m compileall -qq "$INSTDIR\python3.5"'
+  nsExec::ExecToLog '$INSTDIR\python3.5\python.exe -m compileall -qq "$INSTDIR\lib"'
 
   WriteUninstaller $INSTDIR\uninstall.exe
 
@@ -165,7 +166,7 @@ Section "Uninstall"
   Delete $INSTDIR\uninstall.exe
   Delete "$INSTDIR\${PRODUCT_ICON}"
   RMDir /r "$INSTDIR\lib"
-  RMDir /r "$INSTDIR\python2.7"
+  RMDir /r "$INSTDIR\python3.5"
   ; Uninstall files
     Delete "$INSTDIR\README.html"
     Delete "$INSTDIR\LICENSE.txt"
