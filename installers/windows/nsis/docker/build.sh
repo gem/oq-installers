@@ -39,8 +39,9 @@ if [[ $GEM_SET_RELEASE =~ ^[0-9]+$ ]]; then
 fi
 
 # Default software distribution
-PY="2.7.13"
-PY_MSI="python-$PY.amd64.msi"
+PY="3.5.4"
+PY_ZIP="python-${PY}.zip"
+PIP="get-pip.py"
 
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
@@ -48,50 +49,52 @@ cd $DIR && pwd
 
 # pre-cleanup
 rm -Rf src/oq-*
-rm -Rf python-dist/python2.7/*
+rm -Rf python-dist/python3.5/*
 rm -Rf python-dist/Lib/*
+rm -Rf python-dist/Scripts/*
 rm -Rf demos/*
 
 cd src
-if [ ! -d py -o ! -d py27 ]; then
+if [ ! -d py -o ! -d py35 ]; then
     echo "Please download python dependencies first."
     exit 1
 fi
 
-## This is an alternative method that we cannot use because we need extra data
-## not packaged in the python packages
-# pip wheel --no-deps https://github.com/gem/oq-engine/archive/master.zip
+if [ ! -f $PY_ZIP ]; then
+    PY_ZIP=${HOME}/${PY_ZIP}
+fi
+unzip -q $PY_ZIP -d ../python-dist/python3.5
+
+if [ ! -f $PIP ]; then
+    PIP=${HOME}/${PIP}
+fi
+wine ../python-dist/python3.5/python.exe $PIP
+
 
 ## Core apps
 echo "Downloading core apps"
 for app in oq-engine; do
     git clone -q -b $OQ_BRANCH --depth=1 https://github.com/gem/${app}.git
-    wine pip -q wheel --disable-pip-version-check --no-deps ./${app}
+    wine ../python-dist/python3.5/Scripts/pip3.exe -q wheel --disable-pip-version-check --no-deps ./${app}
 done
 
 ## Standalone apps
 echo "Downloading standalone apps"
 for app in oq-platform-standalone oq-platform-ipt oq-platform-taxtweb oq-platform-taxonomy; do
     git clone -q -b $TOOLS_BRANCH --depth=1 https://github.com/gem/${app}.git
-    wine pip -q wheel --disable-pip-version-check --no-deps ./${app}
+    wine ../python-dist/python3.5/Scripts/pip3.exe -q wheel --disable-pip-version-check --no-deps ./${app}
 done
-
-# Extract Python, to be included in the installation
-if [ ! -f $PY_MSI ]; then
-    PY_MSI=$HOME/$PY_MSI
-    echo "Extracting python from $PY_MSI"
-fi
-wine msiexec /a $PY_MSI /qb TARGETDIR=../python-dist/python2.7
 
 # Extract wheels to be included in the installation
 echo "Extracting python wheels"
-wine pip -q install --disable-pip-version-check --force-reinstall --ignore-installed --upgrade --no-deps --no-index --prefix ../python-dist py/*.whl py27/*.whl openquake.*.whl oq_platform*.whl
+wine ../python-dist/python3.5/Scripts/pip3.exe -q install --disable-pip-version-check --force-reinstall --ignore-installed --upgrade --no-deps --no-index --prefix ../python-dist py/*.whl py35/*.whl openquake.*.whl oq_platform*.whl
 
 cd $DIR
 
 ini_vers="$(cat src/oq-engine/openquake/baselib/__init__.py | sed -n "s/^__version__[  ]*=[    ]*['\"]\([^'\"]\+\)['\"].*/\1/gp")"
 git_time="$(date -d @$(git -C src/oq-engine log --format=%ct -1) '+%y%m%d%H%M')"
 
+cp installer.nsi.tmpl installer.nsi
 sed -i "s/\${MYVERSION}/$ini_vers/g" installer.nsi
 if [ $PKG_REL ]; then
     sed -i "s/\${MYTIMESTAMP}/$PKG_REL/g" installer.nsi
