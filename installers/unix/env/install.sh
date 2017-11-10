@@ -22,7 +22,7 @@ if [ $GEM_SET_DEBUG ]; then
 fi
 set -e
 
-PYTHON=python2.7
+PYTHON=python3.5
 
 help() {
     cat <<HSD
@@ -76,7 +76,7 @@ done
 check_dep $PYTHON
 
 # We do not support Anaconda using this installer. Anaconda users must install the Engine manually
-python -c "import sys; sys.exit('Anaconda Python isn\'t supported by this package. Please install the official Python from python.org.') if 'conda' in sys.version else ''"
+/usr/bin/env $PYTHON -c "import sys; sys.exit('Anaconda Python isn\'t supported by this package. Please install the official Python from python.org.') if 'conda' in sys.version else ''"
 
 if [ -z $DEST ]; then
     PROMPT="Type the path where you want to install OpenQuake, followed by [ENTER]. Otherwise leave blank, it will be installed in ${HOME}/openquake: "
@@ -86,7 +86,7 @@ fi
 FDEST=$(realpath "$DEST")
 
 echo "Creating a new python environment in ${FDEST}. Please wait."
-/usr/bin/env $PYTHON virtualenv/virtualenv.py $FDEST > /dev/null
+/usr/bin/env $PYTHON -m venv $FDEST > /dev/null
 
 
 [ $MACOS ] && \
@@ -102,8 +102,8 @@ EOF
 source ${FDEST}/env.sh
 echo "Installing the OpenQuake Engine. Please wait."
 # Update pip first
-/usr/bin/env pip install --disable-pip-version-check -U wheelhouse/pip*.whl > /dev/null
-/usr/bin/env pip install --disable-pip-version-check wheelhouse/*.whl > /dev/null
+/usr/bin/env pip3 install --disable-pip-version-check -U wheelhouse/pip*.whl > /dev/null
+/usr/bin/env pip3 install --disable-pip-version-check wheelhouse/*.whl > /dev/null
 mkdir -p $FDEST/share
 cp -R src/{README.md,LICENSE,demos,doc} $FDEST/share
 
@@ -121,7 +121,7 @@ else
 fi
 if [[ "$TOOLS" == 'Y' || "$TOOLS" == 'y' ]]; then
     PYPREFIX=$(python -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())')
-    /usr/bin/env pip install --disable-pip-version-check wheelhouse/tools/*.whl > /dev/null
+    /usr/bin/env pip3 install --disable-pip-version-check wheelhouse/tools/*.whl > /dev/null
 fi
 
 ## 'oq' command alias
