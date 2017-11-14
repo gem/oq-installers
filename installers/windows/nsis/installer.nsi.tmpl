@@ -100,7 +100,7 @@ Section "!Core Files" SecCore
   ; Install MSVCRT if it's not already on the system
   IfFileExists "$SYSDIR\ucrtbase.dll" skip_msvcrt
   SetOutPath "$INSTDIR\python3.5"
-  File "msvcrt\x64\*.dll"
+  File "dist\msvcrt\x64\*.dll"
   skip_msvcrt:
 
   SetOutPath "$INSTDIR\bin"
