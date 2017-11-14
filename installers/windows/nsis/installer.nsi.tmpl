@@ -145,7 +145,7 @@ Section "OpenQuake Engine desktop icons" SecIcon
 SectionEnd
 
 Section -post
-	; Fix shebangs
+  ; Fix shebangs
   nsExec::ExecToLog '"$INSTDIR\python3.5\python.exe" -Es "$INSTDIR\lib\_rewrite_shebangs.py" "$INSTDIR\bin"'
   ; Byte-compile Python files.
   DetailPrint "Byte-compiling Python modules..."
