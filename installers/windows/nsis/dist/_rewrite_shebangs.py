@@ -1,3 +1,7 @@
+# Original source:
+#    https://github.com/takluyver/pynsist/blob/80392f24d664b08eb7f0b7e45a408575e55810fc/nsist/_rewrite_shebangs.py
+# Copyright (c) 2014-2017 Thomas Kluyver under MIT license:
+#   https://github.com/takluyver/pynsist/blob/e01d6f08eb71bc5aa2d294f5369a736e59becd09/LICENSE
 """This is run during installation to rewrite the shebang (#! headers) of script
 files.
 """
