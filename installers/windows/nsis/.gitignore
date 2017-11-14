@@ -1,7 +1,3 @@
-src/*
-!src/__init__.py
-python-dist/Scripts
-python-dist/Lib
 *.msi
 *.exe
 *.pdf
