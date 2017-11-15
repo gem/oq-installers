@@ -73,9 +73,8 @@ if $(echo $OSTYPE | grep -q linux); then
         sudo yum -y -q install curl gcc git makeself zip
         # CentOS (with SCL)
         sudo yum -y -q install centos-release-scl
-        sudo yum -y -q install python27
-        export PATH=/opt/rh/python27/root/usr/bin:$PATH
-        export LD_LIBRARY_PATH=/opt/rh/python27/root/usr/lib64
+        sudo yum -y -q install rh-python35
+        source /opt/rh/rh-python35/enable
     else
         not_supported
     fi
@@ -91,32 +90,28 @@ rm -Rf $OQ_ROOT
 mkdir -p $OQ_DIST/{wheelhouse,src}
 cd $OQ_ROOT
 
-curl -Lo virtualenv-15.0.2.tar.gz https://github.com/pypa/virtualenv/archive/15.0.2.tar.gz
-cd $OQ_DIST
-tar xzf ../virtualenv-15.0.2.tar.gz
-mv virtualenv-15.0.2 virtualenv
-cd ..
-
-/usr/bin/env python dist/virtualenv/virtualenv.py pybuild
+/usr/bin/env python3.5 -m venv pybuild
 source pybuild/bin/activate
 
 rm -Rf oq-engine
+echo "Cloning OpenQuake Engine"
 git clone -q --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-engine.git
 
 rm -Rf oq-platform*
+echo "Cloning OpenQuake Tools"
 git clone -q --depth=1 -b $TOOLS_BRANCH https://github.com/gem/oq-platform-standalone.git
 git clone -q --depth=1 -b $TOOLS_BRANCH https://github.com/gem/oq-platform-ipt.git
 git clone -q --depth=1 -b $TOOLS_BRANCH https://github.com/gem/oq-platform-taxtweb.git
 git clone -q --depth=1 -b $TOOLS_BRANCH https://github.com/gem/oq-platform-taxonomy.git
 
-/usr/bin/env pip -q install -U pip
-/usr/bin/env pip -q install -U wheel
+/usr/bin/env pip3 -q install -U pip
+/usr/bin/env pip3 -q install -U wheel
 # Include an updated version of pip
-/usr/bin/env pip -q wheel pip -w $OQ_WHEEL
-/usr/bin/env pip -q wheel -r oq-engine/requirements-py27-${BUILD_OS}.txt -w $OQ_WHEEL
+/usr/bin/env pip3 -q wheel pip -w $OQ_WHEEL
+/usr/bin/env pip3 -q wheel -r oq-engine/requirements-py35-${BUILD_OS}.txt -w $OQ_WHEEL
  
 cd oq-engine
-/usr/bin/env pip -q wheel --no-deps . -w $OQ_WHEEL
+/usr/bin/env pip3 -q wheel --no-deps . -w $OQ_WHEEL
 
 if [ $PKG_REL ]; then
     OQ_VERSION="$(cat openquake/baselib/__init__.py | sed -n "s/^__version__[  ]*=[    ]*['\"]\([^'\"]\+\)['\"].*/\1/gp")-${PKG_REL}"
@@ -127,7 +122,7 @@ cd ..
 
 mkdir ${OQ_WHEEL}/tools
 for app in oq-platform-*; do
-    /usr/bin/env pip -q wheel --no-deps ${app}/ -w ${OQ_WHEEL}/tools
+    /usr/bin/env pip3 -q wheel --no-deps ${app}/ -w ${OQ_WHEEL}/tools
 done
 
 cp -R ${OQ_ROOT}/oq-engine/{README.md,LICENSE,demos,doc} ${OQ_DIST}/src

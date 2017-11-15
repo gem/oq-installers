@@ -22,7 +22,7 @@ if [ $GEM_SET_DEBUG ]; then
 fi
 set -e
 
-PYTHON=python2.7
+PYTHON=python3.5
 
 help() {
     cat <<HSD
@@ -107,7 +107,7 @@ find ${FDEST} -type f -exec ${FDEST}/bin/sed -i $REWRITE "{}" \;
 
 source ${FDEST}/env.sh
 echo "Installing the OpenQuake Engine. Please wait."
-/usr/bin/env pip install --disable-pip-version-check wheelhouse/*.whl > /dev/null
+/usr/bin/env pip3 install --disable-pip-version-check wheelhouse/*.whl > /dev/null
 mkdir -p $FDEST/share
 cp -R src/{README.md,LICENSE,demos,doc} $FDEST/share
 
@@ -125,7 +125,7 @@ else
 fi
 if [[ "$TOOLS" == 'Y' || "$TOOLS" == 'y' ]]; then
     PYPREFIX=$(python -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())')
-    /usr/bin/env pip install --disable-pip-version-check wheelhouse/tools/*.whl > /dev/null
+    /usr/bin/env pip3 install --disable-pip-version-check wheelhouse/tools/*.whl > /dev/null
 fi
 
 ## 'oq' command alias
