@@ -34,14 +34,12 @@ ENV PATH /opt/wine-stable/bin:$PATH
 ENV WINEDEBUG -all 
 WORKDIR $HOME
 
-RUN wget -q https://downloads.sourceforge.net/project/nsis/NSIS%203/3.01/nsis-3.01-setup.exe && \
-    wget -q https://www.python.org/ftp/python/2.7.13/python-2.7.13.amd64.msi && \
-    pip -q wheel --disable-pip-version-check --no-deps wheel
+RUN wget -q http://cdn.ftp.openquake.org/windows/thirdparties/nsis-3.01-setup.exe && \
+    wget -q http://cdn.ftp.openquake.org/windows/thirdparties/python-3.5.4.zip && \
+    wget -q http://cdn.ftp.openquake.org/windows/thirdparties/get-pip.py
 
 RUN wineboot && sleep 10
 
-RUN wine nsis-3.01-setup.exe /S && \
-    wine msiexec /i python-2.7.13.amd64.msi TARGETDIR=C:\python27 && \
-    wine pip -q install wheel && sleep 10
+RUN wine nsis-3.01-setup.exe /S && sleep 10
 
 CMD /bin/bash /io/docker/build.sh

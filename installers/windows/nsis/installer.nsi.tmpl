@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# vim: tabstop=2 shiftwidth=2 softtabstop=2
+# vim: tabstop=2 shiftwidth=2 softtabstop=2 syntax=nsis
 #
 # Copyright (C) 2016-2017 GEM Foundation
 #
@@ -94,14 +94,26 @@ Section "!Core Files" SecCore
   File "oq-console.bat"
   File "oq-server.bat"
 
-  SetOutPath "$INSTDIR\python2.7"
-  File /r "python-dist\python2.7\*.*"
+  SetOutPath "$INSTDIR\python3.5"
+  File /r "python-dist\python3.5\*.*"
+
+  ; Install MSVCRT if it's not already on the system
+  IfFileExists "$SYSDIR\ucrtbase.dll" skip_msvcrt
+  SetOutPath "$INSTDIR\python3.5"
+  File "dist\msvcrt\x64\*.dll"
+  skip_msvcrt:
+
+  SetOutPath "$INSTDIR\bin"
+  File /r "dist\bin\*.*"
+
+  SetOutPath "$INSTDIR\lib"
+  File "dist\_rewrite_shebangs.py"
 
   SetOutPath "$INSTDIR\lib"
   File /r /x "python-dist\lib\site-packages\oq_platform*" /x "python-dist\lib\site-packages\openquakeplatform*" "python-dist\lib\*.*"
 
   SetOutPath "$INSTDIR\lib\site-packages\openquake"
-  File "src\__init__.py"
+  File "dist\__init__.py"
 SectionEnd
 
 Section "OpenQuake Tools" SecTools
@@ -133,9 +145,12 @@ Section "OpenQuake Engine desktop icons" SecIcon
 SectionEnd
 
 Section -post
+  ; Fix shebangs
+  nsExec::ExecToLog '"$INSTDIR\python3.5\python.exe" -Es "$INSTDIR\lib\_rewrite_shebangs.py" "$INSTDIR\bin"'
   ; Byte-compile Python files.
   DetailPrint "Byte-compiling Python modules..."
-  nsExec::ExecToLog '$INSTDIR\python2.7\python.exe -m compileall -q "$INSTDIR\lib"'
+  nsExec::ExecToLog '$INSTDIR\python3.5\python.exe -m compileall -qq "$INSTDIR\python3.5"'
+  nsExec::ExecToLog '$INSTDIR\python3.5\python.exe -m compileall -qq "$INSTDIR\lib"'
 
   WriteUninstaller $INSTDIR\uninstall.exe
 
@@ -164,8 +179,9 @@ Section "Uninstall"
   SetShellVarContext all
   Delete $INSTDIR\uninstall.exe
   Delete "$INSTDIR\${PRODUCT_ICON}"
+  RMDir /r "$INSTDIR\bin"
   RMDir /r "$INSTDIR\lib"
-  RMDir /r "$INSTDIR\python2.7"
+  RMDir /r "$INSTDIR\python3.5"
   ; Uninstall files
     Delete "$INSTDIR\README.html"
     Delete "$INSTDIR\LICENSE.txt"
