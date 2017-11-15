@@ -5,25 +5,29 @@ MAINTAINER Daniele Viganò <daniele@openquake.org>
 ARG oq_branch=master
 ARG tools_branch=master
 
-RUN yum -q -y install epel-release python curl && \
-    yum -q -y install python-pip && \
-    pip -q install -U pip wheel
+RUN yum -q -y install centos-release-scl curl
+# Using Python 3.6 here since Python 3.5 from SCL is too old
+# user should not care about what is running inside Docker
+RUN yum -q -y install rh-python36 && \
+    yum -q -y clean all
 
 RUN mkdir -p /opt/openquake/lib && \
     ln -rs /opt/openquake/lib /opt/openquake/lib64
 
-ENV PYTHONPATH /opt/openquake/lib/python2.7/site-packages/
-ENV PATH /opt/openquake/bin/:$PATH
+ENV PATH /opt/openquake/bin/:/opt/rh/rh-python36/root/usr/bin:$PATH
+ENV LD_LIBRARY_PATH /opt/rh/rh-python36/root/usr/lib64
+ENV PYTHONPATH /opt/openquake/lib/python3.6/site-packages/
 
 ADD https://api.github.com/repos/gem/oq-engine/git/refs/heads/$oq_branch /tmp/nocache.json
-RUN curl -so /opt/openquake/requirements.txt https://raw.githubusercontent.com/gem/oq-engine/$oq_branch/requirements-py27-linux64.txt && \
-    pip -q install --force-reinstall --ignore-installed --upgrade --no-deps --prefix /opt/openquake -r /opt/openquake/requirements.txt && \
-    pip -q install --prefix /opt/openquake https://github.com/gem/oq-engine/archive/$oq_branch.zip && \
+RUN curl -so /opt/openquake/requirements.txt https://raw.githubusercontent.com/gem/oq-engine/$oq_branch/requirements-py36-linux64.txt && \
+    pip3 -q install -U pip  && \
+    pip3 -q install --force-reinstall --ignore-installed --upgrade --no-deps --prefix /opt/openquake -r /opt/openquake/requirements.txt && \
+    pip3 -q install --prefix /opt/openquake https://github.com/gem/oq-engine/archive/$oq_branch.zip && \
     for app in oq-platform-standalone oq-platform-ipt oq-platform-taxtweb oq-platform-taxonomy; do \
         if curl --output /dev/null --silent --head --fail --location https://github.com/gem/${app}/archive/$tools_branch.zip ; then \
-           pip -q install --prefix /opt/openquake https://github.com/gem/${app}/archive/$tools_branch.zip; \
+           pip3 -q install --prefix /opt/openquake https://github.com/gem/${app}/archive/$tools_branch.zip; \
         else \
-           pip -q install --prefix /opt/openquake https://github.com/gem/${app}/archive/master.zip; \
+           pip3 -q install --prefix /opt/openquake https://github.com/gem/${app}/archive/master.zip; \
         fi \
     done
 
