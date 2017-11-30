@@ -158,7 +158,9 @@ git clone -q --depth=1 -b $TOOLS_BRANCH https://github.com/gem/oq-platform-ipt.g
 git clone -q --depth=1 -b $TOOLS_BRANCH https://github.com/gem/oq-platform-taxtweb.git
 git clone -q --depth=1 -b $TOOLS_BRANCH https://github.com/gem/oq-platform-taxonomy.git
 
-$OQ_PREFIX/bin/$PYTHON -m pip -q wheel -r oq-engine/requirements-py35-${BUILD_OS}.txt -w $OQ_WHEEL
+REQMIRROR=$(mktemp)
+sed 's/cdn\.ftp\.openquake\.org/ftp.openquake.org/g' oq-engine/requirements-py35-${BUILD_OS}.txt > $REQMIRROR
+EFIX/bin/$PYTHON -m pip -q wheel -r $REQMIRROR -w $OQ_WHEEL
 
 cd oq-engine
 $OQ_PREFIX/bin/$PYTHON -m pip -q wheel --no-deps . -w $OQ_WHEEL
