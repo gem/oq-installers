@@ -108,7 +108,9 @@ git clone -q --depth=1 -b $TOOLS_BRANCH https://github.com/gem/oq-platform-taxon
 /usr/bin/env pip3 -q install -U wheel
 # Include an updated version of pip
 /usr/bin/env pip3 -q wheel pip -w $OQ_WHEEL
-/usr/bin/env pip3 -q wheel -r oq-engine/requirements-py35-${BUILD_OS}.txt -w $OQ_WHEEL
+REQMIRROR=$(mktemp)
+sed 's/cdn\.ftp\.openquake\.org/ftp.openquake.org/g' oq-engine/requirements-py35-${BUILD_OS}.txt > $REQMIRROR
+/usr/bin/env pip3 -q wheel -r $REQMIRROR -w $OQ_WHEEL
  
 cd oq-engine
 /usr/bin/env pip3 -q wheel --no-deps . -w $OQ_WHEEL
