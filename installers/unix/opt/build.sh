@@ -160,7 +160,7 @@ git clone -q --depth=1 -b $TOOLS_BRANCH https://github.com/gem/oq-platform-taxon
 
 REQMIRROR=$(mktemp)
 sed 's/cdn\.ftp\.openquake\.org/ftp.openquake.org/g' oq-engine/requirements-py35-${BUILD_OS}.txt > $REQMIRROR
-EFIX/bin/$PYTHON -m pip -q wheel -r $REQMIRROR -w $OQ_WHEEL
+$OQ_PREFIX/bin/$PYTHON -m pip -q wheel -r $REQMIRROR -w $OQ_WHEEL
 
 cd oq-engine
 $OQ_PREFIX/bin/$PYTHON -m pip -q wheel --no-deps . -w $OQ_WHEEL
