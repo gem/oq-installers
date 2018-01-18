@@ -28,6 +28,7 @@ ADD oqrun.sh /opt/openquake/
 RUN useradd -u 1000 openquake
 
 USER openquake
+ENV LANG en_US.UTF-8
 ENV HOME /home/openquake
 WORKDIR ${HOME}
 
