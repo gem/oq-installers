@@ -56,6 +56,17 @@ $ sudo docker start myoqcontainer
 $ sudo docker stop myoqcontainer
 ```
 
+### Authentication support
+
+Authentication support for the WebUI/API can be enabled passing the `LOCKDOWN=enable` environment variable to the Docker container:
+
+```bash
+$ sudo docker run -e LOCKDOWN=enable --name myoqcontainer -d -p 8800:8800 openquake/engine
+```
+
+You can login with the default `admin` user and `admin` password.
+
+
 ## Run an OpenQuake Engine cluster via docker-compose
 
 ```bash
@@ -100,7 +111,6 @@ See also https://github.com/gem/oq-engine/blob/master/doc/installing/docker.md
 ---
 
 ## TODO
- - Possibility to enable authentication
  - Persistent/shared volumes
  - Kubernetes
  - Deployment examples
