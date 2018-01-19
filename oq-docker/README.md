@@ -106,12 +106,4 @@ $ docker run -d --network=oq-cluster-net --name oq-cluster-worker_1 openquake/en
 ```
 
 See also https://github.com/gem/oq-engine/blob/master/doc/installing/docker.md
-
-
----
-
-## TODO
- - Persistent/shared volumes
- - Kubernetes
- - Deployment examples
-
+For future plans see: https://github.com/gem/oq-builders/issues/88
