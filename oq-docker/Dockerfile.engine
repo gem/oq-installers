@@ -1,14 +1,9 @@
 # vi:syntax=dockerfile
-FROM centos:7
+FROM openquake/base
 MAINTAINER Daniele Viganò <daniele@openquake.org>
 
 ARG oq_branch=master
 ARG tools_branch=master
-
-RUN curl -so /etc/yum.repos.d/gem-openquake-stable-epel-7.repo \
-    https://copr.fedorainfracloud.org/coprs/gem/openquake-stable/repo/epel-7/gem-openquake-stable-epel-7.repo
-RUN yum -q -y install oq-python35 && \
-    yum -q -y clean all
 
 ENV PATH /opt/openquake/bin:$PATH
 ADD https://api.github.com/repos/gem/oq-engine/git/refs/heads/$oq_branch /tmp/nocache.json
@@ -23,14 +18,14 @@ RUN curl -so /opt/openquake/requirements.txt https://raw.githubusercontent.com/g
         fi \
     done
 
-ADD oqrun.sh /opt/openquake/
-
-RUN useradd -u 1000 openquake
 
 USER openquake
 ENV LANG en_US.UTF-8
 ENV HOME /home/openquake
 WORKDIR ${HOME}
 
+ADD scripts/oq-start.sh ${HOME}
+
 EXPOSE 8800:8800
-CMD /bin/bash /opt/openquake/oqrun.sh
+ENTRYPOINT ["/bin/bash"]
+CMD ["./oq-start.sh"]

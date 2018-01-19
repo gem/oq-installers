@@ -1,0 +1,11 @@
+# vi:syntax=dockerfile
+FROM openquake/engine
+MAINTAINER Daniele Viganò <daniele@openquake.org>
+
+ADD scripts/celery-wait.sh ${HOME}
+ADD conf/openquake.cfg ${HOME}
+ENV OQ_CONFIG_FILE ${HOME}/openquake.cfg
+
+ENTRYPOINT ["/opt/openquake/bin/python3", "-m", "celery"]
+# FIXME --config openquake.engine.celeryconfig is not working, using workdir as a fallback
+CMD ["worker", "--workdir", "/opt/openquake/lib/python3.5/site-packages/openquake/engine", "--purge", "-O", "fair"]
