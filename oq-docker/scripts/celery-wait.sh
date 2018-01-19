@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 while :
 do
     (echo > /dev/tcp/oq-cluster-rabbitmq/5672) >/dev/null 2>&1

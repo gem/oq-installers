@@ -12,6 +12,9 @@ services:
   master:
     image: openquake/engine-master
     container_name: oq-cluster-master
+    # Uncomment to enable auth in WebUI/API
+    # environment:
+    #   - LOCKDOWN=true
     networks:
       - oq-cluster-net
     ports:
