@@ -36,5 +36,4 @@ $ docker build -t openquake/engine-worker -f Dockerfile.worker .
 --build-arg tools_branch=mater    ## oq standalone tools branch
 ```
 
-See also https://github.com/gem/oq-engine/blob/master/doc/installing/docker.md
 For future plans see: https://github.com/gem/oq-builders/issues/88
