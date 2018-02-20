@@ -1,6 +1,6 @@
-# Build OpenQuake Docker images #
+# Build OpenQuake Docker images
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/7/79/Docker_%28container_engine%29_logo.png" width="150px"> [![Build Status](https://ci.openquake.org/buildStatus/icon?job=builders/docker-builder)](h    ttps://ci.openquake.org/job/builders/docker-builder)
+<img src="https://upload.wikimedia.org/wikipedia/commons/7/79/Docker_%28container_engine%29_logo.png" width="150px"> [![Build Status](https://ci.openquake.org/buildStatus/icon?job=builders/docker-builder)](https://ci.openquake.org/job/builders/docker-builder)
 
 Introduction: https://github.com/gem/oq-engine/blob/update-doc/doc/installing/docker.md
 
