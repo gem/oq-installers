@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 # vim: tabstop=4 shiftwidth=4 softtabstop=4
 # vim: syntax=dockerfile
-# name: f26-wine
+# name: f27-wine
 #
-# Copyright (C) 2017 GEM Foundation
+# Copyright (C) 2017-2018 GEM Foundation
 #
 # OpenQuake is free software: you can redistribute it and/or modify it
 # under the terms of the GNU Affero General Public License as published
@@ -18,12 +18,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with OpenQuake. If not, see <http://www.gnu.org/licenses/>.
 
-FROM fedora:26
+FROM fedora:27
 MAINTAINER Daniele Viganò <daniele@openquake.org>
 
-RUN dnf -q -y install python-markdown python-wheel wget git zip unzip && \
-    wget -qO- https://repos.wine-staging.com/wine/fedora/26/winehq.repo > /etc/yum.repos.d/winehq.repo && \
-    dnf -q -y install wine-stable64
+RUN dnf -y install wget && \
+    dnf -y install python-markdown python-wheel wget git zip unzip && \
+    dnf -y install wine
 
 ARG uid=1000
 RUN useradd -u $uid builder
