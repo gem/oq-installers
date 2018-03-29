@@ -32,6 +32,13 @@ $ docker run -e GEM_SET_BRANCH=engine-X.Y -e GEM_SET_RELEASE=Z -v $(pwd):/io -t 
 ```
 where `Z` is the build number for the package. 
 
+#### Output types
+```bash
+$ docker run -e GEM_SET_OUTPUT=zip -v $(pwd):/io -t -i --rm f26-wine /io/docker/build.sh
+```
+
+`$GEM_SET_OUTPUT` can be `exe` (default), `zip` or `exe zip`.
+
 ### Manual installation 
 
 #### Setup WINE prefix
