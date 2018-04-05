@@ -14,27 +14,27 @@ Microsoft Windows is not required.
 
 #### Build Docker image
 ```bash
-$ docker build --build-arg uid=$(id -u) --rm=true -t f26-wine -f docker/Dockerfile .
+$ docker build --build-arg uid=$(id -u) --rm=true -t wine -f docker/Dockerfile docker
 ```
 ### Run the container
 ```bash
-$ docker run -v $(pwd):/io -t -i --rm f26-wine
+$ docker run -v $(pwd):/io -t -i --rm wine
 ```
 #### Custom branches
 ```bash
-$ docker run -e GEM_SET_BRANCH=branch -e GEM_SET_BRANCH_TOOLS=branch -v $(pwd):/io -t -i --rm f26-wine
+$ docker run -e GEM_SET_BRANCH=branch -e GEM_SET_BRANCH_TOOLS=branch -v $(pwd):/io -t -i --rm wine
 ```
 otherwise `master` is used.
 
 #### Release mode
 ```bash
-$ docker run -e GEM_SET_BRANCH=engine-X.Y -e GEM_SET_RELEASE=Z -v $(pwd):/io -t -i --rm f26-wine /io/docker/build.sh
+$ docker run -e GEM_SET_BRANCH=engine-X.Y -e GEM_SET_RELEASE=Z -v $(pwd):/io -t -i --rm wine /io/docker/build.sh
 ```
 where `Z` is the build number for the package. 
 
 #### Output types
 ```bash
-$ docker run -e GEM_SET_OUTPUT=zip -v $(pwd):/io -t -i --rm f26-wine /io/docker/build.sh
+$ docker run -e GEM_SET_OUTPUT=zip -v $(pwd):/io -t -i --rm wine /io/docker/build.sh
 ```
 
 `$GEM_SET_OUTPUT` can be `exe` (default), `zip` or `exe zip`.
