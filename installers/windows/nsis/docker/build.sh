@@ -121,7 +121,7 @@ if [ ! -f OpenQuake\ manual.pdf ]; then
 fi
 
 # Fix Lib -> lib to be more consistent with naming
-mv ${DIR}/python-dist/Lib ${DIR}/python-dist/lib || true
+mv ${DIR}/python-dist/Lib ${DIR}/python-dist/lib
 
 if [[ $OQ_OUTPUT = *"exe"* ]]; then
     echo "Generating NSIS installer"

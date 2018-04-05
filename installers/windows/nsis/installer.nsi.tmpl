@@ -105,6 +105,8 @@ Section "!Core Files" SecCore
 
   SetOutPath "$INSTDIR\bin"
   File /r "dist\bin\*.*"
+
+  SetOutPath "$INSTDIR\lib"
   File /r /x "python-dist\lib\site-packages\oq_platform*" /x "python-dist\lib\site-packages\openquakeplatform*" "python-dist\lib\*.*"
 
   SetOutPath "$INSTDIR\lib\site-packages\openquake"
