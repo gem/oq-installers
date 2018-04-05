@@ -120,8 +120,8 @@ if [ ! -f OpenQuake\ manual.pdf ]; then
     wget -O- https://ci.openquake.org/job/builders/job/pdf-builder/lastSuccessfulBuild/artifact/oq-engine/doc/manual/oq-manual.pdf > OpenQuake\ manual.pdf
 fi
 
-# Fix Lib -> lib to be more consistent with naming
-mv ${DIR}/python-dist/Lib ${DIR}/python-dist/lib
+# Make sure that Lib -> lib to be more consistent with naming
+mv ${DIR}/python-dist/Lib ${DIR}/python-dist/lib || true
 
 if [[ $OQ_OUTPUT = *"exe"* ]]; then
     echo "Generating NSIS installer"
