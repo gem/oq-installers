@@ -17,24 +17,24 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with OpenQuake. If not, see <http://www.gnu.org/licenses/>.
 
-if [ $GEM_SET_DEBUG ]; then
+if [ "$GEM_SET_DEBUG" ]; then
     set -x
 fi
 set -e
 
-if [ $GEM_SET_BRANCH ]; then
+if [ "$GEM_SET_BRANCH" ]; then
     OQ_BRANCH=$GEM_SET_BRANCH
 else
     OQ_BRANCH=master
 fi
 
-if [ $GEM_SET_OUTPUT ]; then
+if [ "$GEM_SET_OUTPUT" ]; then
     OQ_OUTPUT=$GEM_SET_OUTPUT
 else
     OQ_OUTPUT="exe"
 fi
 
-if [ $GEM_SET_BRANCH_TOOLS ]; then
+if [ "$GEM_SET_BRANCH_TOOLS" ]; then
     TOOLS_BRANCH=$GEM_SET_BRANCH_TOOLS
 else
     TOOLS_BRANCH=$OQ_BRANCH
@@ -121,7 +121,7 @@ if [ ! -f OpenQuake\ manual.pdf ]; then
 fi
 
 # Fix Lib -> lib to be more consistent with naming
-mv ${DIR}/python-dist/Lib ${DIR}/python-dist/lib
+mv ${DIR}/python-dist/Lib ${DIR}/python-dist/lib || true
 
 if [[ $OQ_OUTPUT = *"exe"* ]]; then
     echo "Generating NSIS installer"

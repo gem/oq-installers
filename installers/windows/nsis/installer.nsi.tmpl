@@ -142,8 +142,8 @@ SectionEnd
 Section -post
   ; Byte-compile Python files.
   DetailPrint "Byte-compiling Python modules..."
-  nsExec::ExecToLog '$INSTDIR\python3.5\python.exe -m compileall -qq "$INSTDIR\python3.5"'
-  nsExec::ExecToLog '$INSTDIR\python3.5\python.exe -m compileall -qq "$INSTDIR\lib"'
+  nsExec::ExecToLog '$INSTDIR\python3.5\python.exe -m compileall -qq "$INSTDIR"'
+  nsExec::ExecToLog 'copy /y nul "$INSTDIR\lib\pycache" >nul'
 
   WriteUninstaller $INSTDIR\uninstall.exe
 
