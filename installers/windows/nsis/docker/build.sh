@@ -51,7 +51,7 @@ PIP="get-pip.py"
 
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
-cd $DIR && pwd
+cd $DIR && echo "Working in: $(pwd)"
 
 # pre-cleanup
 rm -Rf *.zip *.exe
