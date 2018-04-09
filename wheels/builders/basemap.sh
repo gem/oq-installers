@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # vim: tabstop=4 shiftwidth=4 softtabstop=4
 #
-# Copyright (C) 2016-2017 GEM Foundation
+# Copyright (C) 2016-2018 GEM Foundation
 #
 # OpenQuake is free software: you can redistribute it and/or modify it
 # under the terms of the GNU Affero General Public License as published
@@ -34,7 +34,7 @@ curl -Lo basemap-1.1.0.tar.gz https://github.com/matplotlib/basemap/archive/v1.1
 tar xf basemap-1.1.0.tar.gz
 cd basemap-1.1.0
 
-get numpy==1.11.1
+get numpy==1.14.2
 build .
 
 post

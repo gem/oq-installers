@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # vim: tabstop=4 shiftwidth=4 softtabstop=4
 #
-# Copyright (C) 2016-2017 GEM Foundation
+# Copyright (C) 2016-2018 GEM Foundation
 #
 # OpenQuake is free software: you can redistribute it and/or modify it
 # under the terms of the GNU Affero General Public License as published
@@ -35,9 +35,9 @@ yum install -y curl gzip tar
 
 cd /tmp/src
 
-curl -LO https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8.17/src/hdf5-1.8.17.tar.gz
-tar xzf hdf5-1.8.17.tar.gz
-cd hdf5-1.8.17
+curl -LO https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.2/src/hdf5-1.10.2.tar.gz
+tar xzf hdf5-1.10.2.tar.gz
+cd hdf5-1.10.2
 ./configure --prefix=/usr/local
 make -j $NPROC
 make install
@@ -45,7 +45,7 @@ cd ..
 
 cd /tmp/wheelhouse
 
-get numpy==1.11.1
-build h5py==2.6.0
+get numpy==1.14.2
+build h5py==2.8.0
 
 post

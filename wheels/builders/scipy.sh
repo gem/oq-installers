@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # vim: tabstop=4 shiftwidth=4 softtabstop=4
 #
-# Copyright (C) 2016-2017 GEM Foundation
+# Copyright (C) 2016-2018 GEM Foundation
 #
 # OpenQuake is free software: you can redistribute it and/or modify it
 # under the terms of the GNU Affero General Public License as published
@@ -40,7 +40,7 @@ fi
 
 cd /tmp/wheelhouse
 
-get numpy==1.11.1
-build scipy==0.17.1
+get numpy==1.14.2
+build scipy==1.0.1
 
 post
