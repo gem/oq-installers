@@ -104,7 +104,9 @@ git clone -q --depth=1 -b $TOOLS_BRANCH https://github.com/gem/oq-platform-ipt.g
 git clone -q --depth=1 -b $TOOLS_BRANCH https://github.com/gem/oq-platform-taxtweb.git
 git clone -q --depth=1 -b $TOOLS_BRANCH https://github.com/gem/oq-platform-taxonomy.git
 
-/usr/bin/env pip3 -q install -U pip
+# Should be pip install -U pip, but pip is currently broken on macOS
+# when starting from version 9.0.1. We cannot rely on pip here.
+curl https://bootstrap.pypa.io/get-pip.py | /usr/bin/env python3
 /usr/bin/env pip3 -q install -U wheel
 # Include an updated version of pip
 /usr/bin/env pip3 -q wheel pip -w $OQ_WHEEL
