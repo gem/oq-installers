@@ -31,6 +31,8 @@ MYDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 if [ -z $OQ_ENV_SET ]; then source $MYDIR/../build-common.sh; fi
 
+yum install -qy openssl-devel zlib-devel
+
 build_dep geos
 build_dep jasper
 build_dep proj
