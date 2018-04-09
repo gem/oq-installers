@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # vim: tabstop=4 shiftwidth=4 softtabstop=4
 #
-# Copyright (C) 2017 GEM Foundation
+# Copyright (C) 2017-2018 GEM Foundation
 #
 # OpenQuake is free software: you can redistribute it and/or modify it
 # under the terms of the GNU Affero General Public License as published
@@ -17,18 +17,24 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with OpenQuake. If not, see <http://www.gnu.org/licenses/>.
 
-if [ $GEM_SET_DEBUG ]; then
+if [ "$GEM_SET_DEBUG" ]; then
     set -x
 fi
 set -e
 
-if [ $GEM_SET_BRANCH ]; then
+if [ "$GEM_SET_BRANCH" ]; then
     OQ_BRANCH=$GEM_SET_BRANCH
 else
     OQ_BRANCH=master
 fi
 
-if [ $GEM_SET_BRANCH_TOOLS ]; then
+if [ "$GEM_SET_OUTPUT" ]; then
+    OQ_OUTPUT=$GEM_SET_OUTPUT
+else
+    OQ_OUTPUT="exe"
+fi
+
+if [ "$GEM_SET_BRANCH_TOOLS" ]; then
     TOOLS_BRANCH=$GEM_SET_BRANCH_TOOLS
 else
     TOOLS_BRANCH=$OQ_BRANCH
@@ -45,9 +51,10 @@ PIP="get-pip.py"
 
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
-cd $DIR && pwd
+cd $DIR && echo "Working in: $(pwd)"
 
 # pre-cleanup
+rm -Rf *.zip *.exe
 rm -Rf src/oq-*
 rm -Rf python-dist/python3.5/*
 rm -Rf python-dist/Lib/*
@@ -113,5 +120,21 @@ if [ ! -f OpenQuake\ manual.pdf ]; then
     wget -O- https://ci.openquake.org/job/builders/job/pdf-builder/lastSuccessfulBuild/artifact/oq-engine/doc/manual/oq-manual.pdf > OpenQuake\ manual.pdf
 fi
 
-echo "Generating NSIS installer"
-wine ${HOME}/.wine/drive_c/Program\ Files\ \(x86\)/NSIS/makensis /V4 installer.nsi
+# Make sure that Lib -> lib to be more consistent with naming
+mv ${DIR}/python-dist/Lib ${DIR}/python-dist/lib || true
+
+if [[ $OQ_OUTPUT = *"exe"* ]]; then
+    echo "Generating NSIS installer"
+    wine ${HOME}/.wine/drive_c/Program\ Files\ \(x86\)/NSIS/makensis /V4 installer.nsi
+fi
+
+if [[ $OQ_OUTPUT = *"zip"* ]]; then
+    echo "Generating ZIP archive"
+    ZIP="OpenQuake_Engine_${ini_vers}_${git_time}.zip"
+    zip -qr $DIR/${ZIP} *.bat *.pdf demos README.html LICENSE.txt
+    cd $DIR/dist
+    zip -qr $DIR/${ZIP} bin
+    cp __init__.py ${DIR}/python-dist/lib/site-packages/openquake
+    cd $DIR/python-dist
+    zip -qr $DIR/${ZIP} lib python3.5
+fi

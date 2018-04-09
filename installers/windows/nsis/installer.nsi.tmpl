@@ -107,9 +107,6 @@ Section "!Core Files" SecCore
   File /r "dist\bin\*.*"
 
   SetOutPath "$INSTDIR\lib"
-  File "dist\_rewrite_shebangs.py"
-
-  SetOutPath "$INSTDIR\lib"
   File /r /x "python-dist\lib\site-packages\oq_platform*" /x "python-dist\lib\site-packages\openquakeplatform*" "python-dist\lib\*.*"
 
   SetOutPath "$INSTDIR\lib\site-packages\openquake"
@@ -145,12 +142,11 @@ Section "OpenQuake Engine desktop icons" SecIcon
 SectionEnd
 
 Section -post
-  ; Fix shebangs
-  nsExec::ExecToLog '"$INSTDIR\python3.5\python.exe" -Es "$INSTDIR\lib\_rewrite_shebangs.py" "$INSTDIR\bin"'
   ; Byte-compile Python files.
   DetailPrint "Byte-compiling Python modules..."
-  nsExec::ExecToLog '$INSTDIR\python3.5\python.exe -m compileall -qq "$INSTDIR\python3.5"'
-  nsExec::ExecToLog '$INSTDIR\python3.5\python.exe -m compileall -qq "$INSTDIR\lib"'
+  nsExec::ExecToLog '$INSTDIR\python3.5\python.exe -m compileall -qq "$INSTDIR"'
+  FileOpen $0 "$INSTDIR\lib\pycache" w
+  FileClose $0
 
   WriteUninstaller $INSTDIR\uninstall.exe
 
