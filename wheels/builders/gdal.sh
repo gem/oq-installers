@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # vim: tabstop=4 shiftwidth=4 softtabstop=4
 #
-# Copyright (C) 2016-2017 GEM Foundation
+# Copyright (C) 2016-2018 GEM Foundation
 #
 # OpenQuake is free software: you can redistribute it and/or modify it
 # under the terms of the GNU Affero General Public License as published
@@ -31,14 +31,16 @@ MYDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 if [ -z $OQ_ENV_SET ]; then source $MYDIR/../build-common.sh; fi
 
+yum install -qy openssl-devel zlib-devel
+
 build_dep geos
 build_dep jasper
 build_dep proj
 
 cd /tmp/src
-curl -f -L -O http://download.osgeo.org/gdal/2.1.3/gdal-2.1.3.tar.gz
-tar xzf gdal-2.1.3.tar.gz
-cd gdal-2.1.3
+curl -f -L -O http://download.osgeo.org/gdal/2.2.4/gdal-2.2.4.tar.gz
+tar xzf gdal-2.2.4.tar.gz
+cd gdal-2.2.4
 ./configure \
  --with-threads \
  --disable-debug \
@@ -72,15 +74,15 @@ make install
 
 # Replace SWIG's setup.py with this modified one, which gets numpy in
 # there as a dependency.
-cp $MYDIR/gdal/setup.py /tmp/src/gdal-2.1.3/swig/python/setup.py
+cp $MYDIR/gdal/setup.py /tmp/src/gdal-2.2.4/swig/python/setup.py
 # Replace the osgeo module __init__.py with this modified one, which
 # sets the GDAL_DATA and PROJ_LIB variables on import to where they've
 # been copied to.
-cp $MYDIR/gdal/gdalinit.py /tmp/src/gdal-2.1.3/swig/python/osgeo/__init__.py
+cp $MYDIR/gdal/gdalinit.py /tmp/src/gdal-2.2.4/swig/python/osgeo/__init__.py
 
-cd  /tmp/src/gdal-2.1.3/swig/python
+cd  /tmp/src/gdal-2.2.4/swig/python
 
-get numpy==1.11.1
+get numpy==1.14.2
 build .
 
 post

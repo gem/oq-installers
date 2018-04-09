@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # vim: tabstop=4 shiftwidth=4 softtabstop=4
 #
-# Copyright (C) 2016-2017 GEM Foundation
+# Copyright (C) 2016-2018 GEM Foundation
 #
 # OpenQuake is free software: you can redistribute it and/or modify it
 # under the terms of the GNU Affero General Public License as published
@@ -29,7 +29,8 @@ if [ -z $OQ_ENV_SET ]; then source $MYDIR/../build-common.sh; fi
 build_dep geos
 build_dep proj
 
-get numpy==1.11.1 Cython
+get numpy==1.14.2
+get Cython
 build cartopy
 
 post
