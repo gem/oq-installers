@@ -168,6 +168,7 @@ $OQ_PREFIX/bin/$PYTHON -m pip -q wheel -r $REQMIRROR http://ftp.openquake.org/wh
                                                      jupyter_client>=5.0.0 \
                                                      ipykernel>=4.8.0 \
                                                      ipython>=6.2.0 \
+													 notebook>=5.5.0 \
                                                      nbformat \
                                                      prettytable -w ${OQ_WHEEL}
 cd oq-engine
