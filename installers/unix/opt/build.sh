@@ -149,14 +149,17 @@ $OQ_PREFIX/bin/$PYTHON -m pip -q install wheel
 
 rm -Rf oq-engine
 echo "Cloning OpenQuake Engine"
-git clone -q --depth=1 -b $OQ_BRANCH https://github.com/gem/oq-engine.git
+git clone -q --depth=1 -b $OQ_BRANCH https://mirror.openquake.org/git/GEM/oq-engine.git
 
 rm -Rf oq-platform*
 echo "Cloning OpenQuake Tools"
-git clone -q --depth=1 -b $TOOLS_BRANCH https://github.com/gem/oq-platform-standalone.git
-git clone -q --depth=1 -b $TOOLS_BRANCH https://github.com/gem/oq-platform-ipt.git
-git clone -q --depth=1 -b $TOOLS_BRANCH https://github.com/gem/oq-platform-taxtweb.git
-git clone -q --depth=1 -b $TOOLS_BRANCH https://github.com/gem/oq-platform-taxonomy.git
+git clone -q --depth=1 -b $TOOLS_BRANCH https://mirror.openquake.org/git/GEM/oq-platform-standalone.git
+git clone -q --depth=1 -b $TOOLS_BRANCH https://mirror.openquake.org/git/GEM/oq-platform-ipt.git
+git clone -q --depth=1 -b $TOOLS_BRANCH https://mirror.openquake.org/git/GEM/oq-platform-taxtweb.git
+git clone -q --depth=1 -b $TOOLS_BRANCH https://mirror.openquake.org/git/GEM/oq-platform-taxonomy.git
+git clone -q --depth=1 -b $TOOLS_BRANCH https://github.com/GEMScienceTools/oq-man.git
+git clone -q --depth=1 -b $TOOLS_BRANCH https://github.com/GEMScienceTools/oq-subduction.git
+git clone -q --depth=1 -b $TOOLS_BRANCH https://github.com/GEMScienceTools/oq-mbtk.git
 
 REQMIRROR=$(mktemp)
 sed 's/cdn\.ftp\.openquake\.org/ftp.openquake.org/g' oq-engine/requirements-py35-${BUILD_OS}.txt > $REQMIRROR
@@ -182,9 +185,12 @@ for app in oq-platform-*; do
 done
 
 mkdir ${OQ_WHEEL}/mbtk
-$OQ_PREFIX/bin/$PYTHON -m pip -q wheel --no-deps https://github.com/GEMScienceTools/oq-man/archive/master.zip \
-                                                 https://github.com/GEMScienceTools/oq-subduction/archive/master.zip \
-                                                 https://github.com/GEMScienceTools/oq-mbtk/archive/master.zip -w ${OQ_WHEEL}/mbtk
+for app in oq-man oq-subduction oq-mbtk; do
+    $OQ_PREFIX/bin/$PYTHON -m pip -q wheel --no-deps ${app}/ -w ${OQ_WHEEL}/mbtk
+done
+
+# FIXME
+cp -R oq-mbtk/oqmbt/notebooks ${OQ_DIST}/src
 
 cp -R ${OQ_ROOT}/oq-engine/{README.md,LICENSE,demos,doc} ${OQ_DIST}/src
 rm -Rf ${OQ_DIST}/src/doc/sphinx

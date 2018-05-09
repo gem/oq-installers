@@ -128,6 +128,8 @@ if [[ "$TOOLS" == 'Y' || "$TOOLS" == 'y' ]]; then
     /usr/bin/env pip3 install --disable-pip-version-check wheelhouse/tools/*.whl > /dev/null
 fi
 
+unset TOOLS
+
 if [ -z $FORCE ]; then
     while ! (echo "$TOOLS" | grep -qE '^[nNyY]$'); do
         PROMPT="Do you want to install the OpenQuake Model Building Toolkit? [y/n]: "
@@ -139,6 +141,7 @@ fi
 if [[ "$TOOLS" == 'Y' || "$TOOLS" == 'y' ]]; then
     PYPREFIX=$(python -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())')
     /usr/bin/env pip3 install --disable-pip-version-check wheelhouse/mbtk/*.whl > /dev/null
+    cp -R src/notebooks $FDEST/share
 fi
 
 ## 'oq' command alias
