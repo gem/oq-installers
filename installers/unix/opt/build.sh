@@ -162,11 +162,11 @@ REQMIRROR=$(mktemp)
 sed 's/cdn\.ftp\.openquake\.org/ftp.openquake.org/g' oq-engine/requirements-py35-${BUILD_OS}.txt > $REQMIRROR
 $OQ_PREFIX/bin/$PYTHON -m pip -q wheel -r $REQMIRROR http://ftp.openquake.org/wheelhouse/linux/py35/GDAL-2.2.4-cp35-cp35m-manylinux1_x86_64.whl \
                                                      nbstripout>=0.3.0 \
-									                 jupyter_client>=5.0.0 \
-									                 ipykernel>=4.8.0 \
-									                 ipython>=6.2.0 \
-									                 nbformat \
-									                 prettytable -w ${OQ_WHEEL}
+                                                     jupyter_client>=5.0.0 \
+                                                     ipykernel>=4.8.0 \
+                                                     ipython>=6.2.0 \
+                                                     nbformat \
+                                                     prettytable -w ${OQ_WHEEL}
 cd oq-engine
 $OQ_PREFIX/bin/$PYTHON -m pip -q wheel --no-deps . -w $OQ_WHEEL
 if [ $PKG_REL ]; then
@@ -182,9 +182,9 @@ for app in oq-platform-*; do
 done
 
 mkdir ${OQ_WHEEL}/mbtk
-$OQ_PREFIX/bin/$PYTHON -m pip -q wheel --no-deps https://github.com/GEMScienceTools/oq-mbtk/archive/master.zip \
-                                                 https://github.com/GEMScienceTools/oq-mbtk/archive/master.zip \
-								                 https://github.com/GEMScienceTools/oq-subduction.git -w ${OQ_WHEEL}/mbtk
+$OQ_PREFIX/bin/$PYTHON -m pip -q wheel --no-deps https://github.com/GEMScienceTools/oq-man/archive/master.zip \
+                                                 https://github.com/GEMScienceTools/oq-subduction/archive/master.zip \
+                                                 https://github.com/GEMScienceTools/oq-mbtk/archive/master.zip -w ${OQ_WHEEL}/mbtk
 
 cp -R ${OQ_ROOT}/oq-engine/{README.md,LICENSE,demos,doc} ${OQ_DIST}/src
 rm -Rf ${OQ_DIST}/src/doc/sphinx
