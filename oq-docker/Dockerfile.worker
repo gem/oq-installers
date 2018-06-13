@@ -3,8 +3,7 @@ FROM openquake/engine
 MAINTAINER Daniele Viganò <daniele@openquake.org>
 
 ADD scripts/celery-wait.sh ${HOME}
-ADD conf/openquake.cfg ${HOME}
-ENV OQ_CONFIG_FILE ${HOME}/openquake.cfg
+ADD conf/openquake.cfg /etc/openquake
 
 ENTRYPOINT ["/opt/openquake/bin/python3", "-m", "celery"]
 # FIXME --config openquake.engine.celeryconfig is not working, using workdir as a fallback
