@@ -36,4 +36,12 @@ $ docker build -t openquake/engine-worker -f Dockerfile.worker .
 --build-arg tools_branch=mater    ## oq standalone tools branch
 ```
 
+## Debug
+
+It's possible to enter a container as `root`, for debug purposes, running
+
+```bash
+$ docker exec -u 0 -t -i oq-cluster-master /bin/bash
+```
+
 For future plans see: https://github.com/gem/oq-builders/issues/88
