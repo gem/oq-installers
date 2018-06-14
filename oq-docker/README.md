@@ -14,7 +14,7 @@ $ docker build -t openquake/base -f Dockerfile.base .
 ## OpenQuake Engine (single node)
 
 ```bash
-$ docker build -t openquake/engine -f Dockerfile .
+$ docker build -t openquake/engine -f Dockerfile.engine .
 ```
 
 ## OpenQuake Engine master node container (cluster)
