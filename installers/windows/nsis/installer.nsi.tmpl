@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vim: tabstop=2 shiftwidth=2 softtabstop=2 syntax=nsis
 #
-# Copyright (C) 2016-2017 GEM Foundation
+# Copyright (C) 2016-2018 GEM Foundation
 #
 # OpenQuake is free software: you can redistribute it and/or modify it
 # under the terms of the GNU Affero General Public License as published
@@ -102,19 +102,27 @@ Section "!Core Files" SecCore
   SetOutPath "$INSTDIR\python3.5"
   File "dist\msvcrt\x64\*.dll"
   skip_msvcrt:
+
+  SetOutPath "$INSTDIR\oq-dist"
+  File /r "oq-dist\*.*"
+
+  SetOutPath "$INSTDIR\oq-dist\engine"
+  DetailPrint "Installing the OpenQuake Engine..."
+  nsExec::ExecToLog '$INSTDIR\python3.5\python.exe -m pip install -r "index.txt"'
 SectionEnd
 
-#Section "OpenQuake Tools" SecTools
-#  SetOutPath "$INSTDIR\lib\site-packages"
-#  File /r "python-dist\lib\site-packages\oq_platform*" "python-dist\lib\site-packages\openquakeplatform*"
-#SectionEnd
+Section "OpenQuake Tools" SecTools
+  SetOutPath "$INSTDIR\oq-dist\tools"
+  DetailPrint "Installing the OpenQuake Tools..."
+  nsExec::ExecToLog '$INSTDIR\python3.5\python.exe -m pip install -r "index.txt"'
+SectionEnd
 
-#Section "OpenQuake Engine demos and documentation" SecOQ
-#  SetOutPath "$INSTDIR"
-#  File "OpenQuake manual.pdf"
-#  SetOutPath "$INSTDIR\demos"
-#  File /r /x ".gitignore" "demos\*.*"
-#SectionEnd
+Section "OpenQuake Engine demos and documentation" SecOQ
+  SetOutPath "$INSTDIR"
+  File "OpenQuake manual.pdf"
+  SetOutPath "$INSTDIR\demos"
+  File /r /x ".gitignore" "demos\*.*"
+SectionEnd
 
 Section "OpenQuake Engine menu icons" SecMenu
   SetOutPath "$INSTDIR"
@@ -134,6 +142,7 @@ SectionEnd
 
 Section -post
   ; Byte-compile Python files.
+  RMDir /r "$INSTDIR\oq-dist"
   DetailPrint "Byte-compiling Python modules..."
   nsExec::ExecToLog '$INSTDIR\python3.5\python.exe -m compileall -qq "$INSTDIR"'
   FileOpen $0 "$INSTDIR\pycache" w

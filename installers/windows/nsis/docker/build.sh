@@ -75,26 +75,28 @@ if [ ! -f $PIP ]; then
 fi
 wine ../python-dist/python3.5/python.exe $PIP
 
-
-## Core apps
-#echo "Downloading core apps"
-#for app in oq-engine; do
-#    git clone -q -b $OQ_BRANCH --depth=1 https://github.com/gem/${app}.git
-#    wine ../python-dist/python3.5/Scripts/pip3.exe -q wheel --disable-pip-version-check --no-deps ./${app}
-#done
-#
-### Standalone apps
-#echo "Downloading standalone apps"
-#for app in oq-platform-standalone oq-platform-ipt oq-platform-taxtweb oq-platform-taxonomy; do
-#    git clone -q -b $TOOLS_BRANCH --depth=1 https://github.com/gem/${app}.git
-#    wine ../python-dist/python3.5/Scripts/pip3.exe -q wheel --disable-pip-version-check --no-deps ./${app}
-#done
-
 # Extract wheels to be included in the installation
 echo "Extracting python wheels"
-wine ../python-dist/python3.5/Scripts/pip3.exe -q install --disable-pip-version-check --no-warn-script-location --force-reinstall --ignore-installed --upgrade --no-deps --no-index py/*.whl py35/*.whl openquake.*.whl 
+wine ../python-dist/python3.5/Scripts/pip3.exe -q install --disable-pip-version-check --no-warn-script-location --force-reinstall --ignore-installed --upgrade --no-deps --no-index py/*.whl py35/*.whl
 
-# oq_platform*.whl
+## Core apps
+echo "Downloading core apps"
+for app in oq-engine; do
+    git clone -q -b $OQ_BRANCH --depth=1 https://github.com/gem/${app}.git
+    wine ../python-dist/python3.5/Scripts/pip3.exe -q wheel --disable-pip-version-check --no-deps -w ../oq-dist/engine ./${app}
+done
+
+## Standalone apps
+echo "Downloading standalone apps"
+for app in oq-platform-standalone oq-platform-ipt oq-platform-taxtweb oq-platform-taxonomy; do
+    git clone -q -b $TOOLS_BRANCH --depth=1 https://github.com/gem/${app}.git
+    wine ../python-dist/python3.5/Scripts/pip3.exe -q wheel --disable-pip-version-check --no-deps -w ../oq-dist/tools ./${app}
+done
+
+cd $DIR/oq-dist
+for d in *; do
+	ls $d | grep whl > $d/index.txt || true
+done
 
 cd $DIR
 
@@ -132,7 +134,10 @@ if [[ $OQ_OUTPUT = *"exe"* ]]; then
     wine ${HOME}/.wine/drive_c/Program\ Files\ \(x86\)/NSIS/makensis /V4 installer.nsi
 fi
 
+exit 0
+
 if [[ $OQ_OUTPUT = *"zip"* ]]; then
+	# FIXME more to be installed (oq-dist)
     echo "Generating ZIP archive"
     ZIP="OpenQuake_Engine_${ini_vers}_${git_time}.zip"
     zip -qr $DIR/${ZIP} *.bat *.pdf demos README.html LICENSE.txt
