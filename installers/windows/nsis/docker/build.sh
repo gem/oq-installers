@@ -55,7 +55,7 @@ cd $DIR && echo "Working in: $(pwd)"
 
 # pre-cleanup
 rm -Rf *.zip *.exe
-#rm -Rf src/oq-*
+rm -Rf src/oq-*
 rm -Rf python-dist/python3.5/*
 rm -Rf demos/*
 
