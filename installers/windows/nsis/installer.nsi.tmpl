@@ -87,12 +87,9 @@ Section "!Core Files" SecCore
   SetShellVarContext all
 
   SetOutPath "$INSTDIR"
-  File "openquake.ico"
   File "openquake_black.ico"
-  File "LICENSE.txt"
-  File "README.html"
   File "oq-console.bat"
-  File "oq-server.bat"
+  File "LICENSE.txt"
 
   SetOutPath "$INSTDIR\python3.5"
   File /r "python-dist\python3.5\*.*"
@@ -105,6 +102,13 @@ Section "!Core Files" SecCore
 
   SetOutPath "$INSTDIR\oq-dist"
   File /r "oq-dist\*.*"
+SectionEnd
+
+Section "!OpenQuake Engine" SecEngine
+  SetOutPath "$INSTDIR"
+  File "openquake.ico"
+  File "oq-server.bat"
+  File "README.html"
 
   SetOutPath "$INSTDIR\oq-dist\engine"
   DetailPrint "Installing the OpenQuake Engine..."
@@ -117,7 +121,7 @@ Section "OpenQuake Tools" SecTools
   nsExec::ExecToLog '$INSTDIR\python3.5\python.exe -m pip -q install --no-deps --no-index --no-warn-script-location -r "index.txt"'
 SectionEnd
 
-Section "OpenQuake Engine demos and documentation" SecOQ
+Section "OpenQuake Engine demos and documentation" SecDocDemo
   SetOutPath "$INSTDIR"
   File "OpenQuake manual.pdf"
   SetOutPath "$INSTDIR\demos"
