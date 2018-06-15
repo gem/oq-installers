@@ -35,7 +35,7 @@
 !include "WordFunc.nsh"
 !include "x64.nsh"
 
-SetCompressor lzma
+SetCompressor zlib
 
 RequestExecutionLevel admin
 
@@ -102,28 +102,19 @@ Section "!Core Files" SecCore
   SetOutPath "$INSTDIR\python3.5"
   File "dist\msvcrt\x64\*.dll"
   skip_msvcrt:
-
-  SetOutPath "$INSTDIR\bin"
-  File /r "dist\bin\*.*"
-
-  SetOutPath "$INSTDIR\lib"
-  File /r /x "python-dist\lib\site-packages\oq_platform*" /x "python-dist\lib\site-packages\openquakeplatform*" "python-dist\lib\*.*"
-
-  SetOutPath "$INSTDIR\lib\site-packages\openquake"
-  File "dist\__init__.py"
 SectionEnd
 
-Section "OpenQuake Tools" SecTools
-  SetOutPath "$INSTDIR\lib\site-packages"
-  File /r "python-dist\lib\site-packages\oq_platform*" "python-dist\lib\site-packages\openquakeplatform*"
-SectionEnd
+#Section "OpenQuake Tools" SecTools
+#  SetOutPath "$INSTDIR\lib\site-packages"
+#  File /r "python-dist\lib\site-packages\oq_platform*" "python-dist\lib\site-packages\openquakeplatform*"
+#SectionEnd
 
-Section "OpenQuake Engine demos and documentation" SecOQ
-  SetOutPath "$INSTDIR"
-  File "OpenQuake manual.pdf"
-  SetOutPath "$INSTDIR\demos"
-  File /r /x ".gitignore" "demos\*.*"
-SectionEnd
+#Section "OpenQuake Engine demos and documentation" SecOQ
+#  SetOutPath "$INSTDIR"
+#  File "OpenQuake manual.pdf"
+#  SetOutPath "$INSTDIR\demos"
+#  File /r /x ".gitignore" "demos\*.*"
+#SectionEnd
 
 Section "OpenQuake Engine menu icons" SecMenu
   SetOutPath "$INSTDIR"
@@ -145,7 +136,7 @@ Section -post
   ; Byte-compile Python files.
   DetailPrint "Byte-compiling Python modules..."
   nsExec::ExecToLog '$INSTDIR\python3.5\python.exe -m compileall -qq "$INSTDIR"'
-  FileOpen $0 "$INSTDIR\lib\pycache" w
+  FileOpen $0 "$INSTDIR\pycache" w
   FileClose $0
 
   WriteUninstaller $INSTDIR\uninstall.exe
@@ -175,8 +166,6 @@ Section "Uninstall"
   SetShellVarContext all
   Delete $INSTDIR\uninstall.exe
   Delete "$INSTDIR\${PRODUCT_ICON}"
-  RMDir /r "$INSTDIR\bin"
-  RMDir /r "$INSTDIR\lib"
   RMDir /r "$INSTDIR\python3.5"
   ; Uninstall files
     Delete "$INSTDIR\README.html"

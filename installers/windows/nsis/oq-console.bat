@@ -1,12 +1,9 @@
 @echo off
 setlocal
 set mypath=%~dp0
-set PATH=%mypath%\bin;%mypath%\python3.5;%PATH%
-set PYTHONPATH=%mypath%\lib\site-packages
+set PATH=%mypath%\python3.5;%mypath%\python3.5\Scripts;%PATH%
 
-doskey pip=python.exe -m pip $*
-
-if not exist lib\pycache (
+if not exist pycache (
    echo Building python cache. This may take a while.
    echo Please wait ...
    python.exe -m compileall -qq .

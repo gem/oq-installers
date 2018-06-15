@@ -1,8 +1,7 @@
 @echo off
 setlocal
 set mypath=%~dp0
-set PATH=%mypath%\bin;%mypath%\python3.5;%PATH%
-set PYTHONPATH=%mypath%\lib\site-packages
+set PATH=%mypath%\python3.5;%mypath%\python3.5\Scripts;%PATH%
 set OQ_HOST=localhost
 set OQ_PORT=8800
 
