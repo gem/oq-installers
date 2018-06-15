@@ -108,13 +108,13 @@ Section "!Core Files" SecCore
 
   SetOutPath "$INSTDIR\oq-dist\engine"
   DetailPrint "Installing the OpenQuake Engine..."
-  nsExec::ExecToLog '$INSTDIR\python3.5\python.exe -m pip install -r "index.txt"'
+  nsExec::ExecToLog '$INSTDIR\python3.5\python.exe -m pip -q install --no-deps --no-index --no-warn-script-location -r "index.txt"'
 SectionEnd
 
 Section "OpenQuake Tools" SecTools
   SetOutPath "$INSTDIR\oq-dist\tools"
   DetailPrint "Installing the OpenQuake Tools..."
-  nsExec::ExecToLog '$INSTDIR\python3.5\python.exe -m pip install -r "index.txt"'
+  nsExec::ExecToLog '$INSTDIR\python3.5\python.exe -m pip -q install --no-deps --no-index --no-warn-script-location -r "index.txt"'
 SectionEnd
 
 Section "OpenQuake Engine demos and documentation" SecOQ
@@ -145,7 +145,7 @@ Section -post
   RMDir /r "$INSTDIR\oq-dist"
   DetailPrint "Byte-compiling Python modules..."
   nsExec::ExecToLog '$INSTDIR\python3.5\python.exe -m compileall -qq "$INSTDIR"'
-  FileOpen $0 "$INSTDIR\pycache" w
+  FileOpen $0 "$INSTDIR\python3.5\pycached" w
   FileClose $0
 
   WriteUninstaller $INSTDIR\uninstall.exe

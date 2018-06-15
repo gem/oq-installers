@@ -3,11 +3,11 @@ setlocal
 set mypath=%~dp0
 set PATH=%mypath%\python3.5;%mypath%\python3.5\Scripts;%PATH%
 
-if not exist pycache (
+if not exist python3.5\pycached (
    echo Building python cache. This may take a while.
    echo Please wait ...
    python.exe -m compileall -qq .
-   copy /y nul lib\pycache >nul
+   copy /y nul python3.5\pycached >nul
 )
 
 echo OpenQuake environment loaded
