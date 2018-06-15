@@ -100,32 +100,42 @@ Section "!Core Files" SecCore
   File "dist\msvcrt\x64\*.dll"
   skip_msvcrt:
 
-  SetOutPath "$INSTDIR\oq-dist"
+  SetOutPath "$PLUGINSDIR\oq-dist"
   File /r "oq-dist\*.*"
 SectionEnd
 
 Section "!OpenQuake Engine" SecEngine
+  SectionIn RO
   SetOutPath "$INSTDIR"
   File "openquake.ico"
   File "oq-server.bat"
   File "README.html"
 
-  SetOutPath "$INSTDIR\oq-dist\engine"
+  SetOutPath "$PLUGINSDIR\oq-dist\engine"
   DetailPrint "Installing the OpenQuake Engine..."
   nsExec::ExecToLog '$INSTDIR\python3.5\python.exe -m pip -q install --no-deps --no-index --no-warn-script-location -r "index.txt"'
 SectionEnd
 
 Section "OpenQuake Tools" SecTools
-  SetOutPath "$INSTDIR\oq-dist\tools"
+  SetOutPath "$PLUGINSDIR\oq-dist\tools"
   DetailPrint "Installing the OpenQuake Tools..."
   nsExec::ExecToLog '$INSTDIR\python3.5\python.exe -m pip -q install --no-deps --no-index --no-warn-script-location -r "index.txt"'
 SectionEnd
 
 Section "OpenQuake Engine demos and documentation" SecDocDemo
+  # Install manual and demos in 'Public\MyDocuments'
+  # keep disabled for now. It may be dangerous.
+  # SetOutPath "$DOCUMENTS\OpenQuake"
+  # File "OpenQuake manual.pdf"
+  # SetOutPath "$DOCUMENTS\OpenQuake\demos"
+  # File /r /x ".gitignore" "demos\*.*"
+
+  # Keep a copy also in the installation folder
   SetOutPath "$INSTDIR"
   File "OpenQuake manual.pdf"
   SetOutPath "$INSTDIR\demos"
   File /r /x ".gitignore" "demos\*.*"
+
 SectionEnd
 
 Section "OpenQuake Engine menu icons" SecMenu
