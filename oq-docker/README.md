@@ -14,7 +14,7 @@ $ docker build -t openquake/base -f Dockerfile.base .
 ## OpenQuake Engine (single node)
 
 ```bash
-$ docker build -t openquake/engine -f Dockerfile .
+$ docker build -t openquake/engine -f Dockerfile.engine .
 ```
 
 ## OpenQuake Engine master node container (cluster)
@@ -34,6 +34,14 @@ $ docker build -t openquake/engine-worker -f Dockerfile.worker .
 ```bash
 --build-arg oq_branch=master      ## oq-engine branch
 --build-arg tools_branch=mater    ## oq standalone tools branch
+```
+
+## Debug
+
+It's possible to enter a container as `root`, for debug purposes, running
+
+```bash
+$ docker exec -u 0 -t -i oq-cluster-master /bin/bash
 ```
 
 For future plans see: https://github.com/gem/oq-builders/issues/88

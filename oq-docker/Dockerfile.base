@@ -7,7 +7,8 @@ RUN curl -so /etc/yum.repos.d/gem-openquake-stable-epel-7.repo \
 RUN yum -q -y install oq-python35 && \
     yum -q -y clean all
 
-RUN useradd -u 1000 openquake
+RUN useradd -u 1000 openquake && \
+    mkdir /etc/openquake
 ENV LANG en_US.UTF-8
 
 ENTRYPOINT ["/bin/bash"]
