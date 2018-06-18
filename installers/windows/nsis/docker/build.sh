@@ -44,6 +44,13 @@ if [[ $GEM_SET_RELEASE =~ ^[0-9]+$ ]]; then
     PKG_REL=$GEM_SET_RELEASE
 fi
 
+function fix-scripts {
+	for f in "$1"; do
+		sed -i 's/z:\\io\\python-dist\\python3.5\\//g' "$f"
+	done
+}
+
+
 # Default software distribution
 PY="3.5.4"
 PY_ZIP="python-${PY}.zip"
@@ -100,9 +107,7 @@ done
 
 cd $DIR
 
-for f in python-dist/python3.5/Scripts/*.exe; do
-	sed -i 's/z:\\io\\python-dist\\python3.5\\//g' "$f"
-done
+fix-scripts ${DIR}/python-dist/python3.5/Scripts/*.exe
 
 ini_vers="$(cat src/oq-engine/openquake/baselib/__init__.py | sed -n "s/^__version__[  ]*=[    ]*['\"]\([^'\"]\+\)['\"].*/\1/gp")"
 git_time="$(date -d @$(git -C src/oq-engine log --format=%ct -1) '+%y%m%d%H%M')"
@@ -134,16 +139,16 @@ if [[ $OQ_OUTPUT = *"exe"* ]]; then
     wine ${HOME}/.wine/drive_c/Program\ Files\ \(x86\)/NSIS/makensis /V4 installer.nsi
 fi
 
-exit 0
-
 if [[ $OQ_OUTPUT = *"zip"* ]]; then
-	# FIXME more to be installed (oq-dist)
+    cd $DIR/oq-dist
+    for d in *; do
+		wine ../python-dist/python3.5/Scripts/pip3.exe -q install --disable-pip-version-check --no-warn-script-location --force-reinstall --ignore-installed --upgrade --no-deps --no-index $d/*.whl
+    done
+    fix-scripts ${DIR}/python-dist/python3.5/Scripts/*.exe
     echo "Generating ZIP archive"
     ZIP="OpenQuake_Engine_${ini_vers}_${git_time}.zip"
-    zip -qr $DIR/${ZIP} *.bat *.pdf demos README.html LICENSE.txt
-    cd $DIR/dist
-    zip -qr $DIR/${ZIP} bin
-    cp __init__.py ${DIR}/python-dist/lib/site-packages/openquake
     cd $DIR/python-dist
-    zip -qr $DIR/${ZIP} lib python3.5
+    zip -qr $DIR/${ZIP} python3.5
+    cd $DIR
+    zip -qr $DIR/${ZIP} *.bat *.pdf demos README.html LICENSE.txt
 fi
