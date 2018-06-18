@@ -10,6 +10,9 @@ services:
     networks:
       - oq-cluster-net
   master:
+    build:
+      context: .
+      dockerfile: Dockerfile.master
     image: openquake/engine-master
     container_name: oq-cluster-master
     # Uncomment to enable auth in WebUI/API
@@ -25,6 +28,9 @@ services:
     depends_on:
       - rabbitmq
   worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
     image: openquake/engine-worker
     entrypoint: ["./celery-wait.sh"]
     networks:
