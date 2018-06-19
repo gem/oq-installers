@@ -102,7 +102,7 @@ done
 
 cd $DIR/oq-dist
 for d in *; do
-	ls $d | grep whl > $d/index.txt || true
+	ls $d | grep whl > $d/index.txt
 done
 
 cd $DIR
