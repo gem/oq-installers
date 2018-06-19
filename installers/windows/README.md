@@ -39,22 +39,8 @@ $ docker run -e GEM_SET_OUTPUT=zip -v $(pwd):/io -t -i --rm wine /io/docker/buil
 
 `$GEM_SET_OUTPUT` can be `exe` (default), `zip` or `exe zip`.
 
-### Manual installation 
-
-#### Setup WINE prefix
-- `export WINEPREFIX=/home/user/path/to/my/prefix`
-- `cd src`
-- `wget https://www.python.org/ftp/python/2.7.13/python-2.7.13.amd64.msi`
-- `wine msiexec /i python-2.7.12.amd64.msi`
-- `wine pip install wheel`
-
-#### OpenQuake
-- `cd src`
-- `git clone [-b mybranch] https://github.com/gem/oq-hazardlib.git`
-- `git clone [-b mybranch] https://github.com/gem/oq-engine.git`
-
 #### Libs
-- Download `py` and `py27` from the internal repo and put it into `src`
+- Download `py` and `py35` from the internal repo and put it into `src`
 
 #### Run the builder
 - `docker/build.sh`

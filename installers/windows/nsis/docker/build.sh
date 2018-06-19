@@ -45,7 +45,7 @@ if [[ $GEM_SET_RELEASE =~ ^[0-9]+$ ]]; then
 fi
 
 function fix-scripts {
-	for f in "$1"; do
+	for f in $*; do
 		sed -i 's/z:\\io\\python-dist\\python3.5\\//g' "$f"
 	done
 }
@@ -53,7 +53,7 @@ function fix-scripts {
 
 # Default software distribution
 PY="3.5.4"
-PY_ZIP="python-${PY}.zip"
+PY_ZIP="python-${PY}-win64.zip"
 PIP="get-pip.py"
 
 
@@ -84,20 +84,20 @@ wine ../python-dist/python3.5/python.exe $PIP
 
 # Extract wheels to be included in the installation
 echo "Extracting python wheels"
-wine ../python-dist/python3.5/Scripts/pip3.exe -q install --disable-pip-version-check --no-warn-script-location --force-reinstall --ignore-installed --upgrade --no-deps --no-index py/*.whl py35/*.whl
+wine ../python-dist/python3.5/python.exe -m pip -q install --disable-pip-version-check --no-warn-script-location --force-reinstall --ignore-installed --upgrade --no-deps --no-index py/*.whl py35/*.whl
 
 ## Core apps
 echo "Downloading core apps"
 for app in oq-engine; do
     git clone -q -b $OQ_BRANCH --depth=1 https://github.com/gem/${app}.git
-    wine ../python-dist/python3.5/Scripts/pip3.exe -q wheel --disable-pip-version-check --no-deps -w ../oq-dist/engine ./${app}
+    wine ../python-dist/python3.5/python.exe -m pip -q wheel --disable-pip-version-check --no-deps -w ../oq-dist/engine ./${app}
 done
 
 ## Standalone apps
 echo "Downloading standalone apps"
 for app in oq-platform-standalone oq-platform-ipt oq-platform-taxtweb oq-platform-taxonomy; do
     git clone -q -b $TOOLS_BRANCH --depth=1 https://github.com/gem/${app}.git
-    wine ../python-dist/python3.5/Scripts/pip3.exe -q wheel --disable-pip-version-check --no-deps -w ../oq-dist/tools ./${app}
+    wine ../python-dist/python3.5/python.exe -m pip -q wheel --disable-pip-version-check --no-deps -w ../oq-dist/tools ./${app}
 done
 
 cd $DIR/oq-dist
@@ -131,9 +131,6 @@ if [ ! -f OpenQuake\ manual.pdf ]; then
     wget -O- https://ci.openquake.org/job/builders/job/pdf-builder/lastSuccessfulBuild/artifact/oq-engine/doc/manual/oq-manual.pdf > OpenQuake\ manual.pdf
 fi
 
-# Make sure that Lib -> lib to be more consistent with naming
-mv ${DIR}/python-dist/Lib ${DIR}/python-dist/lib || true
-
 if [[ $OQ_OUTPUT = *"exe"* ]]; then
     echo "Generating NSIS installer"
     wine ${HOME}/.wine/drive_c/Program\ Files\ \(x86\)/NSIS/makensis /V4 installer.nsi
@@ -142,7 +139,7 @@ fi
 if [[ $OQ_OUTPUT = *"zip"* ]]; then
     cd $DIR/oq-dist
     for d in *; do
-		wine ../python-dist/python3.5/Scripts/pip3.exe -q install --disable-pip-version-check --no-warn-script-location --force-reinstall --ignore-installed --upgrade --no-deps --no-index $d/*.whl
+		wine ../python-dist/python3.5/python.exe -m pip -q install --disable-pip-version-check --no-warn-script-location --force-reinstall --ignore-installed --upgrade --no-deps --no-index $d/*.whl
     done
     fix-scripts ${DIR}/python-dist/python3.5/Scripts/*.exe
     echo "Generating ZIP archive"
