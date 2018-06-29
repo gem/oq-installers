@@ -27,5 +27,5 @@ WORKDIR ${HOME}
 ADD scripts/oq-start.sh ${HOME}
 
 EXPOSE 8800:8800
-ENTRYPOINT ["/bin/bash"]
+ENTRYPOINT ["/bin/bash", "-c"]
 CMD ["./oq-start.sh"]
