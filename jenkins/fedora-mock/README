@@ -23,5 +23,5 @@ copr_url = https://copr.fedorainfracloud.org
 
 ### Notes
 
-`mock` is executed with `config_opts['use_nspawn'] = True` to be compatible with Docker.
+`mock` is executed with `config_opts['use_nspawn'] = False` to be compatible with Docker.
 This beahaviour is configured globally via `/etc/mock/site-defaults.cfg`
