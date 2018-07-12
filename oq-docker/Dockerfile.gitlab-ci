@@ -4,8 +4,8 @@ MAINTAINER Daniele Viganò <daniele@openquake.org>
 
 RUN curl -so /etc/yum.repos.d/gem-openquake-epel-7.repo \
     https://copr.fedorainfracloud.org/coprs/gem/openquake/repo/epel-7/gem-openquake-epel-7.repo
-RUN yum -q -y install python3-oq-libs && \
-    yum -q -y clean all
+RUN yum -y install python3-oq-libs && \
+    yum -y clean all
 
 ENV LANG en_US.UTF-8
 ENV PATH /opt/openquake/bin:$PATH
