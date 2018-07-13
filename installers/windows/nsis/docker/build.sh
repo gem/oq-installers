@@ -52,7 +52,7 @@ function fix-scripts {
 
 
 # Default software distribution
-PY="3.5.4"
+PY="3.6.6"
 PY_ZIP="python-${PY}-win64.zip"
 PIP="get-pip.py"
 
@@ -67,7 +67,7 @@ rm -Rf python-dist/python3.6/*
 rm -Rf demos/*
 
 cd src
-if [ ! -d py -o ! -d py35 ]; then
+if [ ! -d py -o ! -d py36 ]; then
     echo "Please download python dependencies first."
     exit 1
 fi
@@ -84,7 +84,7 @@ wine ../python-dist/python3.6/python.exe $PIP
 
 # Extract wheels to be included in the installation
 echo "Extracting python wheels"
-wine ../python-dist/python3.6/python.exe -m pip -q install --disable-pip-version-check --no-warn-script-location --force-reinstall --ignore-installed --upgrade --no-deps --no-index py/*.whl py35/*.whl
+wine ../python-dist/python3.6/python.exe -m pip -q install --disable-pip-version-check --no-warn-script-location --force-reinstall --ignore-installed --upgrade --no-deps --no-index py/*.whl py36/*.whl
 
 ## Core apps
 echo "Downloading core apps"
