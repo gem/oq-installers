@@ -90,6 +90,7 @@ rm -Rf $OQ_ROOT
 mkdir -p $OQ_DIST/{wheelhouse,src}
 cd $OQ_ROOT
 
+check_dep python3.6
 /usr/bin/env python3.6 -m venv pybuild
 source pybuild/bin/activate
 
