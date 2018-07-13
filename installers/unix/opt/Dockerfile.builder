@@ -8,7 +8,7 @@ RUN yum -q -y upgrade && \
     yum -q -y install centos-release-scl epel-release && \
     yum -q -y install autoconf bzip2-devel curl git gzip libtool makeself \
                    readline-devel spatialindex-devel sudo sqlite-devel tar \
-		   which xz zip zlib-devel
+                   which xz zip zlib-devel
 
 ARG uid=107
 
