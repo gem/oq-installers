@@ -73,8 +73,8 @@ if $(echo $OSTYPE | grep -q linux); then
         sudo yum -y -q install curl gcc git makeself zip
         # CentOS (with SCL)
         sudo yum -y -q install centos-release-scl
-        sudo yum -y -q install rh-python35
-        source /opt/rh/rh-python35/enable
+        sudo yum -y -q install rh-python36
+        source /opt/rh/rh-python36/enable
     else
         not_supported
     fi
@@ -90,7 +90,7 @@ rm -Rf $OQ_ROOT
 mkdir -p $OQ_DIST/{wheelhouse,src}
 cd $OQ_ROOT
 
-/usr/bin/env python3.5 -m venv pybuild
+/usr/bin/env python3.6 -m venv pybuild
 source pybuild/bin/activate
 
 rm -Rf oq-engine

@@ -38,7 +38,7 @@ not_supported() {
     exit 1
 }
 
-PYTHON=python3.5
+PYTHON=python3.6
 OQ_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 OQ_ROOT=/tmp/build-openquake-dist
 OQ_DIST=${OQ_ROOT}/qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
@@ -91,9 +91,9 @@ mkdir -p $OQ_PREFIX $OQ_DIST/{wheelhouse,src}
 cd $OQ_ROOT
 
 curl -LO http://ftp.gnu.org/gnu/sed/sed-4.2.2.tar.gz
-curl -LO https://www.openssl.org/source/openssl-1.0.2l.tar.gz
-curl -LO https://www.sqlite.org/2017/sqlite-autoconf-3190200.tar.gz
-curl -LO https://www.python.org/ftp/python/3.5.4/Python-3.5.4.tar.xz
+curl -LO https://www.openssl.org/source/openssl-1.0.2o.tar.gz
+curl -LO https://www.sqlite.org/2018/sqlite-autoconf-3240000.tar.gz
+curl -LO https://www.python.org/ftp/python/3.6.6/Python-3.6.6.tar.xz
 
 cat <<EOF >> $OQ_PREFIX/env.sh
 PREFIX=$OQ_PREFIX
@@ -119,8 +119,8 @@ make -s -j $NPROC
 make -s install
 cd ..
 
-tar xf openssl-1.0.2l.tar.gz
-cd openssl-1.0.2l/
+tar xf openssl-1.0.2o.tar.gz
+cd openssl-1.0.2o/
 if [ "$BUILD_OS" == "macos" ]; then
     ./Configure darwin64-x86_64-cc shared enable-ec_nistp_64_gcc_128 no-ssl2 no-ssl3 no-comp --prefix=$OQ_PREFIX
 else
@@ -131,15 +131,15 @@ make -s -j $NPROC
 make -s install
 cd ..
 
-tar xf sqlite-autoconf-3190200.tar.gz
-cd sqlite-autoconf-3190200
+tar xf sqlite-autoconf-3240000.tar.gz
+cd sqlite-autoconf-3240000
 ./configure --prefix=$OQ_PREFIX
 make -s -j $NPROC
 make -s install
 cd ..
 
-tar xJf Python-3.5.4.tar.xz
-cd Python-3.5.4
+tar xJf Python-3.6.6.tar.xz
+cd Python-3.6.6
 ./configure --prefix=$OQ_PREFIX --with-ensurepip
 make -s -j $NPROC
 make -s install
