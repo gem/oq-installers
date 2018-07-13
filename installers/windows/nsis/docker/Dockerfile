@@ -38,7 +38,9 @@ RUN wget -q --cache=off http://cdn.ftp.openquake.org/windows/thirdparties/nsis-3
     wget -q --cache=off http://cdn.ftp.openquake.org/windows/thirdparties/python-3.6.6-win64.zip && \
     wget -q --cache=off http://cdn.ftp.openquake.org/windows/thirdparties/get-pip.py
 
-RUN wineboot && sleep 10
+ADD dlloverride.reg .
+
+RUN wine regedit dlloverride.reg && sleep 10
 
 RUN wine nsis-3.01-setup.exe /S && sleep 10
 
