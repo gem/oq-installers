@@ -28,11 +28,8 @@ mkdir -p /tmp/wheelhouse
 if [ $GEM_SET_PY ]; then
     PY="$GEM_SET_PY"
 else
-    # FIXME '*27mu' is an ugly hack,
-    # but in this way we can skip 'cp27'
-    # builds which currently we don't need
-    # '*27mu* has been deprecated and will be removed soon
-    PY="35 36"
+	# We will add "37" soon
+    PY="36"
 fi
 
 if [ $GEM_SET_NPROC ]; then
