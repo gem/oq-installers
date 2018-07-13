@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vim: tabstop=2 shiftwidth=2 softtabstop=2 syntax=nsis
 #
-# Copyright (C) 2016-2017 GEM Foundation
+# Copyright (C) 2016-2018 GEM Foundation
 #
 # OpenQuake is free software: you can redistribute it and/or modify it
 # under the terms of the GNU Affero General Public License as published
@@ -87,12 +87,9 @@ Section "!Core Files" SecCore
   SetShellVarContext all
 
   SetOutPath "$INSTDIR"
-  File "openquake.ico"
   File "openquake_black.ico"
-  File "LICENSE.txt"
-  File "README.html"
   File "oq-console.bat"
-  File "oq-server.bat"
+  File "LICENSE.txt"
 
   SetOutPath "$INSTDIR\python3.5"
   File /r "python-dist\python3.5\*.*"
@@ -103,26 +100,42 @@ Section "!Core Files" SecCore
   File "dist\msvcrt\x64\*.dll"
   skip_msvcrt:
 
-  SetOutPath "$INSTDIR\bin"
-  File /r "dist\bin\*.*"
+  SetOutPath "$PLUGINSDIR\oq-dist"
+  File /r "oq-dist\*.*"
+SectionEnd
 
-  SetOutPath "$INSTDIR\lib"
-  File /r /x "python-dist\lib\site-packages\oq_platform*" /x "python-dist\lib\site-packages\openquakeplatform*" "python-dist\lib\*.*"
+Section "!OpenQuake Engine" SecEngine
+  SectionIn RO
+  SetOutPath "$INSTDIR"
+  File "openquake.ico"
+  File "oq-server.bat"
+  File "README.html"
 
-  SetOutPath "$INSTDIR\lib\site-packages\openquake"
-  File "dist\__init__.py"
+  SetOutPath "$PLUGINSDIR\oq-dist\engine"
+  DetailPrint "Installing the OpenQuake Engine..."
+  nsExec::ExecToLog '$INSTDIR\python3.5\python.exe -m pip -q install --no-deps --no-index --no-warn-script-location -r "index.txt"'
 SectionEnd
 
 Section "OpenQuake Tools" SecTools
-  SetOutPath "$INSTDIR\lib\site-packages"
-  File /r "python-dist\lib\site-packages\oq_platform*" "python-dist\lib\site-packages\openquakeplatform*"
+  SetOutPath "$PLUGINSDIR\oq-dist\tools"
+  DetailPrint "Installing the OpenQuake Tools..."
+  nsExec::ExecToLog '$INSTDIR\python3.5\python.exe -m pip -q install --no-deps --no-index --no-warn-script-location -r "index.txt"'
 SectionEnd
 
-Section "OpenQuake Engine demos and documentation" SecOQ
+Section "OpenQuake Engine demos and documentation" SecDocDemo
+  # Install manual and demos in 'Public\MyDocuments'
+  # keep disabled for now. It may be dangerous.
+  # SetOutPath "$DOCUMENTS\OpenQuake"
+  # File "OpenQuake manual.pdf"
+  # SetOutPath "$DOCUMENTS\OpenQuake\demos"
+  # File /r /x ".gitignore" "demos\*.*"
+
+  # Keep a copy also in the installation folder
   SetOutPath "$INSTDIR"
   File "OpenQuake manual.pdf"
   SetOutPath "$INSTDIR\demos"
   File /r /x ".gitignore" "demos\*.*"
+
 SectionEnd
 
 Section "OpenQuake Engine menu icons" SecMenu
@@ -143,9 +156,10 @@ SectionEnd
 
 Section -post
   ; Byte-compile Python files.
+  RMDir /r "$INSTDIR\oq-dist"
   DetailPrint "Byte-compiling Python modules..."
   nsExec::ExecToLog '$INSTDIR\python3.5\python.exe -m compileall -qq "$INSTDIR"'
-  FileOpen $0 "$INSTDIR\lib\pycache" w
+  FileOpen $0 "$INSTDIR\python3.5\pycached" w
   FileClose $0
 
   WriteUninstaller $INSTDIR\uninstall.exe
@@ -175,8 +189,6 @@ Section "Uninstall"
   SetShellVarContext all
   Delete $INSTDIR\uninstall.exe
   Delete "$INSTDIR\${PRODUCT_ICON}"
-  RMDir /r "$INSTDIR\bin"
-  RMDir /r "$INSTDIR\lib"
   RMDir /r "$INSTDIR\python3.5"
   ; Uninstall files
     Delete "$INSTDIR\README.html"
