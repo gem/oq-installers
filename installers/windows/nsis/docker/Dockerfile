@@ -35,7 +35,7 @@ ENV WINEDEBUG -all
 WORKDIR $HOME
 
 RUN wget -q --cache=off http://cdn.ftp.openquake.org/windows/thirdparties/nsis-3.01-setup.exe && \
-    wget -q --cache=off http://cdn.ftp.openquake.org/windows/thirdparties/python-3.5.4-win64.zip && \
+    wget -q --cache=off http://cdn.ftp.openquake.org/windows/thirdparties/python-3.6.6-win64.zip && \
     wget -q --cache=off http://cdn.ftp.openquake.org/windows/thirdparties/get-pip.py
 
 RUN wineboot && sleep 10
