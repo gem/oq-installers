@@ -22,7 +22,7 @@ FROM fedora:27
 MAINTAINER Daniele Viganò <daniele@openquake.org>
 
 RUN dnf -y install wget && \
-    dnf -y install python-markdown python-wheel wget git zip unzip && \
+    dnf -y install python3-markdown wget git zip unzip && \
     dnf -y install wine
 
 ARG uid=1000

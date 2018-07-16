@@ -124,7 +124,7 @@ fi
 cp -r src/oq-engine/demos .
 src/oq-engine/helpers/zipdemos.sh $(pwd)/demos
 
-python -m markdown src/oq-engine/README.md > README.html
+python3 -m markdown src/oq-engine/README.md > README.html
 
 # Get a copy of the OQ manual if not yet available
 if [ ! -f OpenQuake\ manual.pdf ]; then
