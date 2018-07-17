@@ -29,7 +29,7 @@ services:
     #   - LOCKDOWN=true
     # Uncomment to use a local copy of the oq-engine
     # volumes:
-    #   - /path/to/oq-engine/openquake:/opt/openquake/lib/python3.5/site-packages/openquake
+    #   - /path/to/oq-engine/openquake:/opt/openquake/lib/python3.6/site-packages/openquake
     networks:
       - oq-cluster-net
     ports:
