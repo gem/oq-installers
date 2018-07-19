@@ -22,7 +22,7 @@ if [ $GEM_SET_DEBUG ]; then
 fi
 set -e
 
-PYTHON=python3.5
+PYTHON=python3.6
 
 help() {
     cat <<HSD
@@ -102,6 +102,13 @@ done
 EOF
 
 echo "Updating the installation. Please wait."
+
+# Fix python entry points first
+for f in $(grep -l "bin/${PYTHON}" ${FDEST}/bin/*); do
+    ${FDEST}/bin/sed -i "s|$PREFIX|$FDEST|" $f
+done
+
+# Then fix binary stuff (keep padding to avoid segfaults)
 REWRITE=':loop;s@'${PREFIX}'\([^\x00\x22\x27]*[\x27\x22]\)@'${FDEST}'\1'${BLA}'@g;s@'${PREFIX}'\([^\x00\x22\x27]*\x00\)@'${FDEST}'\1'${NUL}'@g;s@'${PREFIX}'\([^\x00\x22\x27]*\)$@'${FDEST}'\1'${BLA}'@g;t loop'
 find ${FDEST} -type f -exec ${FDEST}/bin/sed -i $REWRITE "{}" \;
 

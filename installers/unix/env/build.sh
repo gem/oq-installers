@@ -73,8 +73,8 @@ if $(echo $OSTYPE | grep -q linux); then
         sudo yum -y -q install curl gcc git makeself zip
         # CentOS (with SCL)
         sudo yum -y -q install centos-release-scl
-        sudo yum -y -q install rh-python35
-        source /opt/rh/rh-python35/enable
+        sudo yum -y -q install rh-python36
+        source /opt/rh/rh-python36/enable
     else
         not_supported
     fi
@@ -90,7 +90,8 @@ rm -Rf $OQ_ROOT
 mkdir -p $OQ_DIST/{wheelhouse,src}
 cd $OQ_ROOT
 
-/usr/bin/env python3.5 -m venv pybuild
+check_dep python3.6
+/usr/bin/env python3.6 -m venv pybuild
 source pybuild/bin/activate
 
 rm -Rf oq-engine
@@ -111,7 +112,7 @@ curl https://bootstrap.pypa.io/get-pip.py | /usr/bin/env python3
 # Include an updated version of pip
 /usr/bin/env pip3 -q wheel pip -w $OQ_WHEEL
 REQMIRROR=$(mktemp)
-sed 's/cdn\.ftp\.openquake\.org/ftp.openquake.org/g' oq-engine/requirements-py35-${BUILD_OS}.txt > $REQMIRROR
+sed 's/cdn\.ftp\.openquake\.org/ftp.openquake.org/g' oq-engine/requirements-py36-${BUILD_OS}.txt > $REQMIRROR
 /usr/bin/env pip3 -q wheel -r $REQMIRROR -w $OQ_WHEEL
  
 cd oq-engine

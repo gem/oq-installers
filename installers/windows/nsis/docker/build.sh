@@ -46,13 +46,13 @@ fi
 
 function fix-scripts {
 	for f in $*; do
-		sed -i 's/z:\\io\\python-dist\\python3.5\\//g' "$f"
+		sed -i 's/z:\\io\\python-dist\\python3.6\\//g' "$f"
 	done
 }
 
 
 # Default software distribution
-PY="3.5.4"
+PY="3.6.6"
 PY_ZIP="python-${PY}-win64.zip"
 PIP="get-pip.py"
 
@@ -63,11 +63,11 @@ cd $DIR && echo "Working in: $(pwd)"
 # pre-cleanup
 rm -Rf *.zip *.exe
 rm -Rf src/oq-*
-rm -Rf python-dist/python3.5/*
+rm -Rf python-dist/python3.6/*
 rm -Rf demos/*
 
 cd src
-if [ ! -d py -o ! -d py35 ]; then
+if [ ! -d py -o ! -d py36 ]; then
     echo "Please download python dependencies first."
     exit 1
 fi
@@ -75,29 +75,29 @@ fi
 if [ ! -f $PY_ZIP ]; then
     PY_ZIP=${HOME}/${PY_ZIP}
 fi
-unzip -q $PY_ZIP -d ../python-dist/python3.5
+unzip -q $PY_ZIP -d ../python-dist/python3.6
 
 if [ ! -f $PIP ]; then
     PIP=${HOME}/${PIP}
 fi
-wine ../python-dist/python3.5/python.exe $PIP
+wine ../python-dist/python3.6/python.exe $PIP
 
 # Extract wheels to be included in the installation
 echo "Extracting python wheels"
-wine ../python-dist/python3.5/python.exe -m pip -q install --disable-pip-version-check --no-warn-script-location --force-reinstall --ignore-installed --upgrade --no-deps --no-index py/*.whl py35/*.whl
+wine ../python-dist/python3.6/python.exe -m pip -q install --disable-pip-version-check --no-warn-script-location --force-reinstall --ignore-installed --upgrade --no-deps --no-index py/*.whl py36/*.whl
 
 ## Core apps
 echo "Downloading core apps"
 for app in oq-engine; do
     git clone -q -b $OQ_BRANCH --depth=1 https://github.com/gem/${app}.git
-    wine ../python-dist/python3.5/python.exe -m pip -q wheel --disable-pip-version-check --no-deps -w ../oq-dist/engine ./${app}
+    wine ../python-dist/python3.6/python.exe -m pip -q wheel --disable-pip-version-check --no-deps -w ../oq-dist/engine ./${app}
 done
 
 ## Standalone apps
 echo "Downloading standalone apps"
 for app in oq-platform-standalone oq-platform-ipt oq-platform-taxtweb oq-platform-taxonomy; do
     git clone -q -b $TOOLS_BRANCH --depth=1 https://github.com/gem/${app}.git
-    wine ../python-dist/python3.5/python.exe -m pip -q wheel --disable-pip-version-check --no-deps -w ../oq-dist/tools ./${app}
+    wine ../python-dist/python3.6/python.exe -m pip -q wheel --disable-pip-version-check --no-deps -w ../oq-dist/tools ./${app}
 done
 
 cd $DIR/oq-dist
@@ -107,7 +107,7 @@ done
 
 cd $DIR
 
-fix-scripts ${DIR}/python-dist/python3.5/Scripts/*.exe
+fix-scripts ${DIR}/python-dist/python3.6/Scripts/*.exe
 
 ini_vers="$(cat src/oq-engine/openquake/baselib/__init__.py | sed -n "s/^__version__[  ]*=[    ]*['\"]\([^'\"]\+\)['\"].*/\1/gp")"
 git_time="$(date -d @$(git -C src/oq-engine log --format=%ct -1) '+%y%m%d%H%M')"
@@ -124,7 +124,7 @@ fi
 cp -r src/oq-engine/demos .
 src/oq-engine/helpers/zipdemos.sh $(pwd)/demos
 
-python -m markdown src/oq-engine/README.md > README.html
+python3 -m markdown src/oq-engine/README.md > README.html
 
 # Get a copy of the OQ manual if not yet available
 if [ ! -f OpenQuake\ manual.pdf ]; then
@@ -139,13 +139,13 @@ fi
 if [[ $OQ_OUTPUT = *"zip"* ]]; then
     cd $DIR/oq-dist
     for d in *; do
-		wine ../python-dist/python3.5/python.exe -m pip -q install --disable-pip-version-check --no-warn-script-location --force-reinstall --ignore-installed --upgrade --no-deps --no-index $d/*.whl
+		wine ../python-dist/python3.6/python.exe -m pip -q install --disable-pip-version-check --no-warn-script-location --force-reinstall --ignore-installed --upgrade --no-deps --no-index $d/*.whl
     done
-    fix-scripts ${DIR}/python-dist/python3.5/Scripts/*.exe
+    fix-scripts ${DIR}/python-dist/python3.6/Scripts/*.exe
     echo "Generating ZIP archive"
     ZIP="OpenQuake_Engine_${ini_vers}_${git_time}.zip"
     cd $DIR/python-dist
-    zip -qr $DIR/${ZIP} python3.5
+    zip -qr $DIR/${ZIP} python3.6
     cd $DIR
     zip -qr $DIR/${ZIP} *.bat *.pdf demos README.html LICENSE.txt
 fi
