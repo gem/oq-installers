@@ -10,4 +10,4 @@ do
 done
 
 # Start celery
-/opt/openquake/bin/celery worker --config openquake.engine.celeryconfig --purge -Ofair
+/opt/openquake/bin/celery worker --workdir /opt/openquake/lib/python3.6/site-packages/openquake/engine --purge -Ofair

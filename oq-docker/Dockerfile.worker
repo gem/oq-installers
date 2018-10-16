@@ -6,4 +6,4 @@ ADD scripts/celery-wait.sh ${HOME}
 ADD conf/openquake.cfg /etc/openquake
 
 ENTRYPOINT ["/opt/openquake/bin/python3", "-m", "celery"]
-CMD ["worker", "--config", "openquake.engine.celeryconfig", "--purge", "-O", "fair"]
+CMD ["worker", "--workdir", "/opt/openquake/lib/python3.6/site-packages/openquake/engine", "--purge", "-O", "fair"]
