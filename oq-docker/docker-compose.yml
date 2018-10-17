@@ -1,8 +1,7 @@
-version: '3'
+version: '2'
 services:
   rabbitmq:
     image: rabbitmq:3
-    container_name: oq-cluster-rabbitmq
     environment:
       - RABBITMQ_DEFAULT_VHOST=openquake 
       - RABBITMQ_DEFAULT_USER=openquake
@@ -23,31 +22,38 @@ services:
       context: .
       dockerfile: Dockerfile.master
     image: openquake/engine-master
-    container_name: oq-cluster-master
     # Uncomment to enable auth in WebUI/API
     # environment:
     #   - LOCKDOWN=true
-    # Uncomment to use a local copy of the oq-engine
     # volumes:
-    #   - /path/to/oq-engine/openquake:/opt/openquake/lib/python3.6/site-packages/openquake
+    # Uncomment to use a local copy of the oq-engine
+    #   - ./path/to/oq-engine/openquake:/opt/openquake/lib/python3.6/site-packages/openquake
+    # Uncomment to use a custom openquake.cfg
+    #   - ./path/to/openquake.cfg:/etc/openquake/openquake.cfg
     networks:
       - oq-cluster-net
     ports:
       - 8800:8800
     depends_on:
-      - engine
       - rabbitmq
   worker:
     build:
       context: .
       dockerfile: Dockerfile.worker
     image: openquake/engine-worker
+    # volumes:
+    # Uncomment to use a local copy of the oq-engine
+    #   - ./path/to/oq-engine/openquake:/opt/openquake/lib/python3.6/site-packages/openquake
+    # Uncomment to use a custom openquake.cfg
+    #   - ./path/to/openquake.cfg:/etc/openquake/openquake.cfg
+    environment:
+      - OQ_RABBITMQ_HOST=rabbitmq
     entrypoint: ["./celery-wait.sh"]
     networks:
       - oq-cluster-net
     depends_on:
-      - engine
       - rabbitmq
+      - master
 
 networks:
   oq-cluster-net:
