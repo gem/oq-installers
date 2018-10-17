@@ -1,7 +1,7 @@
 #!/bin/bash
 while :
 do
-    (echo > /dev/tcp/oq-cluster-rabbitmq/5672) >/dev/null 2>&1
+    (echo > /dev/tcp/${OQ_RABBITMQ_HOST:-oqcluster_rabbitmq_1}/5672) >/dev/null 2>&1
     result=$?
     if [[ $result -eq 0 ]]; then
         break
