@@ -30,9 +30,10 @@ yum install -y autoconf curl gzip tar
 build_libtool
 
 build_dep proj
+get cython
 
 cd /tmp/wheelhouse
 
-build pyproj==1.9.5.1
+build https://github.com/jswhit/pyproj/archive/882074864bb2e567a164624a3710907f34a4d478.zip
 
 post
