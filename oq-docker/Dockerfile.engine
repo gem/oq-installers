@@ -23,6 +23,7 @@ USER openquake
 ENV LANG en_US.UTF-8
 ENV HOME /home/openquake
 WORKDIR ${HOME}
+RUN mkdir oqdata
 
 ADD scripts/oq-start.sh ${HOME}
 
