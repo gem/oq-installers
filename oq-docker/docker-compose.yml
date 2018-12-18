@@ -58,9 +58,15 @@ services:
       - master
 
 # When running on multiple host the volume must be shared between every node
-# it can be also a folder on the host (i.e. shared via NFS)
+# see the 'oqdata-nfs' example below
 volumes:
   oqdata:
+  # oqdata-nfs:
+  #   driver: local
+  #   driver_opts:
+  #     type: nfs
+  #     o: nfsvers=4,addr=nfs-server,rw
+  #     device: ":/oqdata"
 
 networks:
   cluster:
