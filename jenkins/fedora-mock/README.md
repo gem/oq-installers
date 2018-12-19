@@ -1,6 +1,6 @@
 ## fedora-mock Docker
 
-This container provides Fedora 28 with `mock` and `copr-cli` installed.
+This container provides Fedora 29 with `mock` and `copr-cli` installed.
 
 It also provides `sshd` and a `jenkins` user to be used as a Jenkins builder.
 
