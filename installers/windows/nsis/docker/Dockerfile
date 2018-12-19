@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with OpenQuake. If not, see <http://www.gnu.org/licenses/>.
 
-FROM fedora:27
+FROM fedora:29
 MAINTAINER Daniele Viganò <daniele@openquake.org>
 
 RUN dnf -y install wget && \
