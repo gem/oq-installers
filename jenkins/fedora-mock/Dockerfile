@@ -2,7 +2,7 @@ FROM fedora:29
 MAINTAINER Daniele Viganò <daniele@openquake.org>
 
 RUN dnf -y install java-1.8.0-openjdk openssh-server \
-           bzip2 find git tar dnf-utils copr-cli mock && \ 
+           bzip2 findutils git tar dnf-utils copr-cli mock && \ 
            dnf clean all && \
            find /var/cache/dnf -type f -delete
 
