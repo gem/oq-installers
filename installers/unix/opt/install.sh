@@ -46,7 +46,6 @@ check_dep() {
 }
 
 realpath() {
-
     DIR=$(eval echo "$1")
     if [ -d $DIR ]; then
         echo -e "!! An installation already exists in $DIR. Please remove it first." >&2
@@ -62,6 +61,14 @@ realpath() {
 IFS="
 "
 MACOS=$(echo $OSTYPE | grep darwin || true)
+if [ $MACOS ]; then
+    RC=$HOME/.profile;
+    SED_ARGS="-i ''"
+else
+    RC=$HOME/.bashrc;
+    SED_ARGS="-i"
+fi
+
 PREFIX=/tmp/build-openquake-dist/qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq/prefix
 
 while (( "$#" )); do
@@ -117,6 +124,15 @@ echo "Installing the OpenQuake Engine. Please wait."
 /usr/bin/env pip3 install --disable-pip-version-check wheelhouse/*.whl > /dev/null
 mkdir -p $FDEST/share
 cp -R src/{README.md,LICENSE,demos,doc} $FDEST/share
+cat <<EOF >> $FDEST/share/uninstall.sh
+#!/bin/bash
+
+rm -Rf $FDEST
+[ -f $RC ] && sed $SED_ARGS '/alias oq=.*/d; /function oq().*/d' $RC
+
+echo "The OpenQuake Engine has been uninstalled"
+EOF
+chmod +x $FDEST/share/uninstall.sh
 
 ## Tools installation
 # A question Y/N is prompt to the user: if answer is Y tools (IPT...) will be installed together with
@@ -144,18 +160,13 @@ if [ -z $FORCE ]; then
 else
     OQ=$FORCE
 fi
+echo -n "Installation completed."
 if [[ "$OQ" == 'Y' || "$OQ" == 'y' ]]; then
-    if [ $MACOS ]; then
-        RC=$HOME/.profile;
-        SED_ARGS="-i ''"
-    else
-        RC=$HOME/.bashrc;
-        SED_ARGS="-i"
-    fi
-
     [ -f $RC ] && sed $SED_ARGS '/alias oq=.*/d; /function oq().*/d' $RC
-    echo "function oq() { ( . ${FDEST}/env.sh && ${FDEST}/bin/oq \$* ) }" >> $RC
+    echo "alias oq='${FDEST}/bin/oq'" >> $RC
+    echo "The 'oq' command is now available (see 'oq --help' for more commands)"
+else
+    echo "To make the 'oq' command available you must enable the environment first running 'source ${FDEST}/env.sh'"
 fi
 
-echo "Installation completed. To enable it run 'source ${FDEST}/env.sh'"
 exit 0
