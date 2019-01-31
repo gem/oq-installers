@@ -164,7 +164,7 @@ echo -n "Installation completed."
 if [[ "$OQ" == 'Y' || "$OQ" == 'y' ]]; then
     [ -f $RC ] && sed $SED_ARGS '/alias oq=.*/d; /function oq().*/d' $RC
     echo "alias oq='${FDEST}/bin/oq'" >> $RC
-    echo "The 'oq' command is now available (see 'oq --help' for more commands)"
+    echo "The 'oq' command is now available opening a new terminal (see 'oq --help' for more commands)"
 else
     echo "To make the 'oq' command available you must enable the environment first running 'source ${FDEST}/env.sh'"
 fi
