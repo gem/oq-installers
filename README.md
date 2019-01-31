@@ -5,14 +5,13 @@
 Powered by
 <img src="https://upload.wikimedia.org/wikipedia/commons/7/79/Docker_%28container_engine%29_logo.png" width="100px">
 
-* OpenQuake Docker image
 * Windows NSIS builder
 * Linxu/macOS (env) standalone builder
 * Linux (opt) standalone installer
 
 ### Internals
 
-* Jenkis' Docker containers
+* Jenkins' Docker containers
 * wheel builders
 
 
@@ -23,7 +22,6 @@ All the builders and installers are tested via Travis + Docker with the followin
 - master branch: all the tests are run. Build may take a while
 - other branches: no tests are run unless one of these tags are added to the commit message
    - `[WHEELS]`: run wheels builder
-   - `[DOCKER]`: run Docker for OpenQuake Engine generator
    - `[UNIX]`: build unix installers (env/opt)
    - `[WIN]`: build NSIS Windows installer
 
