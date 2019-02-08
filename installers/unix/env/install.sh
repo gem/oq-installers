@@ -115,10 +115,23 @@ cp -R src/{README.md,LICENSE,demos,doc} $FDEST/share
 cat <<EOF >> $FDEST/share/uninstall.sh
 #!/bin/bash
 
-rm -Rf $FDEST
-[ -f $RC ] && sed $SED_ARGS '/alias oq=.*/d; /function oq().*/d' $RC
+if [ "\$1" != "-f" ]; then
+    while ! (echo "\$CONFIRM" | grep -qE '^[nNyY]$'); do
+        PROMPT="Are you sure you want to uninstall OQ and remove $FDEST? [y/n]: "
+        read -e -p "\$PROMPT" CONFIRM
+    done
+else
+    CONFIRM='y'
+fi
 
-echo "The OpenQuake Engine has been uninstalled"
+if [[ "\$CONFIRM" == 'Y' || "\$CONFIRM" == 'y' ]]; then
+    rm -Rf $FDEST
+    [ -f $RC ] && sed $SED_ARGS '/alias oq=.*/d; /function oq().*/d' $RC
+
+    echo "The OpenQuake Engine has been uninstalled"
+else
+    echo "Operation cancelled"
+fi
 EOF
 chmod +x $FDEST/share/uninstall.sh
 
