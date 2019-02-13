@@ -22,11 +22,6 @@ if [ $GEM_SET_DEBUG ]; then
 fi
 set -e
 
-if [ -z $GEM_FORCE_H5PY ]; then
-    echo "Will not build h5py because is provided by upstream"
-    exit 0
-fi
-
 MYDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 if [ -z $OQ_ENV_SET ]; then source $MYDIR/../build-common.sh; fi
