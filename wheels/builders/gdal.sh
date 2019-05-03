@@ -31,11 +31,9 @@ MYDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 if [ -z $OQ_ENV_SET ]; then source $MYDIR/../build-common.sh; fi
 
-yum install -qy openssl-devel zlib-devel
+yum install -qy json-c-devel zlib-devel libtiff-devel openssl-devel
 
-# Enable devtoolset-2 for C++11
-source /opt/rh/devtoolset-2/enable
-
+build_dep expat
 build_dep geos
 build_dep jasper
 build_dep proj
@@ -52,13 +50,12 @@ cd gdal-2.4.1
  --without-libgrass \
  --without-jpeg12 \
  --with-jasper=/usr/local \
- --with-libtiff=internal \
+ --with-libtiff \
  --with-jpeg \
  --with-gif \
  --with-png \
  --with-geotiff=internal \
  --with-sqlite3=/usr \
- --with-pcraster=internal \
  --with-pcraster=internal \
  --with-pcidsk=internal \
  --with-bsb \
@@ -66,7 +63,7 @@ cd gdal-2.4.1
  --with-pam \
  --with-geos=/usr/local/bin/geos-config \
  --with-static-proj4=/usr/local \
- --with-expat=/usr \
+ --with-expat=/usr/local \
  --with-libjson-c \
  --with-libiconv-prefix=/usr \
  --with-libz=/usr \
