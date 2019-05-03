@@ -33,14 +33,17 @@ if [ -z $OQ_ENV_SET ]; then source $MYDIR/../build-common.sh; fi
 
 yum install -qy openssl-devel zlib-devel
 
+# Enable devtoolset-2 for C++11
+source /opt/rh/devtoolset-2/enable
+
 build_dep geos
 build_dep jasper
 build_dep proj
 
 cd /tmp/src
-curl -f -L -O http://download.osgeo.org/gdal/2.2.4/gdal-2.2.4.tar.gz
-tar xzf gdal-2.2.4.tar.gz
-cd gdal-2.2.4
+curl -f -L -O http://download.osgeo.org/gdal/2.4.1/gdal-2.4.1.tar.gz
+tar xzf gdal-2.4.1.tar.gz
+cd gdal-2.4.1
 ./configure \
  --with-threads \
  --disable-debug \
@@ -74,15 +77,15 @@ make install
 
 # Replace SWIG's setup.py with this modified one, which gets numpy in
 # there as a dependency.
-cp $MYDIR/gdal/setup.py /tmp/src/gdal-2.2.4/swig/python/setup.py
+cp $MYDIR/gdal/setup.py /tmp/src/gdal-2.4.1/swig/python/setup.py
 # Replace the osgeo module __init__.py with this modified one, which
 # sets the GDAL_DATA and PROJ_LIB variables on import to where they've
 # been copied to.
-cp $MYDIR/gdal/gdalinit.py /tmp/src/gdal-2.2.4/swig/python/osgeo/__init__.py
+cp $MYDIR/gdal/gdalinit.py /tmp/src/gdal-2.4.1/swig/python/osgeo/__init__.py
 
-cd  /tmp/src/gdal-2.2.4/swig/python
+cd  /tmp/src/gdal-2.4.1/swig/python
 
 get numpy==1.14.2
-build .
+CFLAGS="-std=c++11" build .
 
 post
