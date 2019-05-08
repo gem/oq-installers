@@ -142,6 +142,7 @@ if [[ $OQ_OUTPUT = *"zip"* ]]; then
 		wine ../python-dist/python3.6/python.exe -m pip -q install --disable-pip-version-check --no-warn-script-location --force-reinstall --ignore-installed --upgrade --no-deps --no-index $d/*.whl
     done
     fix-scripts ${DIR}/python-dist/python3.6/Scripts/*.exe
+    cp ${DIR}/dist/msvcp/x64/msvcp140.dll ${DIR}/python-dist/python3.6
     echo "Generating ZIP archive"
     ZIP="OpenQuake_Engine_${ini_vers}_${git_time}.zip"
     cd $DIR/python-dist
