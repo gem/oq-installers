@@ -100,6 +100,12 @@ Section "!Core Files" SecCore
   File "dist\msvcrt\x64\*.dll"
   skip_msvcrt:
 
+  ; Install MSVCP if it's not already on the system
+  IfFileExists "$SYSDIR\msvcp140.dll" skip_msvcp
+  SetOutPath "$INSTDIR\python3.6"
+  File "dist\msvcp\x64\msvcp140.dll"
+  skip_msvcp:
+
   SetOutPath "$PLUGINSDIR\oq-dist"
   File /r "oq-dist\*.*"
 SectionEnd
