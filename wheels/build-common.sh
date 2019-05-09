@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # vim: tabstop=4 shiftwidth=4 softtabstop=4
 #
-# Copyright (C) 2016-2017 GEM Foundation
+# Copyright (C) 2016-2019 GEM Foundation
 #
 # OpenQuake is free software: you can redistribute it and/or modify it
 # under the terms of the GNU Affero General Public License as published
@@ -61,6 +61,17 @@ function build_libtool {
 
 function build_dep {
     case $1 in
+        'expat')
+            if [ ! -f /usr/local/lib/libexpat.so ]; then
+                cd /tmp/src
+                curl -f -L -O https://github.com/libexpat/libexpat/releases/download/R_2_2_5/expat-2.2.5.tar.bz2
+                tar xjf expat-2.2.5.tar.bz2
+                cd expat-2.2.5
+                ./configure --prefix=/usr/local
+                make -j $NPROC
+                make install
+            fi
+            ;;
         'geos')
             if [ ! -f /usr/local/lib/libgeos-3.6.1.so ]; then
                 cd /tmp/src

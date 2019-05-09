@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vim: tabstop=2 shiftwidth=2 softtabstop=2 syntax=nsis
 #
-# Copyright (C) 2016-2018 GEM Foundation
+# Copyright (C) 2016-2019 GEM Foundation
 #
 # OpenQuake is free software: you can redistribute it and/or modify it
 # under the terms of the GNU Affero General Public License as published
@@ -34,6 +34,7 @@
 !include "FileFunc.nsh"
 !include "WordFunc.nsh"
 !include "x64.nsh"
+!include "WinVer.nsh"
 
 SetCompressor lzma
 
@@ -75,6 +76,9 @@ Function .onInit
       MessageBox MB_OK "A 64bit OS is required"
       Quit
   ${EndIf}
+  ${IfNot} ${AtLeastWin10}
+    MessageBox MB_OK "Your Windows version is not supported. Use at your own risk."
+  ${EndIf}
 FunctionEnd
 
 Section -SETTINGS
@@ -99,6 +103,12 @@ Section "!Core Files" SecCore
   SetOutPath "$INSTDIR\python3.6"
   File "dist\msvcrt\x64\*.dll"
   skip_msvcrt:
+
+  ; Install MSVCP if it's not already on the system
+  IfFileExists "$SYSDIR\msvcp140.dll" skip_msvcp
+  SetOutPath "$INSTDIR\python3.6"
+  File "dist\msvcp\x64\msvcp140.dll"
+  skip_msvcp:
 
   SetOutPath "$PLUGINSDIR\oq-dist"
   File /r "oq-dist\*.*"

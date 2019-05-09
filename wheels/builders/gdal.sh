@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # vim: tabstop=4 shiftwidth=4 softtabstop=4
 #
-# Copyright (C) 2016-2018 GEM Foundation
+# Copyright (C) 2016-2019 GEM Foundation
 #
 # OpenQuake is free software: you can redistribute it and/or modify it
 # under the terms of the GNU Affero General Public License as published
@@ -31,16 +31,17 @@ MYDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 if [ -z $OQ_ENV_SET ]; then source $MYDIR/../build-common.sh; fi
 
-yum install -qy openssl-devel zlib-devel
+yum install -qy json-c-devel zlib-devel libtiff-devel openssl-devel
 
+build_dep expat
 build_dep geos
 build_dep jasper
 build_dep proj
 
 cd /tmp/src
-curl -f -L -O http://download.osgeo.org/gdal/2.2.4/gdal-2.2.4.tar.gz
-tar xzf gdal-2.2.4.tar.gz
-cd gdal-2.2.4
+curl -f -L -O http://download.osgeo.org/gdal/2.4.1/gdal-2.4.1.tar.gz
+tar xzf gdal-2.4.1.tar.gz
+cd gdal-2.4.1
 ./configure \
  --with-threads \
  --disable-debug \
@@ -49,13 +50,12 @@ cd gdal-2.2.4
  --without-libgrass \
  --without-jpeg12 \
  --with-jasper=/usr/local \
- --with-libtiff=internal \
+ --with-libtiff \
  --with-jpeg \
  --with-gif \
  --with-png \
  --with-geotiff=internal \
  --with-sqlite3=/usr \
- --with-pcraster=internal \
  --with-pcraster=internal \
  --with-pcidsk=internal \
  --with-bsb \
@@ -63,7 +63,7 @@ cd gdal-2.2.4
  --with-pam \
  --with-geos=/usr/local/bin/geos-config \
  --with-static-proj4=/usr/local \
- --with-expat=/usr \
+ --with-expat=/usr/local \
  --with-libjson-c \
  --with-libiconv-prefix=/usr \
  --with-libz=/usr \
@@ -74,13 +74,13 @@ make install
 
 # Replace SWIG's setup.py with this modified one, which gets numpy in
 # there as a dependency.
-cp $MYDIR/gdal/setup.py /tmp/src/gdal-2.2.4/swig/python/setup.py
+cp $MYDIR/gdal/setup.py /tmp/src/gdal-2.4.1/swig/python/setup.py
 # Replace the osgeo module __init__.py with this modified one, which
 # sets the GDAL_DATA and PROJ_LIB variables on import to where they've
 # been copied to.
-cp $MYDIR/gdal/gdalinit.py /tmp/src/gdal-2.2.4/swig/python/osgeo/__init__.py
+cp $MYDIR/gdal/gdalinit.py /tmp/src/gdal-2.4.1/swig/python/osgeo/__init__.py
 
-cd  /tmp/src/gdal-2.2.4/swig/python
+cd  /tmp/src/gdal-2.4.1/swig/python
 
 get numpy==1.14.2
 build .
