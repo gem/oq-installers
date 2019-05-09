@@ -74,7 +74,8 @@ if $(echo $OSTYPE | grep -q linux); then
         sudo yum -q -y upgrade
         sudo yum -q -y groupinstall 'Development Tools'
         sudo yum -q -y install epel-release
-        sudo yum -q -y install autoconf bzip2-devel curl git gzip libtool makeself readline-devel spatialindex-devel tar which xz zip zlib-devel
+        sudo yum -q -y install autoconf bzip2-devel curl git gzip libffi-devel libtool \
+                               makeself readline-devel spatialindex-devel tar which xz zip zlib-devel
     else
         not_supported
     fi
@@ -140,7 +141,7 @@ cd ..
 
 tar xJf Python-3.6.6.tar.xz
 cd Python-3.6.6
-./configure --prefix=$OQ_PREFIX --with-ensurepip
+./configure --prefix=$OQ_PREFIX --with-system-ffi --with-ensurepip
 make -s -j $NPROC
 make -s install
 cd ..
