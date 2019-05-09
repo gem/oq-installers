@@ -74,8 +74,8 @@ if $(echo $OSTYPE | grep -q linux); then
         sudo yum -q -y upgrade
         sudo yum -q -y groupinstall 'Development Tools'
         sudo yum -q -y install epel-release
-        sudo yum -q -y install autoconf bzip2-devel curl git gzip libffi-devel libtool \
-                               makeself readline-devel spatialindex-devel tar which xz zip zlib-devel
+        sudo yum -q -y install autoconf bzip2-devel curl git gzip libffi-devel libtool makeself \
+                               readline-devel spatialindex-devel tar which xz xz-devel zip zlib-devel
     else
         not_supported
     fi
