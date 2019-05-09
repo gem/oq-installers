@@ -175,7 +175,7 @@ mkdir ${OQ_WHEEL}/tools
 for app in oq-platform-*; do
     if [ -f ${app}/requirements-py36-${BUILD_OS}.txt ]; then
         sed 's/cdn\.ftp\.openquake\.org/ftp.openquake.org/g' ${app}/requirements-py36-${BUILD_OS}.txt > $REQMIRROR
-        $OQ_PREFIX/bin/$PYTHON -m -q wheel -r $REQMIRROR -w $OQ_WHEEL
+        $OQ_PREFIX/bin/$PYTHON -m pip -q wheel -r $REQMIRROR -w $OQ_WHEEL
     fi
     $OQ_PREFIX/bin/$PYTHON -m pip -q wheel --no-deps ${app}/ -w ${OQ_WHEEL}/tools
 done
