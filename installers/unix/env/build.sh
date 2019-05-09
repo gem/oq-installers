@@ -113,7 +113,7 @@ curl https://bootstrap.pypa.io/get-pip.py | /usr/bin/env python3
 /usr/bin/env pip3 -q wheel pip -w $OQ_WHEEL
 REQMIRROR=$(mktemp)
 sed 's/cdn\.ftp\.openquake\.org/ftp.openquake.org/g' oq-engine/requirements-py36-${BUILD_OS}.txt > $REQMIRROR
-/usr/bin/env pip3 -q wheel -r $REQMIRROR -w $OQ_WHEEL
+/usr/bin/env pip3 -q wheel --no-deps -r $REQMIRROR -w $OQ_WHEEL
  
 cd oq-engine
 /usr/bin/env pip3 -q wheel --no-deps . -w $OQ_WHEEL
@@ -129,7 +129,7 @@ mkdir ${OQ_WHEEL}/tools
 for app in oq-platform-*; do
     if [ -f ${app}/requirements-py36-${BUILD_OS}.txt ]; then
         sed 's/cdn\.ftp\.openquake\.org/ftp.openquake.org/g' ${app}/requirements-py36-${BUILD_OS}.txt > $REQMIRROR
-        /usr/bin/env pip3 -q wheel -r $REQMIRROR -w $OQ_WHEEL
+        /usr/bin/env pip3 -q wheel --no-deps -r $REQMIRROR -w $OQ_WHEEL
     fi
     /usr/bin/env pip3 -q wheel --no-deps ${app}/ -w ${OQ_WHEEL}/tools
 done
