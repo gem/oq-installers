@@ -115,7 +115,7 @@ cp -R src/{README.md,LICENSE,demos,doc} $FDEST/share
 cat <<EOF >> $FDEST/share/uninstall.sh
 #!/bin/bash
 
-if [ "\$1" != "-f" ]; then
+if [[ "\$1" != "-f" ]]; then
     while ! (echo "\$CONFIRM" | grep -qE '^[nNyY]$'); do
         PROMPT="Are you sure you want to uninstall OQ and remove $FDEST? [y/n]: "
         read -e -p "\$PROMPT" CONFIRM
