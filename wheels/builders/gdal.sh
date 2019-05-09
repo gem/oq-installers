@@ -83,6 +83,6 @@ cp $MYDIR/gdal/gdalinit.py /tmp/src/gdal-2.4.1/swig/python/osgeo/__init__.py
 cd  /tmp/src/gdal-2.4.1/swig/python
 
 get numpy==1.14.2
-CFLAGS="-std=c++11" build .
+build .
 
 post
