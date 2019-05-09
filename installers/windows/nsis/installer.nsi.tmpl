@@ -34,6 +34,7 @@
 !include "FileFunc.nsh"
 !include "WordFunc.nsh"
 !include "x64.nsh"
+!include "WinVer.nsh"
 
 SetCompressor lzma
 
@@ -74,6 +75,9 @@ Function .onInit
   ${IfNot} ${RunningX64}
       MessageBox MB_OK "A 64bit OS is required"
       Quit
+  ${EndIf}
+  ${IfNot} ${AtLeastWin10}
+    MessageBox MB_OK "Your Windows version is not supported. Use at your own risk."
   ${EndIf}
 FunctionEnd
 
