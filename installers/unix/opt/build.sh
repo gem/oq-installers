@@ -141,7 +141,7 @@ make -s install
 cd ..
 
 tar xf libffi-3.2.1.tar.gz
-cd libffi-3.2.1.tar.gz
+cd libffi-3.2.1
 ./configure --prefix=$OQ_PREFIX
 make -s -j $NPROC
 make -s install
