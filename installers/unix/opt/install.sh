@@ -62,7 +62,7 @@ IFS="
 "
 MACOS=$(echo $OSTYPE | grep darwin || true)
 if [ $MACOS ]; then
-    RC=$HOME/.profile;
+    RC=$HOME/.bash_profile;
     SED_ARGS="-i ''"
 else
     RC=$HOME/.bashrc;
