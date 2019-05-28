@@ -29,8 +29,8 @@ if [ -z $OQ_ENV_SET ]; then source $MYDIR/../build-common.sh; fi
 build_dep geos
 build_dep proj
 
-get numpy==1.14.2
 get Cython
+get numpy==1.16.3
 build cartopy
 
 post
