@@ -30,6 +30,6 @@ cd /tmp/wheelhouse
 
 yum install -y libyaml-devel.x86_64
 
-build pyyaml==3.12
+build pyyaml==5.1
 
 post

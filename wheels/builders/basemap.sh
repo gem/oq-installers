@@ -30,11 +30,12 @@ cd /tmp/src
 
 build_dep geos
 
-curl -Lo basemap-1.1.0.tar.gz https://github.com/matplotlib/basemap/archive/v1.1.0.tar.gz
-tar xf basemap-1.1.0.tar.gz
-cd basemap-1.1.0
+curl -Lo basemap-master.tar.gz https://github.com/matplotlib/basemap/archive/master.tar.gz
+tar xf basemap-master.tar.gz
+cd basemap-master
 
-get numpy==1.14.2
+get Cython
+get numpy==1.16.3
 build .
 
 post
