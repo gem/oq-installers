@@ -112,7 +112,11 @@ curl https://bootstrap.pypa.io/get-pip.py | /usr/bin/env python3
 # Include an updated version of pip
 /usr/bin/env pip3 -q wheel pip -w $OQ_WHEEL
 REQMIRROR=$(mktemp)
+## Main wheels
 sed 's/cdn\.ftp\.openquake\.org/ftp.openquake.org/g' oq-engine/requirements-py36-${BUILD_OS}.txt > $REQMIRROR
+/usr/bin/env pip3 -q wheel --no-deps -r $REQMIRROR -w $OQ_WHEEL
+## Extra wheels
+sed 's/cdn\.ftp\.openquake\.org/ftp.openquake.org/g' oq-engine/requirements-extra-py36-${BUILD_OS}.txt > $REQMIRROR
 /usr/bin/env pip3 -q wheel --no-deps -r $REQMIRROR -w $OQ_WHEEL
  
 cd oq-engine

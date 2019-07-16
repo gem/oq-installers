@@ -168,7 +168,11 @@ git clone -q --depth=1 -b $TOOLS_BRANCH https://github.com/gem/oq-platform-taxtw
 git clone -q --depth=1 -b $TOOLS_BRANCH https://github.com/gem/oq-platform-taxonomy.git
 
 REQMIRROR=$(mktemp)
+## Main wheels
 sed 's/cdn\.ftp\.openquake\.org/ftp.openquake.org/g' oq-engine/requirements-py36-${BUILD_OS}.txt > $REQMIRROR
+$OQ_PREFIX/bin/$PYTHON -m pip -q wheel --no-deps -r $REQMIRROR -w $OQ_WHEEL
+## Extra wheels
+sed 's/cdn\.ftp\.openquake\.org/ftp.openquake.org/g' oq-engine/requirements-extra-py36-${BUILD_OS}.txt > $REQMIRROR
 $OQ_PREFIX/bin/$PYTHON -m pip -q wheel --no-deps -r $REQMIRROR -w $OQ_WHEEL
 
 cd oq-engine
