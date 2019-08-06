@@ -29,7 +29,7 @@ if [ $GEM_SET_PY ]; then
     PY="$GEM_SET_PY"
 else
 	# We will add "37" soon
-    PY="36"
+    PY="36 37"
 fi
 
 if [ $GEM_SET_NPROC ]; then
