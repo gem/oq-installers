@@ -40,6 +40,6 @@ fi
 
 cd /tmp/wheelhouse
 
-build numpy==1.14.2
+build numpy==1.16.4
 
 post

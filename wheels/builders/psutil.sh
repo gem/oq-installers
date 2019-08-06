@@ -28,6 +28,6 @@ if [ -z $OQ_ENV_SET ]; then source $MYDIR/../build-common.sh; fi
 
 cd /tmp/wheelhouse
 
-build psutil==5.6.2
+build psutil==5.6.3
 
 post
