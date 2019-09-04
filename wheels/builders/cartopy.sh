@@ -30,7 +30,7 @@ build_dep geos
 build_dep proj
 
 get Cython
-get numpy==1.16.4
+get numpy==1.16.5
 build cartopy
 
 post

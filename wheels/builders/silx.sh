@@ -29,7 +29,7 @@ if [ -z $OQ_ENV_SET ]; then source $MYDIR/../build-common.sh; fi
 cd /tmp/wheelhouse
 
 get Cython
-get numpy==1.16.4
+get numpy==1.16.5
 build https://github.com/silx-kit/silx/archive/master.zip
 
 post
