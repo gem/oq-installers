@@ -82,7 +82,8 @@ cp $MYDIR/gdal/gdalinit.py /tmp/src/gdal-2.4.1/swig/python/osgeo/__init__.py
 
 cd  /tmp/src/gdal-2.4.1/swig/python
 
-get numpy==1.16.5
+# numpy is disabled to avoid recompiling GDAL every time numpy is updated
+# get numpy==1.16.5
 build .
 
 post

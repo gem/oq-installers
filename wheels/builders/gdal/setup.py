@@ -331,7 +331,9 @@ if HAVE_SETUPTOOLS:
            exclude_package_data = exclude_package_data,
            cmdclass={'build_ext':gdal_ext},
            ext_modules = ext_modules,
-           install_requires=['numpy=={}'.format(numpy.__version__)],
+           # numpy is disabled to avoid recompiling GDAL
+           # every time numpy is updated
+           # install_requires=['numpy=={}'.format(numpy.__version__)],
            package_data={'osgeo': ['gdal_data/*', 'proj_data/*']},
            **extra )
 else:
