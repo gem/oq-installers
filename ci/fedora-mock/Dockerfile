@@ -7,6 +7,8 @@ RUN dnf -y install epel-release && \
     dnf clean all && \
     find /var/cache/dnf -type f -delete
 
+# 'rm /run/nologin' is usually done by systemd at the end of boot
+# but here systemd is not executed so it must be deleted manually
 RUN ssh-keygen -A && \
     mkdir -p /var/run/sshd && \
     rm /run/nologin && \
