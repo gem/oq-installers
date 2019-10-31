@@ -1,10 +1,11 @@
-FROM fedora:29
+FROM centos:8
 MAINTAINER Daniele Viganò <daniele@openquake.org>
 
-RUN dnf -y install java-1.8.0-openjdk openssh-server \
+RUN dnf -y install epel-release && \
+    dnf -y install java-1.8.0-openjdk openssh-server \
            bzip2 findutils git tar dnf-utils copr-cli mock && \ 
-           dnf clean all && \
-           find /var/cache/dnf -type f -delete
+    dnf clean all && \
+    find /var/cache/dnf -type f -delete
 
 RUN ssh-keygen -A && \
     sed -i 's|session    required     pam_loginuid.so|session    optional     pam_loginuid.so|g' /etc/pam.d/sshd && \
