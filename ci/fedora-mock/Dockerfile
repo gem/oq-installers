@@ -8,7 +8,7 @@ RUN dnf -y install epel-release && \
     find /var/cache/dnf -type f -delete
 
 RUN ssh-keygen -A && \
-    mkdir -p /var/run/sshd && \ 
+    mkdir -p /var/run/sshd && \
     rm /run/nologin && \
     useradd -u 1000 jenkins && \
     usermod -a -G mock jenkins
