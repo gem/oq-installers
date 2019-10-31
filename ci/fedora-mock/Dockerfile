@@ -8,8 +8,8 @@ RUN dnf -y install epel-release && \
     find /var/cache/dnf -type f -delete
 
 RUN ssh-keygen -A && \
-    sed -i 's|UsePAM yes|UsePAM no|g' /etc/ssh/sshd_config && \
-    mkdir -p /var/run/sshd  && \ 
+    mkdir -p /var/run/sshd && \ 
+    rm /run/nologin && \
     useradd -u 1000 jenkins && \
     usermod -a -G mock jenkins
 
