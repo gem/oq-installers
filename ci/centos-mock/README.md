@@ -1,4 +1,4 @@
-## fedora-mock Docker
+## centos-mock Docker
 
 This container provides CentOS 8 with `mock` and `copr-cli` installed.
 
