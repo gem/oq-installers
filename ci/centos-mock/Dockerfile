@@ -1,14 +1,17 @@
-FROM fedora:29
+FROM centos:8
 MAINTAINER Daniele Viganò <daniele@openquake.org>
 
-RUN dnf -y install java-1.8.0-openjdk openssh-server \
+RUN dnf -y install epel-release && \
+    dnf -y install java-1.8.0-openjdk openssh-server \
            bzip2 findutils git tar dnf-utils copr-cli mock && \ 
-           dnf clean all && \
-           find /var/cache/dnf -type f -delete
+    dnf clean all && \
+    find /var/cache/dnf -type f -delete
 
+# 'rm /run/nologin' is usually done by systemd at the end of boot
+# but here systemd is not executed so it must be deleted manually
 RUN ssh-keygen -A && \
-    sed -i 's|session    required     pam_loginuid.so|session    optional     pam_loginuid.so|g' /etc/pam.d/sshd && \
-    mkdir -p /var/run/sshd  && \ 
+    mkdir -p /var/run/sshd && \
+    rm /run/nologin && \
     useradd -u 1000 jenkins && \
     usermod -a -G mock jenkins
 
