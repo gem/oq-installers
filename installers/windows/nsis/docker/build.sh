@@ -67,10 +67,6 @@ rm -Rf python-dist/python3.6/*
 rm -Rf demos/*
 
 cd src
-if [ ! -d py -o ! -d py36 ]; then
-    echo "Please download python dependencies first."
-    exit 1
-fi
 
 if [ ! -f $PY_ZIP ]; then
     PY_ZIP=${HOME}/${PY_ZIP}
@@ -83,9 +79,6 @@ fi
 wine ../python-dist/python3.6/python.exe $PIP
 
 # Extract wheels to be included in the installation
-echo "Extracting python wheels"
-wine ../python-dist/python3.6/python.exe -m pip -q install --disable-pip-version-check --no-warn-script-location --force-reinstall --ignore-installed --upgrade --no-deps --no-index py/*.whl py36/*.whl
-
 ## Core apps
 echo "Downloading core apps"
 for app in oq-engine; do
@@ -99,6 +92,9 @@ for app in oq-platform-standalone oq-platform-ipt oq-platform-taxtweb oq-platfor
     git clone -q -b $TOOLS_BRANCH --depth=1 https://github.com/gem/${app}.git
     wine ../python-dist/python3.6/python.exe -m pip -q wheel --disable-pip-version-check --no-deps -w ../oq-dist/tools ./${app}
 done
+
+echo "Extracting python wheels"
+wine ../python-dist/python3.6/python.exe -m pip -q install --disable-pip-version-check --no-warn-script-location --force-reinstall --ignore-installed --upgrade --no-deps --no-index -r oq-engine/requirements-py36-win64.txt -r requirements-extra-py36-win64.txt
 
 cd $DIR/oq-dist
 for d in *; do
