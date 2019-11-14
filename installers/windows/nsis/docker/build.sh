@@ -79,12 +79,12 @@ fi
 wine ../python-dist/python3.6/python.exe $PIP
 
 # Extract wheels to be included in the installation
+# Make sure symlinks are ignored to retain compatibility with WINE/Windows
+git config --global core.symlinks false
 ## Core apps
 echo "Downloading core apps"
 for app in oq-engine; do
     git clone -q -b $OQ_BRANCH --depth=1 https://github.com/gem/${app}.git
-    # Remove any symlinks
-    rm oq-engine/openquake/engine/openquake.cfg.cluster-sample
     wine ../python-dist/python3.6/python.exe -m pip -q wheel --disable-pip-version-check --no-deps -w ../oq-dist/engine ./${app}
 done
 
