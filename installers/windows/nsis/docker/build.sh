@@ -83,6 +83,8 @@ wine ../python-dist/python3.6/python.exe $PIP
 echo "Downloading core apps"
 for app in oq-engine; do
     git clone -q -b $OQ_BRANCH --depth=1 https://github.com/gem/${app}.git
+    # Remove any symlinks
+    rm oq-engine/openquake/engine/openquake.cfg.cluster-sample
     wine ../python-dist/python3.6/python.exe -m pip -q wheel --disable-pip-version-check --no-deps -w ../oq-dist/engine ./${app}
 done
 
@@ -94,7 +96,7 @@ for app in oq-platform-standalone oq-platform-ipt oq-platform-taxtweb oq-platfor
 done
 
 echo "Extracting python wheels"
-wine ../python-dist/python3.6/python.exe -m pip -q install --disable-pip-version-check --no-warn-script-location --force-reinstall --ignore-installed --upgrade --no-deps --no-index -r oq-engine/requirements-py36-win64.txt -r requirements-extra-py36-win64.txt
+wine ../python-dist/python3.6/python.exe -m pip -q install --disable-pip-version-check --no-warn-script-location --force-reinstall --ignore-installed --upgrade --no-deps --no-index -r oq-engine/requirements-py36-win64.txt -r oq-engine/requirements-extra-py36-win64.txt
 
 cd $DIR/oq-dist
 for d in *; do
