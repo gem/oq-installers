@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # vim: tabstop=4 shiftwidth=4 softtabstop=4
 # vim: syntax=dockerfile
-# name: f27-wine
 #
 # Copyright (C) 2017-2019 GEM Foundation
 #
@@ -18,11 +17,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with OpenQuake. If not, see <http://www.gnu.org/licenses/>.
 
-FROM fedora:29
+FROM fedora:31
 MAINTAINER Daniele Viganò <daniele@openquake.org>
 
-RUN dnf -y install wget && \
-    dnf -y install python3-markdown wget git zip unzip && \
+RUN dnf -y install wget python3-markdown wget git zip unzip && \
     dnf -y install wine
 
 ARG uid=1000
