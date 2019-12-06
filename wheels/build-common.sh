@@ -91,6 +91,9 @@ function build_dep {
                 ./configure
                 make -j $NPROC
                 make install
+                cd /tmp/src
+                curl -f -L -O https://download.osgeo.org/proj/proj-datumgrid-1.8.zip
+                unzip -d /usr/local/share/proj proj-datumgrid-1.8.zip
             fi
             ;;
         'jasper')
