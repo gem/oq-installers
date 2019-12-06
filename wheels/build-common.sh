@@ -93,7 +93,7 @@ function build_dep {
                 make install
                 cd /tmp/src
                 curl -f -L -O https://download.osgeo.org/proj/proj-datumgrid-1.8.zip
-                unzip -d /usr/local/share/proj /tmp/src/proj-datumgrid-1.8.zip
+                unzip -d /usr/local/share/proj proj-datumgrid-1.8.zip
             fi
             ;;
         'jasper')
