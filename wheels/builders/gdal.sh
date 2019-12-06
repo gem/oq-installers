@@ -85,4 +85,10 @@ cd  /tmp/src/gdal-2.4.1/swig/python
 get numpy==1.16.5
 build .
 
+cd /tmp/src
+curl -f -L -O https://download.osgeo.org/proj/proj-datumgrid-1.8.zip
+mkdir -p osgeo/proj_data
+unzip -d osgeo/proj_data proj-datumgrid-1.8.zip
+zip -r /tmp/wheelhouse/GDAL-*.whl osgeo/proj_data
+
 post
