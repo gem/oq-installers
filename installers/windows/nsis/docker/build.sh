@@ -94,7 +94,9 @@ for app in oq-platform-standalone oq-platform-ipt oq-platform-taxtweb oq-platfor
     git clone -q -b $TOOLS_BRANCH --depth=1 https://github.com/gem/${app}.git
     wine ../python-dist/python3.6/python.exe -m pip -q wheel --disable-pip-version-check --no-deps -w ../oq-dist/tools ./${app}
     if [ "$app" = "oq-platform-taxtweb" ]; then
-        export PYBUILD_NAME="oq-taxonomy" wine ../python-dist/python3.6/python.exe -m pip -q wheel --disable-pip-version-check --no-deps -w ../oq-dist/tools ./${app}
+        export PYBUILD_NAME="oq-taxonomy"
+        wine ../python-dist/python3.6/python.exe -m pip -q wheel --disable-pip-version-check --no-deps -w ../oq-dist/tools ./${app}
+        unset PYBUILD_NAME
     fi
 done
 
