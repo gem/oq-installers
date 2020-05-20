@@ -38,7 +38,7 @@ not_supported() {
     exit 1
 }
 
-PYTHON=python3.6
+PYTHON=python3.8
 OQ_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 OQ_ROOT=/tmp/build-openquake-dist
 OQ_DIST=${OQ_ROOT}/qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
@@ -95,7 +95,7 @@ curl -LO http://ftp.gnu.org/gnu/sed/sed-4.2.2.tar.gz
 curl -LO https://www.openssl.org/source/openssl-1.0.2o.tar.gz
 curl -LO https://www.sqlite.org/2018/sqlite-autoconf-3240000.tar.gz
 curl -LO http://sourceware.org/pub/libffi/libffi-3.2.1.tar.gz
-curl -LO https://www.python.org/ftp/python/3.6.6/Python-3.6.6.tar.xz
+curl -LO https://www.python.org/ftp/python/3.8.2/Python-3.8.2.tar.xz
 
 cat <<EOF >> $OQ_PREFIX/env.sh
 PREFIX=$OQ_PREFIX
@@ -147,8 +147,8 @@ make -s -j $NPROC
 make -s install
 cd ..
 
-tar xJf Python-3.6.6.tar.xz
-cd Python-3.6.6
+tar xJf Python-3.8.2.tar.xz
+cd Python-3.8.2
 ./configure --prefix=$OQ_PREFIX --with-system-ffi --with-ensurepip
 make -s -j $NPROC
 make -s install
@@ -169,9 +169,9 @@ git clone -q --depth=1 -b $TOOLS_BRANCH https://github.com/gem/oq-platform-taxon
 
 REQMIRROR=$(mktemp)
 ## Main wheels
-sed 's/cdn\.ftp\.openquake\.org/ftp.openquake.org/g' oq-engine/requirements-py36-${BUILD_OS}.txt > $REQMIRROR
+sed 's/cdn\.ftp\.openquake\.org/ftp.openquake.org/g' oq-engine/requirements-py38-${BUILD_OS}.txt > $REQMIRROR
 ## Extra wheels
-sed 's/cdn\.ftp\.openquake\.org/ftp.openquake.org/g' oq-engine/requirements-extra-py36-${BUILD_OS}.txt >> $REQMIRROR
+sed 's/cdn\.ftp\.openquake\.org/ftp.openquake.org/g' oq-engine/requirements-extra-py38-${BUILD_OS}.txt >> $REQMIRROR
 $OQ_PREFIX/bin/$PYTHON -m pip -q wheel --no-deps -r $REQMIRROR -w $OQ_WHEEL
 
 cd oq-engine
@@ -185,8 +185,8 @@ cd ..
 
 mkdir ${OQ_WHEEL}/tools
 for app in oq-platform-*; do
-    if [ -f ${app}/requirements-py36-${BUILD_OS}.txt ]; then
-        sed 's/cdn\.ftp\.openquake\.org/ftp.openquake.org/g' ${app}/requirements-py36-${BUILD_OS}.txt > $REQMIRROR
+    if [ -f ${app}/requirements-py38-${BUILD_OS}.txt ]; then
+        sed 's/cdn\.ftp\.openquake\.org/ftp.openquake.org/g' ${app}/requirements-py38-${BUILD_OS}.txt > $REQMIRROR
         $OQ_PREFIX/bin/$PYTHON -m pip -q wheel --no-deps -r $REQMIRROR -w $OQ_WHEEL
     fi
     $OQ_PREFIX/bin/$PYTHON -m pip -q wheel --no-deps ${app}/ -w ${OQ_WHEEL}/tools

@@ -40,7 +40,7 @@ $ docker run -e GEM_SET_OUTPUT=zip -v $(pwd):/io -t -i --rm wine /io/docker/buil
 `$GEM_SET_OUTPUT` can be `exe` (default), `zip` or `exe zip`.
 
 #### Libs
-- Download `py` and `py36` from the internal repo and put it into `src`
+- Download `py` and `py38` from the internal repo and put it into `src`
 
 #### Run the builder
 - `docker/build.sh`

@@ -24,7 +24,7 @@ $ [GEM_SET_BRANCH='master'] bash /io/build.sh
 
 ## macOS
 
-Xcode, GNU sed and (Python 3.6)[https://www.python.org/ftp/python/3.6.6/python-3.6.6-macosx10.9.pkg] must be installed first
+Xcode, GNU sed and (Python 3.8)[https://www.python.org/ftp/python/3.8.2/python-3.8.2-macosx10.9.pkg] must be installed first
 
 ```bash
 ./build.sh

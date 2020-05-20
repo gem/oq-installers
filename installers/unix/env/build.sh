@@ -73,8 +73,8 @@ if $(echo $OSTYPE | grep -q linux); then
         sudo yum -y -q install curl gcc git makeself zip
         # CentOS (with SCL)
         sudo yum -y -q install centos-release-scl
-        sudo yum -y -q install rh-python36
-        source /opt/rh/rh-python36/enable
+        sudo yum -y -q install rh-python38
+        source /opt/rh/rh-python38/enable
     else
         not_supported
     fi
@@ -90,8 +90,8 @@ rm -Rf $OQ_ROOT
 mkdir -p $OQ_DIST/{wheelhouse,src}
 cd $OQ_ROOT
 
-check_dep python3.6
-/usr/bin/env python3.6 -m venv pybuild
+check_dep python3.8
+/usr/bin/env python3.8 -m venv pybuild
 source pybuild/bin/activate
 
 rm -Rf oq-engine
@@ -113,9 +113,9 @@ curl https://bootstrap.pypa.io/get-pip.py | /usr/bin/env python3
 /usr/bin/env pip3 -q wheel pip -w $OQ_WHEEL
 REQMIRROR=$(mktemp)
 ## Main wheels
-sed 's/cdn\.ftp\.openquake\.org/ftp.openquake.org/g' oq-engine/requirements-py36-${BUILD_OS}.txt > $REQMIRROR
+sed 's/cdn\.ftp\.openquake\.org/ftp.openquake.org/g' oq-engine/requirements-py38-${BUILD_OS}.txt > $REQMIRROR
 ## Extra wheels
-sed 's/cdn\.ftp\.openquake\.org/ftp.openquake.org/g' oq-engine/requirements-extra-py36-${BUILD_OS}.txt >> $REQMIRROR
+sed 's/cdn\.ftp\.openquake\.org/ftp.openquake.org/g' oq-engine/requirements-extra-py38-${BUILD_OS}.txt >> $REQMIRROR
 /usr/bin/env pip3 -q wheel --no-deps -r $REQMIRROR -w $OQ_WHEEL
  
 cd oq-engine
@@ -130,8 +130,8 @@ cd ..
 
 mkdir ${OQ_WHEEL}/tools
 for app in oq-platform-*; do
-    if [ -f ${app}/requirements-py36-${BUILD_OS}.txt ]; then
-        sed 's/cdn\.ftp\.openquake\.org/ftp.openquake.org/g' ${app}/requirements-py36-${BUILD_OS}.txt > $REQMIRROR
+    if [ -f ${app}/requirements-py38-${BUILD_OS}.txt ]; then
+        sed 's/cdn\.ftp\.openquake\.org/ftp.openquake.org/g' ${app}/requirements-py38-${BUILD_OS}.txt > $REQMIRROR
         /usr/bin/env pip3 -q wheel --no-deps -r $REQMIRROR -w $OQ_WHEEL
     fi
     /usr/bin/env pip3 -q wheel --no-deps ${app}/ -w ${OQ_WHEEL}/tools
