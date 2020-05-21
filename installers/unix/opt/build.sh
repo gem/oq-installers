@@ -149,7 +149,7 @@ cd ..
 
 tar xJf Python-3.8.2.tar.xz
 cd Python-3.8.2
-./configure --prefix=$OQ_PREFIX --with-system-ffi --with-ensurepip
+./configure --prefix=$OQ_PREFIX --with-openssl=$OQ_PREFIX --with-system-ffi --with-ensurepip
 make -s -j $NPROC
 make -s install
 cd ..
