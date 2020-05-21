@@ -75,8 +75,7 @@ if $(echo $OSTYPE | grep -q linux); then
         sudo yum -q -y groupinstall 'Development Tools'
         sudo yum -q -y install epel-release
         sudo yum -q -y install autoconf bzip2-devel curl git gzip libtool makeself \
-                               readline-devel spatialindex-devel tar which xz xz-devel zip zlib-devel \
-                               libffi libffi-devel
+                               readline-devel spatialindex-devel tar which xz xz-devel zip zlib-devel
     else
         not_supported
     fi
@@ -150,7 +149,8 @@ cd ..
 
 tar xJf Python-3.8.2.tar.xz
 cd Python-3.8.2
-./configure --prefix=$OQ_PREFIX --with-openssl=$OQ_PREFIX --with-system-ffi --with-ensurepip
+export PKG_CONFIG_PATH=$OQ_PREFIX
+./configure --prefix=$OQ_PREFIX --with-openssl=$OQ_PREFIX --with-ensurepip
 make -s -j $NPROC
 make -s install
 cd ..
