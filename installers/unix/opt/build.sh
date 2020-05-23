@@ -100,7 +100,7 @@ curl -LO https://www.python.org/ftp/python/3.8.2/Python-3.8.2.tar.xz
 cat <<EOF >> $OQ_PREFIX/env.sh
 PREFIX=$OQ_PREFIX
 
-export LD_LIBRARY_PATH=\${PREFIX}/lib
+export LD_LIBRARY_PATH=\${PREFIX}/lib:\${PREFIX}/lib64
 export CPATH=\${PREFIX}/include
 export PATH=\${PREFIX}/bin:\${PATH}
 export PS1=(openquake)\${PS1}
@@ -149,10 +149,9 @@ cd ..
 
 tar xJf Python-3.8.2.tar.xz
 cd Python-3.8.2
-find $OQ_PREFIX | grep ffi
 export PKG_CONFIG_PATH="$OQ_PREFIX/lib/pkgconfig/"
 export LDFLAGS=`pkg-config --libs libffi`
-./configure --prefix=$OQ_PREFIX --with-openssl=$OQ_PREFIX --with-ensurepip
+./configure --prefix=$OQ_PREFIX --with-openssl=$OQ_PREFIX --with-system-ffi --with-ensurepip
 make -s -j $NPROC
 make -s install
 cd ..
