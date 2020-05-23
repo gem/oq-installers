@@ -150,7 +150,7 @@ cd ..
 tar xJf Python-3.8.2.tar.xz
 cd Python-3.8.2
 find $OQ_PREFIX -name libffi
-./configure LDFLAGS=`pkg-config --libs libffi` PKG_CONFIG_PATH="$OQ_PREFIX/lib/pkgconfig/" --prefix=$OQ_PREFIX --with-openssl=$OQ_PREFIX --without-system-ffi --with-ensurepip
+./configure LDFLAGS=`pkg-config --libs libffi` PKG_CONFIG_PATH="$OQ_PREFIX/lib/pkgconfig/" --prefix=$OQ_PREFIX --with-openssl=$OQ_PREFIX --with-ensurepip
 make -s -j $NPROC
 make -s install
 cd ..
