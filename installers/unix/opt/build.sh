@@ -75,8 +75,7 @@ if $(echo $OSTYPE | grep -q linux); then
         sudo yum -q -y groupinstall 'Development Tools'
         sudo yum -q -y install epel-release
         sudo yum -q -y install autoconf bzip2-devel curl git gzip libtool makeself \
-             readline-devel spatialindex-devel tar which xz xz-devel zip zlib-devel \
-             libffi-devel
+             readline-devel spatialindex-devel tar which xz xz-devel zip zlib-devel
     else
         not_supported
     fi
@@ -95,7 +94,7 @@ cd $OQ_ROOT
 curl -LO http://ftp.gnu.org/gnu/sed/sed-4.2.2.tar.gz
 curl -LO https://www.openssl.org/source/openssl-1.0.2o.tar.gz
 curl -LO https://www.sqlite.org/2018/sqlite-autoconf-3240000.tar.gz
-curl -LO http://sourceware.org/pub/libffi/libffi-3.2.1.tar.gz
+curl -LO http://sourceware.org/pub/libffi/libffi-3.3.tar.gz
 curl -LO https://www.python.org/ftp/python/3.8.2/Python-3.8.2.tar.xz
 
 cat <<EOF >> $OQ_PREFIX/env.sh
@@ -141,8 +140,8 @@ make -s -j $NPROC
 make -s install
 cd ..
 
-tar xf libffi-3.2.1.tar.gz
-cd libffi-3.2.1
+tar xf libffi-3.3.tar.gz
+cd libffi-3.3
 ./configure --prefix=$OQ_PREFIX
 make -s -j $NPROC
 make -s install
