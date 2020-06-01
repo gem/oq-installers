@@ -190,6 +190,11 @@ for app in oq-platform-*; do
         $OQ_PREFIX/bin/$PYTHON -m pip -q wheel --no-deps -r $REQMIRROR -w $OQ_WHEEL
     fi
     $OQ_PREFIX/bin/$PYTHON -m pip -q wheel --no-deps ${app}/ -w ${OQ_WHEEL}/tools
+    if [ "$app" = "oq-platform-taxtweb" ]; then
+        export PYBUILD_NAME="oq-taxonomy"
+        $OQ_PREFIX/bin/$PYTHON -m pip -q wheel --no-deps ${app}/ -w ${OQ_WHEEL}/tools
+        unset PYBUILD_NAME
+    fi
 done
 
 cp -R ${OQ_ROOT}/oq-engine/{README.md,LICENSE,demos,doc} ${OQ_DIST}/src
