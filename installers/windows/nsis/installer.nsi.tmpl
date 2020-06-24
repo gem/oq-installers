@@ -237,6 +237,10 @@ Section -post
   IntFmt $0 "0x%08X" $0
   WriteRegDWORD HKLM "${REG_KEY}" "EstimatedSize" "$0"
 
+  StrCpy $0 "$INSTDIR\oq_install.log"
+  Push $0
+  Call DumpLog
+
   ; Check if we need to reboot
   IfRebootFlag 0 noreboot
     MessageBox MB_YESNO "A reboot is required to finish the installation. Do you wish to reboot now?" \
@@ -270,13 +274,13 @@ Section "Uninstall"
 SectionEnd
 
 Function .onInstSuccess
-  StrCpy $0 "$INSTDIR\install.log"
+  StrCpy $0 "$INSTDIR\oq_install.log"
   Push $0
   Call DumpLog
 FunctionEnd
 
 Function .onInstFail
-  StrCpy $0 "$INSTDIR\install.log"
+  StrCpy $0 "$INSTDIR\oq_install.log"
   Push $0
   Call DumpLog
 FunctionEnd
