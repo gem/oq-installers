@@ -134,7 +134,7 @@ FunctionEnd
 Section -SETTINGS
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
-  StrCpy $0 "$EXEDIR\install.log"
+  StrCpy $0 "$INSTDIR\install.log"
   Push $0
   Call DumpLog
 SectionEnd
