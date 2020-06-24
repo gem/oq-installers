@@ -134,9 +134,6 @@ FunctionEnd
 Section -SETTINGS
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
-  StrCpy $0 "$INSTDIR\install.log"
-  Push $0
-  Call DumpLog
 SectionEnd
 
 Section "!Core Files" SecCore
@@ -272,6 +269,17 @@ Section "Uninstall"
   DeleteRegKey HKLM "${REG_KEY}"
 SectionEnd
 
+Function .onInstSuccess
+  StrCpy $0 "$INSTDIR\install.log"
+  Push $0
+  Call DumpLog
+FunctionEnd
+
+Function .onInstFail
+  StrCpy $0 "$INSTDIR\install.log"
+  Push $0
+  Call DumpLog
+FunctionEnd
 
 !ifdef VER_CODE & VER_BUILD
 
