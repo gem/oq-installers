@@ -273,7 +273,8 @@ if HAVE_NUMPY:
 
 packages = ["osgeo",]
 
-readme = str(open('README.txt','rb').read())
+# comment 18082020 README.txt not found in gdal 2.42
+#readme = str(open('README.txt','rb').read())
 
 name = 'GDAL'
 version = gdal_version
@@ -319,7 +320,7 @@ if HAVE_SETUPTOOLS:
            author_email = author_email,
            maintainer = maintainer,
            maintainer_email = maintainer_email,
-           long_description = readme,
+           #long_description = readme,
            description = description,
            license = license,
            classifiers = classifiers,
@@ -342,7 +343,7 @@ else:
            author_email = author_email,
            maintainer = maintainer,
            maintainer_email = maintainer_email,
-           long_description = readme,
+           #long_description = readme,
            description = description,
            license = license,
            classifiers = classifiers,
