@@ -33,10 +33,10 @@ if [ -z $OQ_ENV_SET ]; then source $MYDIR/../build-common.sh; fi
 
 yum install -qy gcc-c++ gcc libpng  libtiff json-c-devel zlib-devel libtiff-devel openssl-devel unzip zip
 
-#build_dep expat
-#build_dep geos
-#build_dep jasper
-#build_dep proj
+build_dep expat
+build_dep geos
+build_dep jasper
+build_dep proj
 
 cd /tmp/src
 curl -f -L -O  https://download.osgeo.org/proj/proj-5.2.0.tar.gz
