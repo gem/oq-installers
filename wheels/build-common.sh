@@ -85,9 +85,9 @@ function build_dep {
         'proj')
             if [ ! -f /usr/local/lib/libproj.so.12.0.0 ]; then
                 cd /tmp/src
-                curl -f -L -O http://download.osgeo.org/proj/proj-4.9.3.tar.gz
-                tar xzf proj-4.9.3.tar.gz
-                cd proj-4.9.3
+                curl -f -L -O https://download.osgeo.org/proj/proj-5.2.0.tar.gz
+                tar xzf proj-5.2.0.tar.gz
+                cd proj-5.2.0
                 ./configure
                 make -j $NPROC
                 make install
