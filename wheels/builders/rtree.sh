@@ -34,7 +34,7 @@ if [ -z $OQ_ENV_SET ]; then source $MYDIR/../build-common.sh; fi
 yum install -qy cmake
 
 cd /tmp/src
-git clone --depth=1 -b wheel https://github.com/gem/rtree.git
+git clone --depth=1 https://github.com/Toblerity/rtree.git
 
 build .
 
