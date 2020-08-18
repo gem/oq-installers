@@ -28,14 +28,14 @@ mkdir -p /tmp/wheelhouse
 if [ $GEM_SET_PY ]; then
     PY="$GEM_SET_PY"
 else
-    PY="36 37"
+    PY="38"
 fi
 
 if [ $GEM_SET_NPROC ]; then
     NPROC=$GEM_SET_NPROC
 else
     #Everyone has at least two cores
-    NPROC=2
+    NPROC=4
 fi
 
 HUID=$(stat -c '%u' ${BASH_SOURCE[0]})
