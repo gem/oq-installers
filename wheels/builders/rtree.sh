@@ -35,7 +35,7 @@ yum install -qy cmake
 
 cd /tmp/src
 git clone --depth=1 https://github.com/Toblerity/rtree.git
-
+cd /tmp/src/rtree
 build .
 
 post
