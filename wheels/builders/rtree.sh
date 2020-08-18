@@ -31,7 +31,7 @@ MYDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 if [ -z $OQ_ENV_SET ]; then source $MYDIR/../build-common.sh; fi
 
-yum install -qy cmake
+yum install -q -y cmake spatialindex spatialindex-devel
 
 cd /tmp/src
 git clone --depth=1 https://github.com/Toblerity/rtree.git
