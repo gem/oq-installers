@@ -74,9 +74,9 @@ function build_dep {
         'geos')
             if [ ! -f /usr/local/lib/libgeos-3.6.1.so ]; then
                 cd /tmp/src
-                curl -f -L -O http://download.osgeo.org/geos/geos-3.6.1.tar.bz2
-                tar jxf geos-3.6.1.tar.bz2
-                cd geos-3.6.1
+                curl -f -L -O https://download.osgeo.org/geos/geos-3.7.1.tar.bz2
+                tar jxf geos-3.7.1.tar.bz2
+                cd geos-3.7.1
                 ./configure
                 make -j $NPROC
                 make install
