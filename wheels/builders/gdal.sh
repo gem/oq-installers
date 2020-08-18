@@ -31,7 +31,7 @@ MYDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 if [ -z $OQ_ENV_SET ]; then source $MYDIR/../build-common.sh; fi
 
-yum install -qy gcc-c++ gcc libpng  libtiff json-c-devel zlib-devel libtiff-devel openssl-devel unzip zip
+yum install -q -y gcc-c++ gcc libpng  libtiff json-c-devel zlib-devel libtiff-devel openssl-devel unzip zip
 
 build_dep expat
 build_dep geos
@@ -39,13 +39,6 @@ build_dep jasper
 build_dep proj
 
 cd /tmp/src
-curl -f -L -O  https://download.osgeo.org/proj/proj-5.2.0.tar.gz
-tar -zvxf proj-5.2.0.tar.gz
-cd proj-5.2.0
-./configure --prefix=/usr/local/proj-5.2.0
-make -j $NPROC
-make install
-
 curl -f -L -O  https://download.osgeo.org/gdal/2.4.2/gdal-2.4.2.tar.gz
 tar xzf gdal-2.4.2.tar.gz
 cd gdal-2.4.2
