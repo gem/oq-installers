@@ -34,7 +34,7 @@ if [ -z $OQ_ENV_SET ]; then source $MYDIR/../build-common.sh; fi
 yum install -q -y cmake spatialindex spatialindex-devel
 
 cd /tmp/src
-git clone --depth=1 https://github.com/Toblerity/rtree.git
+git clone --depth=1 -b 0.9.4 https://github.com/Toblerity/rtree.git
 cd /tmp/src/rtree
 build .
 
