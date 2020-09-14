@@ -28,14 +28,14 @@ mkdir -p /tmp/wheelhouse
 if [ $GEM_SET_PY ]; then
     PY="$GEM_SET_PY"
 else
-    PY="36 37"
+    PY="38"
 fi
 
 if [ $GEM_SET_NPROC ]; then
     NPROC=$GEM_SET_NPROC
 else
     #Everyone has at least two cores
-    NPROC=2
+    NPROC=4
 fi
 
 HUID=$(stat -c '%u' ${BASH_SOURCE[0]})
@@ -63,9 +63,9 @@ function build_dep {
         'expat')
             if [ ! -f /usr/local/lib/libexpat.so ]; then
                 cd /tmp/src
-                curl -f -L -O https://github.com/libexpat/libexpat/releases/download/R_2_2_5/expat-2.2.5.tar.bz2
-                tar xjf expat-2.2.5.tar.bz2
-                cd expat-2.2.5
+                curl -f -L -O https://github.com/libexpat/libexpat/releases/download/R_2_2_9/expat-2.2.9.tar.bz2
+                tar xjf expat-2.2.9.tar.bz2
+                cd expat-2.2.9
                 ./configure --prefix=/usr/local
                 make -j $NPROC
                 make install
@@ -74,9 +74,9 @@ function build_dep {
         'geos')
             if [ ! -f /usr/local/lib/libgeos-3.6.1.so ]; then
                 cd /tmp/src
-                curl -f -L -O http://download.osgeo.org/geos/geos-3.6.1.tar.bz2
-                tar jxf geos-3.6.1.tar.bz2
-                cd geos-3.6.1
+                curl -f -L -O https://download.osgeo.org/geos/geos-3.8.1.tar.bz2 
+                tar jxf geos-3.8.1.tar.bz2
+                cd geos-3.8.1
                 ./configure
                 make -j $NPROC
                 make install
@@ -85,15 +85,15 @@ function build_dep {
         'proj')
             if [ ! -f /usr/local/lib/libproj.so.12.0.0 ]; then
                 cd /tmp/src
-                curl -f -L -O http://download.osgeo.org/proj/proj-4.9.3.tar.gz
-                tar xzf proj-4.9.3.tar.gz
-                cd proj-4.9.3
+                curl -f -L -O https://download.osgeo.org/proj/proj-6.3.2.tar.gz
+                tar xzf proj-6.3.2.tar.gz
+                cd proj-6.3.2
                 ./configure
                 make -j $NPROC
                 make install
                 cd /tmp/src
                 curl -f -L -O https://download.osgeo.org/proj/proj-datumgrid-1.8.zip
-                unzip -d /usr/local/share/proj proj-datumgrid-1.8.zip
+                unzip -o -d /usr/local/share/proj proj-datumgrid-1.8.zip
             fi
             ;;
         'jasper')

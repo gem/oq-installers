@@ -7,7 +7,7 @@
 # Howard Butler hobu.inc@gmail.com
 
 
-gdal_version = '2.4.1.post1'
+gdal_version = '3.1.2'
 
 import sys
 import shutil
@@ -273,7 +273,8 @@ if HAVE_NUMPY:
 
 packages = ["osgeo",]
 
-readme = str(open('README.txt','rb').read())
+# comment 18082020 README.txt not found in gdal 2.42
+#readme = str(open('README.txt','rb').read())
 
 name = 'GDAL'
 version = gdal_version
@@ -319,7 +320,7 @@ if HAVE_SETUPTOOLS:
            author_email = author_email,
            maintainer = maintainer,
            maintainer_email = maintainer_email,
-           long_description = readme,
+           #long_description = readme,
            description = description,
            license = license,
            classifiers = classifiers,
@@ -331,7 +332,8 @@ if HAVE_SETUPTOOLS:
            exclude_package_data = exclude_package_data,
            cmdclass={'build_ext':gdal_ext},
            ext_modules = ext_modules,
-           install_requires=['numpy=={}'.format(numpy.__version__)],
+           #install_requires=['numpy=={}'.format(numpy.__version__)],
+           install_requires=['numpy>={}'.format(numpy.__version__)],
            package_data={'osgeo': ['gdal_data/*', 'proj_data/*']},
            **extra )
 else:
@@ -341,7 +343,7 @@ else:
            author_email = author_email,
            maintainer = maintainer,
            maintainer_email = maintainer_email,
-           long_description = readme,
+           #long_description = readme,
            description = description,
            license = license,
            classifiers = classifiers,

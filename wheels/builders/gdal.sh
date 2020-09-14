@@ -31,7 +31,7 @@ MYDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 if [ -z $OQ_ENV_SET ]; then source $MYDIR/../build-common.sh; fi
 
-yum install -qy json-c-devel zlib-devel libtiff-devel openssl-devel unzip zip
+yum install -q -y gcc-c++ gcc libpng  libtiff json-c-devel zlib-devel libtiff-devel openssl-devel unzip zip libcurl-devel 
 
 build_dep expat
 build_dep geos
@@ -39,9 +39,9 @@ build_dep jasper
 build_dep proj
 
 cd /tmp/src
-curl -f -L -O http://download.osgeo.org/gdal/2.4.1/gdal-2.4.1.tar.gz
-tar xzf gdal-2.4.1.tar.gz
-cd gdal-2.4.1
+curl -f -L -O  https://download.osgeo.org/gdal/3.1.2/gdal-3.1.2.tar.gz 
+tar xzf gdal-3.1.2.tar.gz
+cd gdal-3.1.2
 ./configure \
  --with-threads \
  --disable-debug \
@@ -74,15 +74,16 @@ make install
 
 # Replace SWIG's setup.py with this modified one, which gets numpy in
 # there as a dependency.
-cp $MYDIR/gdal/setup.py /tmp/src/gdal-2.4.1/swig/python/setup.py
+cp $MYDIR/gdal/setup.py /tmp/src/gdal-3.1.2/swig/python/setup.py
 # Replace the osgeo module __init__.py with this modified one, which
 # sets the GDAL_DATA and PROJ_LIB variables on import to where they've
 # been copied to.
-cp $MYDIR/gdal/gdalinit.py /tmp/src/gdal-2.4.1/swig/python/osgeo/__init__.py
+cp $MYDIR/gdal/gdalinit.py /tmp/src/gdal-3.1.2/swig/python/osgeo/__init__.py
 
-cd  /tmp/src/gdal-2.4.1/swig/python
+cd  /tmp/src/gdal-3.1.2/swig/python
 
-get numpy==1.16.5
+#get numpy==1.16.5
+get numpy==1.18.2 
 build .
 
 post
