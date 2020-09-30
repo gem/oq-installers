@@ -23,7 +23,7 @@ MAINTAINER Daniele Viganò <daniele@openquake.org>
 RUN dnf -y install wget python3-markdown wget git zip unzip && \
     dnf -y install wine
 
-ARG uid=1000
+ARG uid=998
 RUN useradd -u $uid builder
 
 USER builder
