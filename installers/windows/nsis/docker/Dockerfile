@@ -24,7 +24,7 @@ RUN dnf -y install wget python3-markdown wget git zip unzip && \
     dnf -y install wine
     
 # instead of use ARG use: --build-arg uid=$(id -u)
-#ARG uid=998
+ARG uid=998
 RUN useradd -u $uid builder
 
 USER builder
