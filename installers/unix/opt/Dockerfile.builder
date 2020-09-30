@@ -1,7 +1,7 @@
 # vi:syntax=dockerfile
 # name:centos6-builder
 FROM centos:6
-MAINTAINER Daniele Viganò <daniele@openquake.org>
+MAINTAINER GEM Foundation <devops@openquake.org>
 
 RUN yum -q -y upgrade && \
     yum -q -y groupinstall 'Development Tools' && \
@@ -9,8 +9,8 @@ RUN yum -q -y upgrade && \
     yum -q -y install autoconf bzip2-devel curl git gzip libtool makeself \
                    readline-devel spatialindex-devel sudo sqlite-devel tar \
                    which xz zip zlib-devel
-
-ARG uid=998
+# instead of use ARG use: --build-arg uid=$(id -u)
+#ARG uid=998
 
 RUN useradd -u $uid builder && \
 echo 'builder ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
