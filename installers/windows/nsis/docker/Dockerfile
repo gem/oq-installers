@@ -18,12 +18,13 @@
 # along with OpenQuake. If not, see <http://www.gnu.org/licenses/>.
 
 FROM fedora:31
-MAINTAINER Daniele Viganò <daniele@openquake.org>
+MAINTAINER GEM Foundation <devops@openquake.org>
 
 RUN dnf -y install wget python3-markdown wget git zip unzip && \
     dnf -y install wine
-
-ARG uid=1000
+    
+# instead of use ARG use: --build-arg uid=$(id -u)
+ARG uid=998
 RUN useradd -u $uid builder
 
 USER builder
