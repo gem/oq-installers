@@ -96,6 +96,7 @@ curl -LO https://www.openssl.org/source/openssl-1.0.2o.tar.gz
 curl -LO https://www.sqlite.org/2018/sqlite-autoconf-3240000.tar.gz
 curl -LO http://sourceware.org/pub/libffi/libffi-3.2.1.tar.gz
 curl -LO https://www.python.org/ftp/python/3.6.6/Python-3.6.6.tar.xz
+curl -LO https://tukaani.org/xz/xz-5.2.5.tar.gz
 
 cat <<EOF >> $OQ_PREFIX/env.sh
 PREFIX=$OQ_PREFIX
@@ -142,6 +143,13 @@ cd ..
 
 tar xf libffi-3.2.1.tar.gz
 cd libffi-3.2.1
+./configure --prefix=$OQ_PREFIX
+make -s -j $NPROC
+make -s install
+cd ..
+
+tar xf xz-5.2.5.tar.gz
+cd xz-5.2.5
 ./configure --prefix=$OQ_PREFIX
 make -s -j $NPROC
 make -s install
