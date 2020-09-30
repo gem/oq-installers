@@ -10,7 +10,7 @@ RUN yum -q -y upgrade && \
                    readline-devel spatialindex-devel sudo sqlite-devel tar \
                    which xz zip zlib-devel
 
-ARG uid=107
+ARG uid=998
 
 RUN useradd -u $uid builder && \
 echo 'builder ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
