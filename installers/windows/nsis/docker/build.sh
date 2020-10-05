@@ -130,6 +130,7 @@ src/oq-engine/helpers/zipdemos.sh $(pwd)/demos
 # create absolute links starting from relatives and resolve '../' paths
 sed "s@](\([^:]\+)\)@](https://github.com/gem/oq-engine/blob/${OQ_BRANCH}/\1@g;s@/${OQ_BRANCH}/\.\.@@g" < src/oq-engine/README.md > /tmp/README.$$.md
 python3 -m markdown /tmp/README.$$.md > README.html
+rm /tmp/README.$$.md
 
 # Get a copy of the OQ manual if not yet available
 if [ ! -f OpenQuake\ manual.pdf ]; then
