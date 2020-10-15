@@ -208,6 +208,8 @@ done
 cp -R ${OQ_ROOT}/oq-engine/{README.md,LICENSE,demos,doc} ${OQ_DIST}/src
 rm -Rf ${OQ_DIST}/src/doc/sphinx
 
+curl -L -o - https://ci.openquake.org/job/builders/job/pdf-builder/lastSuccessfulBuild/artifact/oq-engine/doc/manual/oq-manual.pdf >  ${OQ_DIST}/src/doc/OpenQuake\ manual.pdf
+
 # Make a zipped copy of each demo
 ${OQ_ROOT}/oq-engine/helpers/zipdemos.sh ${OQ_DIST}/src/demos
 
