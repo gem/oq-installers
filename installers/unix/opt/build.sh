@@ -208,6 +208,10 @@ done
 cp -R ${OQ_ROOT}/oq-engine/{README.md,LICENSE,demos,doc} ${OQ_DIST}/src
 rm -Rf ${OQ_DIST}/src/doc/sphinx
 
+if [ "$OQ_BRANCH" != "master" ]; then
+    manual_vers="$(echo "$OQ_BRANCH" | sed 's/^engine-//g')"
+fi
+curl -L -f -o - "https://docs.openquake.org/manuals/OpenQuake%20Manual%20${manual_vers}.pdf" > ${OQ_DIST}/src/doc/OpenQuake\ manual.pdf || \
 curl -L -o - https://ci.openquake.org/job/builders/job/pdf-builder/lastSuccessfulBuild/artifact/oq-engine/doc/manual/oq-manual.pdf >  ${OQ_DIST}/src/doc/OpenQuake\ manual.pdf
 
 # Make a zipped copy of each demo
