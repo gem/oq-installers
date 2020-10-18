@@ -116,9 +116,10 @@ EOF
 
 source ${FDEST}/env.sh
 echo "Installing the OpenQuake Engine. Please wait."
+# Define externally GEM_NO_PIP_INST to disable wheels installation (in case of cross-system installation tests)
 # Update pip first
-/usr/bin/env pip3 install --disable-pip-version-check -U wheelhouse/pip*.whl > /dev/null
-/usr/bin/env pip3 install --disable-pip-version-check wheelhouse/*.whl > /dev/null
+test "$GEM_NO_PIP_INST" || /usr/bin/env pip3 install --disable-pip-version-check -U wheelhouse/pip*.whl > /dev/null
+test "$GEM_NO_PIP_INST" || /usr/bin/env pip3 install --disable-pip-version-check wheelhouse/*.whl > /dev/null
 mkdir -p $FDEST/share
 cp -R src/{README.md,LICENSE,demos,doc} $FDEST/share
 cat <<EOF >> $FDEST/share/uninstall.sh
@@ -158,7 +159,7 @@ else
 fi
 if [[ "$TOOLS" == 'Y' || "$TOOLS" == 'y' ]]; then
     PYPREFIX=$(python -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())')
-    /usr/bin/env pip3 install --disable-pip-version-check wheelhouse/tools/*.whl > /dev/null
+    test "$GEM_NO_PIP_INST" || /usr/bin/env pip3 install --disable-pip-version-check wheelhouse/tools/*.whl > /dev/null
 fi
 
 ## 'oq' command alias
