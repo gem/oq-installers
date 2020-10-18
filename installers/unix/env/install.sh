@@ -61,11 +61,20 @@ realpath() {
 IFS="
 "
 MACOS=$(echo $OSTYPE | grep darwin || true)
+SHELL_DEF=$(basename $SHELL || true)
 if [ $MACOS ]; then
-    RC=$HOME/.bash_profile;
+    if [ "$SHELL_DEF" = "zsh" ]; then
+        RC=$HOME/.zshrc
+    else
+        RC=$HOME/.bash_profile
+    fi
     SED_ARGS="-i ''"
 else
-    RC=$HOME/.bashrc;
+    if [ "$SHELL_DEF" = "zsh" ]; then
+        RC=$HOME/.zshrc
+    else
+        RC=$HOME/.bashrc
+    fi
     SED_ARGS="-i"
 fi
 
