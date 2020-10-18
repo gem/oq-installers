@@ -120,6 +120,7 @@ REWRITE=':loop;s@'${PREFIX}'\([^\x00\x22\x27]*[\x27\x22]\)@'${FDEST}'\1'${BLA}'@
 find ${FDEST} -type f -exec ${FDEST}/bin/sed -i $REWRITE "{}" \;
 
 source ${FDEST}/env.sh
+# Define externally GEM_NO_PIP_INST to disable wheels installation (in case of cross-system installation tests)
 echo "Installing the OpenQuake Engine. Please wait."
 test "$GEM_NO_PIP_INST" || /usr/bin/env pip3 install --disable-pip-version-check wheelhouse/*.whl > /dev/null
 mkdir -p $FDEST/share

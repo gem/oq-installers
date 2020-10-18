@@ -107,6 +107,7 @@ EOF
 
 source ${FDEST}/env.sh
 echo "Installing the OpenQuake Engine. Please wait."
+# Define externally GEM_NO_PIP_INST to disable wheels installation (in case of cross-system installation tests)
 # Update pip first
 test "$GEM_NO_PIP_INST" || /usr/bin/env pip3 install --disable-pip-version-check -U wheelhouse/pip*.whl > /dev/null
 test "$GEM_NO_PIP_INST" || /usr/bin/env pip3 install --disable-pip-version-check wheelhouse/*.whl > /dev/null
