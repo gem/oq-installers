@@ -102,6 +102,6 @@ jobs:
         with:
           name: gdal wheel
           path: src/whl/
-           retention-days: 2
+          retention-days: 2
 
 
