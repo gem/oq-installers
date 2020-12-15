@@ -22,19 +22,19 @@ jobs:
           curl -f -L -O https://github.com/libexpat/libexpat/releases/download/R_2_2_9/expat-2.2.9.tar.bz2
           tar xjf expat-2.2.9.tar.bz2
           cd expat-2.2.9
-          ./configure --prefix=/usr/local
+          ./configure 
           make -j 2
           sudo make install
           curl -f -L -O https://download.osgeo.org/geos/geos-3.8.1.tar.bz2 
           tar jxf geos-3.8.1.tar.bz2
           cd geos-3.8.1
-          ./configure --prefix=/usr/local
+          ./configure 
           make -j $NPROC
           sudo make install
           curl -f -L -O https://download.osgeo.org/proj/proj-6.3.2.tar.gz
           tar xzf proj-6.3.2.tar.gz
           cd proj-6.3.2
-          ./configure  --prefix=/usr/local
+          ./configure 
           make -j $NPROC
           sudo make install
       - name: compile GDAL 3.1.2 from source pip environments
@@ -58,9 +58,9 @@ jobs:
            --with-pcraster=internal \
            --with-pcidsk=internal \
            --with-pam \
-           --with-geos=/usr/local/bin/geos-config \
-           --with-proj=/usr/local \
-           --with-expat=/usr/local \
+           --with-geos \
+           --with-proj \
+           --with-expat \
            --with-libjson-c \
            --with-libiconv-prefix=/usr \
            --with-libz=/usr \
@@ -89,13 +89,13 @@ jobs:
           cp ../wheels/builders/gdal/setup.py gdal-3.1.2/swig/python/setup.py
           cp ../wheels/builders/gdal/gdalinit.py gdal-3.1.2/swig/python/osgeo/__init__.py
           cd gdal-3.1.2/swig/python
-          pip install -U numpy==1.18.2
-          pip wheel --no-deps --no-binary :all: -w ~/src/whl .
+          pip install numpy==1.18.2
+          pip install pyproj==2.1.3
+          echo "pip wheel -w ~/src/whl ."
+          pip wheel -w ~/src/whl .
           git clone https://github.com/gem/oq-engine.git
           cd oq-engine
           pip install -e .
-          pip install pyproj==2.1.3
-          pip install GDAL==3.1.2
           pytest -vsx openquake/sep
       - name: Upload wheel
         uses: actions/upload-artifact@v2
@@ -103,5 +103,3 @@ jobs:
           name: gdal wheel
           path: ~/src/whl/
           retention-days: 2
-
-
