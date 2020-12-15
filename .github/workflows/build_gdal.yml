@@ -1,0 +1,31 @@
+name: pypi deployer
+on:
+  push:
+jobs:
+  Matrix-build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        #os: [macos-latest, windows-latest, ubuntu-latest]
+        os: [ubuntu-latest]
+        #python-version: [3.6, 3.7, 3.8]
+        python-version: [3.8]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name:
+        run: |
+          pip install wheel setuptools
+          cd /wheels/builders
+          export GEM_SET_DEBUG = TRUE
+          cd /tmp/src
+          curl -f -L -O https://github.com/libexpat/libexpat/releases/download/R_2_2_9/expat-2.2.9.tar.bz2
+          tar xjf expat-2.2.9.tar.bz2
+          cd expat-2.2.9
+          ./configure --prefix=/usr/local
+          make -j 2
+          make install
+          
