@@ -91,9 +91,10 @@ jobs:
           cd gdal-3.1.2/swig/python
           pip install -U numpy==1.18.2
           pip wheel --no-deps --no-binary :all: .
-          git clone --depth=1 git@github.com:gem/oq-engine.git
+          git clone https://github.com/gem/oq-engine.git
           cd oq-engine
           pip install -e .
+          pip install pyproj=2.1.3
           pytest -vsx openquake/sep
 
 
