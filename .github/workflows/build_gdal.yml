@@ -81,9 +81,9 @@ jobs:
           gdalinfo --formats
           echo " gdal-config --version"
           gdal-config --version
-      - name: Setup pip and wheel environments
+      - name: Setup pip and wheel environments and test on oqengine
         run: |
-          pip install -U pip wheel setuptools auditwheel
+          pip install -U pip wheel setuptools auditwheel pytest
           #
           cd src
           cp ../wheels/builders/gdal/setup.py gdal-3.1.2/swig/python/setup.py
@@ -91,3 +91,9 @@ jobs:
           cd gdal-3.1.2/swig/python
           pip install -U numpy==1.18.2
           pip wheel --no-deps --no-binary :all: .
+          git clone --depth=1 git@github.com:gem/oq-engine.git
+          cd oq-engine
+          pip install -e .
+          pytest -vsx openquake/sep
+
+
