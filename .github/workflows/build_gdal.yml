@@ -58,6 +58,8 @@ jobs:
           sudo make install
           #test gdal installation
           gdalinfo --formats
+          gdal-config --version
+          #
           cp gdal/setup.py gdal-3.1.2/swig/python/setup.py
           cp gdal/gdalinit.py gdal-3.1.2/swig/python/osgeo/__init__.py
           cd gdal-3.1.2/swig/python
