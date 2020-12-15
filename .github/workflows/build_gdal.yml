@@ -19,7 +19,8 @@ jobs:
       - name:
         run: |
           pip install wheel setuptools
-          cd /tmp/src
+          mkdir src
+          cd src
           curl -f -L -O https://github.com/libexpat/libexpat/releases/download/R_2_2_9/expat-2.2.9.tar.bz2
           tar xjf expat-2.2.9.tar.bz2
           cd expat-2.2.9
