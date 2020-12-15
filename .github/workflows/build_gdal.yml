@@ -7,7 +7,7 @@ jobs:
     strategy:
       matrix:
         #os: [macos-latest, windows-latest, ubuntu-latest]
-        os: [macos-latest, ubuntu-latest]
+        os: [macos-latest]
         #python-version: [3.6, 3.7, 3.8]
         python-version: [3.8]
     steps:
@@ -16,6 +16,52 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Setup pip environments
+        run: |
+          pip install -U pip wheel setuptools auditwheel
+          mkdir src
+          cd src
+          curl -f -L -O  https://download.osgeo.org/gdal/3.1.2/gdal-3.1.2.tar.gz
+          tar xzf gdal-3.1.2.tar.gz
+          cd gdal-3.1.2
+          ./configure \
+           --with-threads \
+           --disable-debug \
+           --disable-static \
+           --with-libtiff \
+           --with-libtool \
+           --with-opencl \
+           --with-jpeg \
+           --with-gif \
+           --with-png \
+           --with-geotiff=internal \
+           --with-sqlite3 \
+           --with-pcraster=internal \
+           --with-pcidsk=internal \
+           --with-pam \
+           --with-geos=/usr/local/bin/geos-config \
+           --with-expat=/usr/local \
+           --with-libjson-c \
+           --with-libiconv-prefix=/usr \
+           --with-libz=/usr \
+           --with-curl=curl-config \
+           --without-grass \
+           --without-libgrass \
+           --without-jpeg12 \
+           --without-jasper \
+           --with-armadillo=no \
+           --with-qhull=no \
+           --without-mysql \
+           --without-perl \
+           --without-python
+          make -j 2
+          sudo make install
+          #test gdal installation
+          gdalinfo --formats
+          cp gdal/setup.py gdal-3.1.2/swig/python/setup.py
+          cp gdal/gdalinit.py gdal-3.1.2/swig/python/osgeo/__init__.py
+          cd gdal-3.1.2/swig/python
+          pip install -U numpy==1.18.2
       - name: build expat geos and proj
         run: |
           mkdir src
@@ -40,44 +86,3 @@ jobs:
           sudo make install
           curl -f -L -O https://download.osgeo.org/proj/proj-datumgrid-1.8.zip
           sudo unzip -o -d /usr/local/share/proj proj-datumgrid-1.8.zip
-      - name: Setup pip environments
-        run: |
-          pip install -U pip wheel setuptools auditwheel
-          cd src
-          curl -f -L -O  https://download.osgeo.org/gdal/3.1.2/gdal-3.1.2.tar.gz
-          tar xzf gdal-3.1.2.tar.gz
-          cd gdal-3.1.2
-          ./configure \
-           --with-threads \
-           --disable-debug \
-           --disable-static \
-           --without-grass \
-           --without-libgrass \
-           --without-jpeg12 \
-           --with-jasper=/usr/local \
-           --with-libtiff \
-           --with-jpeg \
-           --with-gif \
-           --with-png \
-           --with-geotiff=internal \
-           --with-sqlite3=/usr \
-           --with-pcraster=internal \
-           --with-pcidsk=internal \
-           --with-bsb \
-           --with-grib \
-           --with-pam \
-           --with-geos=/usr/local/bin/geos-config \
-           --with-static-proj4=/usr/local \
-           --with-expat=/usr/local \
-           --with-libjson-c \
-           --with-libiconv-prefix=/usr \
-           --with-libz=/usr \
-           --with-curl=curl-config \
-           --without-python
-          make -j 2
-          sudo make install
-          cp gdal/setup.py gdal-3.1.2/swig/python/setup.py
-          cp gdal/gdalinit.py gdal-3.1.2/swig/python/osgeo/__init__.py
-          cd gdal-3.1.2/swig/python
-          pip install -U numpy==1.18.2
-          pip wheel --no-deps --no-binary :all: .
