@@ -16,6 +16,15 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Setup pip and wheel environments
+        run: |
+          pip install -U pip wheel setuptools auditwheel
+          #
+          cd src
+          cp ../wheels/builders/gdal/setup.py gdal-3.1.2/swig/python/setup.py
+          cp ../wheels/builders/gdal/gdalinit.py gdal-3.1.2/swig/python/osgeo/__init__.py
+          cd gdal-3.1.2/swig/python
+          pip install -U numpy==1.18.2
       - name: build expat geos and proj
         run: |
           mkdir src
@@ -29,17 +38,15 @@ jobs:
           curl -f -L -O https://download.osgeo.org/geos/geos-3.8.1.tar.bz2 
           tar jxf geos-3.8.1.tar.bz2
           cd geos-3.8.1
-          ./configure
+          ./configure --prefix=/usr/local
           make -j $NPROC
           sudo make install
           curl -f -L -O https://download.osgeo.org/proj/proj-6.3.2.tar.gz
           tar xzf proj-6.3.2.tar.gz
           cd proj-6.3.2
-          ./configure
+          ./configure  --prefix=/usr/local
           make -j $NPROC
           sudo make install
-          curl -f -L -O https://download.osgeo.org/proj/proj-datumgrid-1.8.zip
-          sudo unzip -o -d /usr/local/share/proj proj-datumgrid-1.8.zip
       - name: compile GDAL 3.1.2 from source pip environments
         run: |
           cd src
@@ -62,6 +69,7 @@ jobs:
            --with-pcidsk=internal \
            --with-pam \
            --with-geos=/usr/local/bin/geos-config \
+           --with-proj=/usr/local \
            --with-expat=/usr/local \
            --with-libjson-c \
            --with-libiconv-prefix=/usr \
@@ -81,12 +89,3 @@ jobs:
           #test gdal installation
           gdalinfo --formats
           gdal-config --version
-      - name: Setup pip and wheel environments
-        run: |
-          pip install -U pip wheel setuptools auditwheel
-          cd src
-          #
-          cp gdal/setup.py gdal-3.1.2/swig/python/setup.py
-          cp gdal/gdalinit.py gdal-3.1.2/swig/python/osgeo/__init__.py
-          cd gdal-3.1.2/swig/python
-          pip install -U numpy==1.18.2
