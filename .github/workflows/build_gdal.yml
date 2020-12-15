@@ -1,4 +1,4 @@
-name: pypi deployer
+name: build gdal whl
 on:
   push:
 jobs:
@@ -19,7 +19,6 @@ jobs:
       - name:
         run: |
           pip install wheel setuptools
-          cd /wheels/builders
           export GEM_SET_DEBUG = TRUE
           cd /tmp/src
           curl -f -L -O https://github.com/libexpat/libexpat/releases/download/R_2_2_9/expat-2.2.9.tar.bz2
