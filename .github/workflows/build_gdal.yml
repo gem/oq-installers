@@ -24,20 +24,20 @@ jobs:
           tar xjf expat-2.2.9.tar.bz2
           cd expat-2.2.9
           ./configure 
-          make -j 2
+          make -j 4
           sudo make install
           curl -f -L -O https://download.osgeo.org/geos/geos-3.8.1.tar.bz2 
           tar jxf geos-3.8.1.tar.bz2
           cd geos-3.8.1
           ./configure --enable-python
-          make -j 2
+          make -j 4
           sudo make install
           which geos-config
           curl -f -L -O https://download.osgeo.org/proj/proj-6.3.2.tar.gz
           tar xzf proj-6.3.2.tar.gz
           cd proj-6.3.2
           ./configure 
-          make -j 2
+          make -j 4
           sudo make install
       - name: compile GDAL 3.1.2 from source pip environments
         run: |
@@ -78,7 +78,7 @@ jobs:
            --without-mysql \
            --without-perl \
            --without-python
-          make -j 2
+          make -j 4
           sudo make install
           #test gdal installation
           echo "gdalinfo --formats"
@@ -86,12 +86,10 @@ jobs:
           echo " gdal-config --version"
           gdal-config --version
           which gdal-config
-          ls /usr/local/Cellar/gdal/
+          sudo ind / -name libgdal.27 -ls
           pip3 download GDAL==3.1.2
           tar -xvzf GDAL-3.1.2.tar.gz
           cd GDAL-3.1.2
-          python3 setup.py build_ext --gdal-config /usr/local/Cellar/gdal/bin/gdal-config
+          python3 setup.py build_ext --gdal-config /usr/local//bin/gdal-config
           python3 setup.py build
           python3 setup.py install
-
-
