@@ -86,12 +86,11 @@ jobs:
           ls -lrt /Library/Frameworks/GDAL.framework/Versions/3.1/Headers 
           ls -lrt /Library/Frameworks/GDAL.framework/Versions/3.1/unix/lib 
           ls -lrt /Library/Frameworks/GDAL.framework/Versions/3.1/unix/bin/gdal-config  
+          pip3 install numpy==1.18.2
           pip3 download GDAL==3.1.2
           tar -xvzf GDAL-3.1.2.tar.gz
           cd GDAL-3.1.2
-          python3 setup.py build_ext -I/Library/Frameworks/GDAL.framework/Versions/3.1/Headers -L/Library/Frameworks/GDAL.framework/Versions/3.1/unix/lib --gdal-config /Library/Frameworks/GDAL.framework/Versions/3.1/unix/bin/gdal-config
-          python3 setup.py build
-          python3 setup.py install
+          python3 setup.py install --include-dirs=/Library/Frameworks/GDAL.framework/Versions/3.1/unix/include  --library-dirs=/Library/Frameworks/GDAL.framework/Versions/3.1/unix/lib
           pip wheel -w ~/src/whl .
       - name: Upload wheel
         uses: actions/upload-artifact@v2
