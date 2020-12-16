@@ -32,7 +32,6 @@ jobs:
           ./configure --enable-python
           make -j 2
           sudo make install
-          geos-config --libs
           which geos-config
           curl -f -L -O https://download.osgeo.org/proj/proj-6.3.2.tar.gz
           tar xzf proj-6.3.2.tar.gz
@@ -40,5 +39,56 @@ jobs:
           ./configure 
           make -j 2
           sudo make install
-          proj -V
-          which proj
+      - name: compile GDAL 3.1.2 from source pip environments
+        run: |
+          cd src
+          curl -f -L -O  https://download.osgeo.org/gdal/3.1.2/gdal-3.1.2.tar.gz
+          tar xzf gdal-3.1.2.tar.gz
+          cd gdal-3.1.2
+          ./configure \
+           --with-threads \
+           --disable-debug \
+           --disable-static \
+           --with-libtiff \
+           --with-libtool \
+           --with-opencl \
+           --with-jpeg \
+           --with-gif \
+           --with-png \
+           --with-geotiff \
+           --with-sqlite3 \
+           --with-pcraster=internal \
+           --with-pcidsk=internal \
+           --with-pam \
+           --with-geos=/usr/local/bin/geos-config \
+           --with-proj=/usr/local \
+           --with-expat=/usr/local \
+           --with-freexl \
+           --with-libjson-c \
+           --with-libiconv-prefix \
+           --with-libz \
+           --with-curl \
+           --without-grass \
+           --without-libgrass \
+           --without-jpeg12 \
+           --without-jasper \
+           --with-armadillo=no \
+           --with-qhull=no \
+           --with-pg=yes \
+           --without-mysql \
+           --without-perl \
+           --without-python
+          make -j 2
+          sudo make install
+          #test gdal installation
+          echo "gdalinfo --formats"
+          gdalinfo --formats
+          echo " gdal-config --version"
+          gdal-config --version
+          which gdal-config
+          ls -lrt /Library/Frameworks/GDAL.framework/Versions/
+          pip3 download GDAL==3.1.2
+          tar -xvzf GDAL-3.1.2.tar.gz
+          cd GDAL-3.1.2
+
+
