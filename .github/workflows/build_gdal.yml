@@ -77,7 +77,8 @@ jobs:
            --with-pg=yes \
            --without-mysql \
            --without-perl \
-           --without-python
+           --with-python \
+           --with-macosx-framework
           make -j 4
           sudo make install
           #test gdal installation
