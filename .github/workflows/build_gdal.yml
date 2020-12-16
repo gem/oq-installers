@@ -90,6 +90,7 @@ jobs:
           ls -lrt /Library/Frameworks/GDAL.framework/Versions/3.1/unix/bin/gdal-config  
           echo " gdalinfo --version"
           gdalinfo --version
+          pip3 install -U pip wheel setuptools
           pip3 install numpy==1.18.2
           pip3 download GDAL==3.1.2
           tar -xvzf GDAL-3.1.2.tar.gz
