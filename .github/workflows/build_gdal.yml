@@ -97,7 +97,7 @@ jobs:
           python setup.py build_ext -I/Library/Frameworks/GDAL.framework/Versions/3.1/Headers -L/Library/Frameworks/GDAL.framework/Versions/3.1/unix/lib --gdal-config /Library/Frameworks/GDAL.framework/Versions/3.1/unix/bin/gdal-config
           python setup.py build
           python setup.py install
-          pip wheel -w ~/src/whl .
+          pip wheel --no-deps --no-binary :all: -w ~/src/whl .
       - name: Upload wheel
         uses: actions/upload-artifact@v2
         with:
