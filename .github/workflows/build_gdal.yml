@@ -82,16 +82,14 @@ jobs:
           make -j 4
           sudo make install
           #test gdal installation
-          echo "gdalinfo --formats"
-          gdalinfo --formats
-          echo " gdal-config --version"
-          gdal-config --version
-          which gdal-config
-          sudo find / -name libgdal.27 -ls
+          ls -lrt  /Library/Frameworks/GDAL.framework/Versions/3.1/*
+          ls -lrt /Library/Frameworks/GDAL.framework/Versions/3.1/Headers 
+          ls -lrt /Library/Frameworks/GDAL.framework/Versions/3.1/unix/lib 
+          ls -lrt /Library/Frameworks/GDAL.framework/Versions/3.1/unix/bin/gdal-config  
           pip3 download GDAL==3.1.2
           tar -xvzf GDAL-3.1.2.tar.gz
           cd GDAL-3.1.2
-          python3 setup.py build_ext --gdal-config /usr/local//bin/gdal-config
+          python3 setup.py build_ext -I/Library/Frameworks/GDAL.framework/Versions/3.1/Headers -L/Library/Frameworks/GDAL.framework/Versions/3.1/unix/lib --gdal-config /Library/Frameworks/GDAL.framework/Versions/3.1/unix/bin/gdal-config
           python3 setup.py build
           python3 setup.py install
           pip wheel -w ~/src/whl .
