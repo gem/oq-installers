@@ -1,0 +1,40 @@
+name: build gdal whl
+on:
+  push:
+jobs:
+  Matrix-build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        #os: [macos-latest, windows-latest, ubuntu-latest]
+        os: [windows-latest]
+        python-version: [3.8]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: build expat geos and proj
+        run: |
+          mkdir src
+          cd src
+          curl -f -L -O https://github.com/libexpat/libexpat/releases/download/R_2_2_9/expat-2.2.9.tar.bz2
+          tar xjf expat-2.2.9.tar.bz2
+          cd expat-2.2.9
+          ./configure 
+          make -j 4
+          sudo make install
+          curl -f -L -O https://download.osgeo.org/geos/geos-3.8.1.tar.bz2 
+          tar jxf geos-3.8.1.tar.bz2
+          cd geos-3.8.1
+          ./configure --enable-python
+          make -j 4
+          sudo make install
+          which geos-config
+          curl -f -L -O https://download.osgeo.org/proj/proj-6.3.2.tar.gz
+          tar xzf proj-6.3.2.tar.gz
+          cd proj-6.3.2
+          ./configure 
+          make -j 4
+          sudo make install
