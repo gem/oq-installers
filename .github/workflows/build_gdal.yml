@@ -94,7 +94,9 @@ jobs:
           pip3 download GDAL==3.1.2
           tar -xvzf GDAL-3.1.2.tar.gz
           cd GDAL-3.1.2
-          cp ../../wheels/builders/gdal/setup_mac.py ./setup.py
+          pwd
+          cp ../../../wheels/builders/gdal/setup_mac.py ./setup.py
+          cp ../../../wheels/builders/gdal/ gdalinit_mac.py ./osgeo/__init__.py
           pip wheel --no-deps --no-binary :all: -w ~/src/whl .
       - name: Upload wheel
         uses: actions/upload-artifact@v2
