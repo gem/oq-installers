@@ -16,7 +16,7 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      - name: build expat geos and proj
+      - name: build expat geos and proj and jasper
         run: |
           mkdir src
           cd src
@@ -26,6 +26,7 @@ jobs:
           ./configure 
           make -j 4
           sudo make install
+          cd ..
           curl -f -L -O https://download.osgeo.org/geos/geos-3.8.1.tar.bz2 
           tar jxf geos-3.8.1.tar.bz2
           cd geos-3.8.1
@@ -33,6 +34,7 @@ jobs:
           make -j 4
           sudo make install
           which geos-config
+          cd ..
           curl -f -L -O https://download.osgeo.org/proj/proj-6.3.2.tar.gz
           tar xzf proj-6.3.2.tar.gz
           cd proj-6.3.2
@@ -43,6 +45,13 @@ jobs:
           cd ..
           ./configure 
           make -j 4
+          sudo make install
+          cd ..
+          curl -f -L -O http://download.osgeo.org/gdal/jasper-1.900.1.uuid.tar.gz
+          tar xzf jasper-1.900.1.uuid.tar.gz
+          cd jasper-1.900.1.uuid
+          ./configure --disable-debug --enable-shared
+          make -j $NPROC
           sudo make install
       - name: compile GDAL 3.1.2 from source pip environments
         run: |
