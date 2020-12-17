@@ -46,13 +46,6 @@ jobs:
           ./configure 
           make -j 4
           sudo make install
-          cd ..
-          curl -f -L -O http://download.osgeo.org/gdal/jasper-1.900.1.uuid.tar.gz
-          tar xzf jasper-1.900.1.uuid.tar.gz
-          cd jasper-1.900.1.uuid
-          ./configure --disable-debug --enable-shared
-          make -j $NPROC
-          sudo make install
       - name: compile GDAL 3.1.2 from source pip environments
         run: |
           cd src
@@ -101,7 +94,7 @@ jobs:
           pip3 download GDAL==3.1.2
           tar -xvzf GDAL-3.1.2.tar.gz
           cd GDAL-3.1.2
-          which gdal-config
+          cp ../../wheels/builders/gdal/setup_mac.py ./setup.py
           pip wheel --no-deps --no-binary :all: -w ~/src/whl .
       - name: Upload wheel
         uses: actions/upload-artifact@v2
