@@ -8,7 +8,7 @@ jobs:
       matrix:
         #os: [macos-latest, windows-latest, ubuntu-latest]
         os: [macos-10.15]
-        python-version: [3.6, 3.7, 3.8]
+          #python-version: [3.6, 3.7, 3.8]
         python-version: [3.8]
     steps:
       - uses: actions/checkout@v2
@@ -36,9 +36,9 @@ jobs:
           curl -f -L -O https://download.osgeo.org/proj/proj-6.3.2.tar.gz
           tar xzf proj-6.3.2.tar.gz
           cd proj-6.3.2
+          curl -f -L -O https://download.osgeo.org/proj/proj-datumgrid-1.8.zip
           mkdir nad
           cd nad
-          curl -f -L -O https://download.osgeo.org/proj/proj-datumgrid-1.8.zip
           unzip ../proj-datumgrid-1.8.zip
           cd ..
           ./configure 
