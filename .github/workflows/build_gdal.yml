@@ -35,6 +35,11 @@ jobs:
           curl -f -L -O https://download.osgeo.org/proj/proj-6.3.2.tar.gz
           tar xzf proj-6.3.2.tar.gz
           cd proj-6.3.2
+          mkdir nad
+          cd nad
+          curl -f -L -O https://download.osgeo.org/proj/proj-datumgrid-1.8.zip
+          unzip ../proj-datumgrid-1.8.zip
+          cd ..
           ./configure 
           make -j 4
           sudo make install
@@ -76,7 +81,7 @@ jobs:
            --with-pg=yes \
            --without-mysql \
            --without-perl \
-           --with-python \
+           --without-python 
           make -j 4
           sudo make install
           #echo 'export PATH=/Library/Frameworks/GDAL.framework/Versions/3.1/Programs:$PATH' >> ~/.z_profile
