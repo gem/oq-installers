@@ -77,16 +77,15 @@ jobs:
            --without-mysql \
            --without-perl \
            --with-python \
-           --with-macosx-framework
           make -j 4
           sudo make install
-          echo 'export PATH=/Library/Frameworks/GDAL.framework/Versions/3.1/Programs:$PATH' >> ~/.z_profile
-          source ~/.z_profile
+          #echo 'export PATH=/Library/Frameworks/GDAL.framework/Versions/3.1/Programs:$PATH' >> ~/.z_profile
+          #source ~/.z_profile
           #test gdal installation
-          ls -lrt  /Library/Frameworks/GDAL.framework/Versions/3.1/*
-          ls -lrt /Library/Frameworks/GDAL.framework/Versions/3.1/Headers 
-          ls -lrt /Library/Frameworks/GDAL.framework/Versions/3.1/unix/lib 
-          ls -lrt /Library/Frameworks/GDAL.framework/Versions/3.1/unix/bin/gdal-config  
+          #ls -lrt  /Library/Frameworks/GDAL.framework/Versions/3.1/*
+          #ls -lrt /Library/Frameworks/GDAL.framework/Versions/3.1/Headers 
+          #ls -lrt /Library/Frameworks/GDAL.framework/Versions/3.1/unix/lib 
+          #ls -lrt /Library/Frameworks/GDAL.framework/Versions/3.1/unix/bin/gdal-config  
           echo " gdalinfo --version"
           gdalinfo --version
           pip3 install -U pip wheel setuptools
@@ -94,9 +93,10 @@ jobs:
           pip3 download GDAL==3.1.2
           tar -xvzf GDAL-3.1.2.tar.gz
           cd GDAL-3.1.2
-          python setup.py build_ext -I/Library/Frameworks/GDAL.framework/Versions/3.1/Headers -L/Library/Frameworks/GDAL.framework/Versions/3.1/unix/lib --gdal-config /Library/Frameworks/GDAL.framework/Versions/3.1/unix/bin/gdal-config
-          python setup.py build
-          python setup.py install
+          which gdal-config
+          #python setup.py build_ext -I/Library/Frameworks/GDAL.framework/Versions/3.1/Headers -L/Library/Frameworks/GDAL.framework/Versions/3.1/unix/lib --gdal-config /Library/Frameworks/GDAL.framework/Versions/3.1/unix/bin/gdal-config
+          #python setup.py build
+          #python setup.py install
           pip wheel --no-deps --no-binary :all: -w ~/src/whl .
       - name: Upload wheel
         uses: actions/upload-artifact@v2
