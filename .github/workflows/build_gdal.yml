@@ -66,7 +66,7 @@ jobs:
            --with-libjson-c \
            --with-libiconv-prefix \
            --with-libz \
-           --with-curl \
+           --with-curl=/usr/bin/curl-config \
            --without-grass \
            --without-libgrass \
            --without-jpeg12 \
@@ -76,7 +76,6 @@ jobs:
            --with-pg=yes \
            --without-mysql \
            --without-perl \
-           --with-python \
            --with-macosx-framework
           make -j 4
           sudo make install
@@ -89,18 +88,20 @@ jobs:
           ls -lrt /Library/Frameworks/GDAL.framework/Versions/3.1/unix/bin/gdal-config  
           echo " gdalinfo --version"
           gdalinfo --version
-          pip3 install -U pip wheel setuptools
+          pip3 install -U pip wheel setuptools deallocate
           pip3 install numpy==1.18.2
           pip3 download GDAL==3.1.2
           tar -xvzf GDAL-3.1.2.tar.gz
           cd GDAL-3.1.2
           pwd
           cp /Users/runner/work/oq-builders/oq-builders/wheels/builders/gdal/setup_mac.py ./setup.py
-          cp /Users/runner/work/oq-builders/oq-builders/wheels/builders/gdal/gdalinit_mac.py ./osgeo/__init__.py
+          export GDAL_DATA=/Library/Frameworks/GDAL.framework/Versions/3.1/Resources/gdal/gdal
           python setup.py build_ext -I/Library/Frameworks/GDAL.framework/Versions/3.1/Headers -L/Library/Frameworks/GDAL.framework/Versions/3.1/unix/lib --gdal-config /Library/Frameworks/GDAL.framework/Versions/3.1/unix/bin/gdal-config
           python setup.py build
           python setup.py install
-          pip wheel --no-deps --no-binary :all: -w ~/src/whl .
+          pip wheel --no-deps --no-binary :all: -w output .
+          cd output
+          delocate-wheel -w ~/src/whl GDAL*.whl
       - name: Upload wheel
         uses: actions/upload-artifact@v2
         with:
