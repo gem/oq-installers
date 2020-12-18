@@ -22,10 +22,6 @@ jobs:
           curl -f -L -O https://github.com/libexpat/libexpat/releases/download/R_2_2_9/expat-2.2.9.tar.bz2
           tar xjf expat-2.2.9.tar.bz2
           cd expat-2.2.9
-          pwd
-          ls -lrt ../../../oq-builders/wheels/builders/gdal/
-          ls -lrt ../../oq-builders/wheels/builders/gdal/
-          ls -lrt ../../
           ./configure 
           make -j 4
           sudo make install
@@ -99,8 +95,8 @@ jobs:
           tar -xvzf GDAL-3.1.2.tar.gz
           cd GDAL-3.1.2
           pwd
-          cp ../../oq-builders/wheels/builders/gdal/setup_mac.py ./setup.py
-          cp ../../oq-builders/wheels/builders/gdal/gdalinit_mac.py ./osgeo/__init__.py
+          cp ../../../oq-builders/wheels/builders/gdal/setup_mac.py ./setup.py
+          cp ../../../oq-builders/wheels/builders/gdal/gdalinit_mac.py ./osgeo/__init__.py
           python setup.py build_ext -I/Library/Frameworks/GDAL.framework/Versions/3.1/Headers -L/Library/Frameworks/GDAL.framework/Versions/3.1/unix/lib --gdal-config /Library/Frameworks/GDAL.framework/Versions/3.1/unix/bin/gdal-config
           python setup.py build
           python setup.py install
