@@ -95,8 +95,8 @@ jobs:
           tar -xvzf GDAL-3.1.2.tar.gz
           cd GDAL-3.1.2
           pwd
-          cp ../../../oq-builders/wheels/builders/gdal/setup_mac.py ./setup.py
-          cp ../../../oq-builders/wheels/builders/gdal/gdalinit_mac.py ./osgeo/__init__.py
+          cp /Users/runner/work/oq-builders/oq-builders/wheels/builders/gdal/setup_mac.py ./setup.py
+          cp /Users/runner/work/oq-builders/oq-builders/wheels/builders/gdal/gdalinit_mac.py ./osgeo/__init__.py
           python setup.py build_ext -I/Library/Frameworks/GDAL.framework/Versions/3.1/Headers -L/Library/Frameworks/GDAL.framework/Versions/3.1/unix/lib --gdal-config /Library/Frameworks/GDAL.framework/Versions/3.1/unix/bin/gdal-config
           python setup.py build
           python setup.py install
