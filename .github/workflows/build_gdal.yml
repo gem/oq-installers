@@ -8,25 +8,27 @@ jobs:
       matrix:
         #os: [macos-latest, windows-latest, ubuntu-latest]
         os: [macos-10.15]
-          #python-version: [3.6, 3.7, 3.8]
-        python-version: [3.8]
+        python-version: [3.6, 3.7, 3.8]
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      - name: build expat geos and proj and jasper
+      - name: build expat geos and proj
         run: |
           mkdir src
           cd src
           curl -f -L -O https://github.com/libexpat/libexpat/releases/download/R_2_2_9/expat-2.2.9.tar.bz2
           tar xjf expat-2.2.9.tar.bz2
           cd expat-2.2.9
+          pwd
+          ls -lrt ../../../oq-builders/wheels/builders/gdal/
+          ls -lrt ../../oq-builders/wheels/builders/gdal/
+          ls -lrt ../../
           ./configure 
           make -j 4
           sudo make install
-          cd ..
           curl -f -L -O https://download.osgeo.org/geos/geos-3.8.1.tar.bz2 
           tar jxf geos-3.8.1.tar.bz2
           cd geos-3.8.1
@@ -34,15 +36,9 @@ jobs:
           make -j 4
           sudo make install
           which geos-config
-          cd ..
           curl -f -L -O https://download.osgeo.org/proj/proj-6.3.2.tar.gz
           tar xzf proj-6.3.2.tar.gz
           cd proj-6.3.2
-          curl -f -L -O https://download.osgeo.org/proj/proj-datumgrid-1.8.zip
-          mkdir nad
-          cd nad
-          unzip ../proj-datumgrid-1.8.zip
-          cd ..
           ./configure 
           make -j 4
           sudo make install
@@ -84,9 +80,17 @@ jobs:
            --with-pg=yes \
            --without-mysql \
            --without-perl \
-           --without-python 
+           --with-python \
+           --with-macosx-framework
           make -j 4
           sudo make install
+          echo 'export PATH=/Library/Frameworks/GDAL.framework/Versions/3.1/Programs:$PATH' >> ~/.z_profile
+          source ~/.z_profile
+          #test gdal installation
+          ls -lrt  /Library/Frameworks/GDAL.framework/Versions/3.1/*
+          ls -lrt /Library/Frameworks/GDAL.framework/Versions/3.1/Headers 
+          ls -lrt /Library/Frameworks/GDAL.framework/Versions/3.1/unix/lib 
+          ls -lrt /Library/Frameworks/GDAL.framework/Versions/3.1/unix/bin/gdal-config  
           echo " gdalinfo --version"
           gdalinfo --version
           pip3 install -U pip wheel setuptools
@@ -95,8 +99,11 @@ jobs:
           tar -xvzf GDAL-3.1.2.tar.gz
           cd GDAL-3.1.2
           pwd
-          cp ../../../wheels/builders/gdal/setup_mac.py ./setup.py
-          cp ../../../wheels/builders/gdal/ gdalinit_mac.py ./osgeo/__init__.py
+          cp ../../oq-builders/wheels/builders/gdal/setup_mac.py ./setup.py
+          cp ../../oq-builders/wheels/builders/gdal/gdalinit_mac.py ./osgeo/__init__.py
+          python setup.py build_ext -I/Library/Frameworks/GDAL.framework/Versions/3.1/Headers -L/Library/Frameworks/GDAL.framework/Versions/3.1/unix/lib --gdal-config /Library/Frameworks/GDAL.framework/Versions/3.1/unix/bin/gdal-config
+          python setup.py build
+          python setup.py install
           pip wheel --no-deps --no-binary :all: -w ~/src/whl .
       - name: Upload wheel
         uses: actions/upload-artifact@v2
