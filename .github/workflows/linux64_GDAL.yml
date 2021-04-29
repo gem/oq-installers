@@ -3,31 +3,17 @@ on:
   push:
     branches: [ gdal ]
 jobs:
-  mkdir_out:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Create output folder for artifacts
-        run: |
-          mkdir output
-          cd output
-          pwd
-          touch pippo
-          ls -lrt 
   build_whl: 
     runs-on: ubuntu-latest
     container: 
       image: quay.io/pypa/manylinux2010_x86_64
-      volumes:
-        - /home/runner/work/output:/io
+      #volumes:
+      #  - /home/runner/work/output:/io
     steps:
       - uses: actions/checkout@v1
       - name: 
         run: |
-          uname -a
+          bash -x wheels/builders/gdal.sh
+          cd wheels/wheelhouse
+          ls -lrt
           pwd
-          ls -lrt
-          cd /
-          ls -lrt
-          cd /io
-          ls -lrt
-          #bash -x wheels/builders/gdal.sh
