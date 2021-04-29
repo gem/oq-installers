@@ -11,7 +11,8 @@ jobs:
           mkdir output
           cd output
           pwd
-          ls -lrt *
+          touch pippo
+          ls -lrt 
   build_whl: 
     runs-on: ubuntu-latest
     container: 
@@ -26,5 +27,7 @@ jobs:
           pwd
           ls -lrt
           cd /
+          ls -lrt
+          cd /io
           ls -lrt
           #bash -x wheels/builders/gdal.sh
