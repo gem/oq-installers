@@ -5,9 +5,10 @@ on:
 jobs:
   build_whl: 
     runs-on: ubuntu-latest
-    container: quay.io/pypa/manylinux2010_x86_64
-    volumes:
-      - $PWD:/tmp
+    container: 
+      image: quay.io/pypa/manylinux2010_x86_64
+      volumes:
+        - $PWD:/tmp
     steps:
       - uses: actions/checkout@v1
       - name: 
