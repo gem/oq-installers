@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         #os: [macos-latest, windows-latest, ubuntu-latest]
-        os: [ubuntu-latest]
+        os: [ubuntu-18.04]
         python-version: [3.7]
     steps:
       - uses: actions/checkout@v2
@@ -21,7 +21,6 @@ jobs:
           echo $LD_LIBRARY_PATH
           export PYTHONPATH=$LD_LIBRARY_PATH
           echo $PYTHONPATH
-          find / -name python3*so
           mkdir src
           cd src
           curl -f -L -O https://github.com/libexpat/libexpat/releases/download/R_2_2_9/expat-2.2.9.tar.bz2
