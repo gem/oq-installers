@@ -1,4 +1,4 @@
-name: build gdal whl
+name: MACOS build GDAL whl
 on:
   push:
 jobs:
