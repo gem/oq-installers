@@ -6,17 +6,12 @@ jobs:
   build_whl: 
     runs-on: ubuntu-latest
     container: quay.io/pypa/manylinux2010_x86_64
+    volumes:
+      - $PWD:/tmp
     steps:
       - uses: actions/checkout@v1
       - name: 
         run: |
           uname -a
-          echo $LD_LIBRARY_PATH
-          export PYTHONPATH=$LD_LIBRARY_PATH
-          echo $PYTHONPATH
-          mkdir src
-      - name: Upload wheel
-        uses: actions/upload-artifact@v2
-        with:
-          name: gdal wheel
-          path: ~/src/whl/
+          pwd
+          bash -x wheels/builders/gdal.sh
