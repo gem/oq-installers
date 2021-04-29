@@ -1,7 +1,7 @@
 name: Linux build GDAL 
 on:
   push:
-  branches: [ gdal ]
+    branches: [ gdal ]
 jobs:
   Matrix-build:
     runs-on: ${{ matrix.os }}
