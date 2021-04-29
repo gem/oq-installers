@@ -30,6 +30,7 @@ jobs:
           tar jxf geos-3.8.1.tar.bz2
           cd geos-3.8.1
           echo $LD_LIBRARY_PATH
+          export PYTHONPATH=$LD_LIBRARY_PATH
           echo $PYTHONPATH
           ./configure --enable-python
           make -j 4
