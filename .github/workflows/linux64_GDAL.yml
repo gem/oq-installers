@@ -22,7 +22,6 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: build expat geos and proj
         run: |
-          ls -lrt /opt/hostedtoolcache/Python/*
           which python3
           mkdir src
           cd src
@@ -35,6 +34,7 @@ jobs:
           curl -f -L -O https://download.osgeo.org/geos/geos-3.8.1.tar.bz2 
           tar jxf geos-3.8.1.tar.bz2
           cd geos-3.8.1
+          export PYTHON=/opt/hostedtoolcache/Python/${{ matrix.python-version }}/x64/bin/python3
           ./configure --enable-python
           make -j 4
           sudo make install
