@@ -9,6 +9,7 @@ jobs:
       - name: Create output folder for artifacts
         run: |
           mkdir output
+          cd output
           pwd
           ls -lrt *
   build_whl: 
@@ -23,5 +24,7 @@ jobs:
         run: |
           uname -a
           pwd
-          ls -lrt /io/*
+          ls -lrt
+          cd /
+          ls -lrt
           #bash -x wheels/builders/gdal.sh
