@@ -3,20 +3,21 @@ on:
   push:
     branches: [ gdal ]
 jobs:
-  runs-on: ubuntu-latest
-  container: quay.io/pypa/manylinux2010_x86_64
-  steps:
-    - name: Checkout Project
-      uses: actions/checkout@v2
-    - name: 
-      run: |
-        uname -a
-        echo $LD_LIBRARY_PATH
-        export PYTHONPATH=$LD_LIBRARY_PATH
-        echo $PYTHONPATH
-        mkdir src
-    - name: Upload wheel
-      uses: actions/upload-artifact@v2
-      with:
-        name: gdal wheel
-        path: ~/src/whl/
+  build_whl: 
+    runs-on: ubuntu-latest
+    container: quay.io/pypa/manylinux2010_x86_64
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v2
+      - name: 
+        run: |
+          uname -a
+          echo $LD_LIBRARY_PATH
+          export PYTHONPATH=$LD_LIBRARY_PATH
+          echo $PYTHONPATH
+          mkdir src
+      - name: Upload wheel
+        uses: actions/upload-artifact@v2
+        with:
+          name: gdal wheel
+          path: ~/src/whl/

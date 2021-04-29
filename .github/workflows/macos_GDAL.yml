@@ -1,8 +1,8 @@
 name: MACOS build GDAL whl
 on:
-  push:
+  push: [master]
 jobs:
-  Matrix-build:
+  GDAL-build:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
