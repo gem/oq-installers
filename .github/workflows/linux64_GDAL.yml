@@ -3,16 +3,27 @@ on:
   push:
     branches: [ gdal ]
 jobs:
+  setup_workspace:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: mkdir -p /out
+      - run: echo ciao > /out/pippo.txt
+      - uses: actions/upload-artifact@master
+        with:
+          name: my-artifact
+          path: /out
   build_whl: 
     runs-on: ubuntu-latest
     container: 
       image: quay.io/pypa/manylinux2010_x86_64
       volumes:
-        - $PWD:/tmp
+        - /out:/io
     steps:
       - uses: actions/checkout@v1
       - name: 
         run: |
+          ls /io*
           uname -a
           pwd
           bash -x wheels/builders/gdal.sh
