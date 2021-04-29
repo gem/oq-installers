@@ -13,6 +13,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: Set Python environment variable
         run: echo '::set-env name=LD_LIBRARY_PATH::/tmp/runner/work/_tool/Python/${{ matrix.python-version }}/x64/lib'
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
       - name: Set up Python  ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
