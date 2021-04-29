@@ -21,7 +21,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: build expat geos and proj
         run: |
-          ls -lrt /opt/hostedtoolcache/Python/${{ matrix.python-version }}/x64/bin
+          ls -lrt /opt/hostedtoolcache/Python/${{ matrix.python-version }}/x64/*
           which python3
           mkdir src
           cd src
