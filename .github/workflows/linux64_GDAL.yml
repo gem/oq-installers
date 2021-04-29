@@ -21,7 +21,8 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: build expat geos and proj
         run: |
-          ls -lrt /opt/hostedtoolcache/Python/*
+          ls -lrt /opt/hostedtoolcache/Python/${{ matrix.python-version }}/x64/bin
+          which python3
           mkdir src
           cd src
           curl -f -L -O https://github.com/libexpat/libexpat/releases/download/R_2_2_9/expat-2.2.9.tar.bz2
