@@ -18,6 +18,10 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: build expat geos and proj
         run: |
+          echo $LD_LIBRARY_PATH
+          export PYTHONPATH=$LD_LIBRARY_PATH
+          echo $PYTHONPATH
+          find / -name python3*so
           mkdir src
           cd src
           curl -f -L -O https://github.com/libexpat/libexpat/releases/download/R_2_2_9/expat-2.2.9.tar.bz2
@@ -29,9 +33,6 @@ jobs:
           curl -f -L -O https://download.osgeo.org/geos/geos-3.8.1.tar.bz2 
           tar jxf geos-3.8.1.tar.bz2
           cd geos-3.8.1
-          echo $LD_LIBRARY_PATH
-          export PYTHONPATH=$LD_LIBRARY_PATH
-          echo $PYTHONPATH
           ./configure --enable-python
           make -j 4
           sudo make install
