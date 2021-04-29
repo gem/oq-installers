@@ -9,20 +9,15 @@ jobs:
       matrix:
         #os: [macos-latest, windows-latest, ubuntu-latest]
         os: [ubuntu-latest]
-        python-version: [3.6, 3.7, 3.8]
+        python-version: [3.7]
     steps:
       - uses: actions/checkout@v2
-      - name: Set Python environment variable
-        run: echo '::set-env name=LD_LIBRARY_PATH::/opt/hostedtoolcache/Python/${{ matrix.python-version }}/x64/lib'
-        env:
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
       - name: Set up Python  ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
       - name: build expat geos and proj
         run: |
-          which python3
           mkdir src
           cd src
           curl -f -L -O https://github.com/libexpat/libexpat/releases/download/R_2_2_9/expat-2.2.9.tar.bz2
@@ -34,7 +29,7 @@ jobs:
           curl -f -L -O https://download.osgeo.org/geos/geos-3.8.1.tar.bz2 
           tar jxf geos-3.8.1.tar.bz2
           cd geos-3.8.1
-          export PYTHON=/opt/hostedtoolcache/Python/${{ matrix.python-version }}/x64/bin/python3
+          export PYTHON=/opt/hostedtoolcache/Python/3.7.10/x64/bin/python3
           ./configure --enable-python
           make -j 4
           sudo make install
