@@ -1,6 +1,6 @@
 name: WIN64 build GDAL whl
-on:
-  push:
+#on:
+  #  push:
 jobs:
   Matrix-build:
     runs-on: ${{ matrix.os }}

@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set Python environment variable
-        run: echo '::set-env name=LD_LIBRARY_PATH::/tmp/runner/work/_tool/Python/${{ matrix.python-version }}/x64/lib'
+        run: echo '::set-env name=LD_LIBRARY_PATH::/opt/hostedtoolcache/Python/${{ matrix.python-version }}/x64/lib'
         env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
       - name: Set up Python  ${{ matrix.python-version }}
@@ -21,6 +21,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: build expat geos and proj
         run: |
+          ls -lrt /opt/hostedtoolcache/Python/*
           mkdir src
           cd src
           curl -f -L -O https://github.com/libexpat/libexpat/releases/download/R_2_2_9/expat-2.2.9.tar.bz2
