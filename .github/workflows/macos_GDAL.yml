@@ -106,5 +106,5 @@ jobs:
       - name: Upload wheel
         uses: actions/upload-artifact@v2
         with:
-          name: gdal wheel
+          name: gdal wheel macos
           path: ~/src/whl/
