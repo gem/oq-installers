@@ -3,10 +3,10 @@ on:
   push:
     branches: [ gdal ]
 jobs:
-  build_whl: 
+  build_GDAL: 
     runs-on: ubuntu-latest
     container: 
-      image: quay.io/pypa/manylinux2010_x86_64
+      image: quay.io/pypa/manylinux1_x86_64
       #volumes:
       #  - /home/runner/work/output:/io
     steps:
