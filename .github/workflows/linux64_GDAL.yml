@@ -1,7 +1,7 @@
 name: Linux build GDAL 
 on:
-  push:
-    branches: [ gdal ]
+  schedule:
+    - cron: "0 2 * * 5"
 jobs:
   build_GDAL: 
     runs-on: ubuntu-latest
