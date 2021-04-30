@@ -1,8 +1,9 @@
-name: MACOS build GDAL whl
-#on:
-  #  push:
+name: macOS build GDAL whl
+on:
+  schedule:
+    - cron: "0 5 * * 5"
 jobs:
-  Matrix-build:
+  GDAL-build:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -38,12 +39,12 @@ jobs:
           ./configure 
           make -j 4
           sudo make install
-      - name: compile GDAL 3.1.2 from source pip environments
+      - name: compile GDAL 3.2.2 from source pip environments
         run: |
           cd src
-          curl -f -L -O  https://download.osgeo.org/gdal/3.1.2/gdal-3.1.2.tar.gz
-          tar xzf gdal-3.1.2.tar.gz
-          cd gdal-3.1.2
+          curl -f -L -O  https://download.osgeo.org/gdal/3.2.2/gdal-3.2.2.tar.gz
+          tar xzf gdal-3.2.2.tar.gz
+          cd gdal-3.2.2
           ./configure \
            --with-threads \
            --disable-debug \
@@ -79,24 +80,24 @@ jobs:
            --with-macosx-framework
           make -j 4
           sudo make install
-          echo 'export PATH=/Library/Frameworks/GDAL.framework/Versions/3.1/Programs:$PATH' >> ~/.z_profile
+          echo 'export PATH=/Library/Frameworks/GDAL.framework/Versions/3.2/Programs:$PATH' >> ~/.z_profile
           source ~/.z_profile
           #test gdal installation
-          ls -lrt  /Library/Frameworks/GDAL.framework/Versions/3.1/*
-          ls -lrt /Library/Frameworks/GDAL.framework/Versions/3.1/Headers 
-          ls -lrt /Library/Frameworks/GDAL.framework/Versions/3.1/unix/lib 
-          ls -lrt /Library/Frameworks/GDAL.framework/Versions/3.1/unix/bin/gdal-config  
+          ls -lrt  /Library/Frameworks/GDAL.framework/Versions/3.2/*
+          ls -lrt /Library/Frameworks/GDAL.framework/Versions/3.2/Headers 
+          ls -lrt /Library/Frameworks/GDAL.framework/Versions/3.2/unix/lib 
+          ls -lrt /Library/Frameworks/GDAL.framework/Versions/3.2/unix/bin/gdal-config  
           echo " gdalinfo --version"
           gdalinfo --version
           pip3 install -U pip wheel setuptools delocate
           pip3 install numpy==1.18.2
-          pip3 download GDAL==3.1.2
-          tar -xvzf GDAL-3.1.2.tar.gz
-          cd GDAL-3.1.2
+          pip3 download GDAL==3.2.2
+          tar -xvzf GDAL-3.2.2.tar.gz
+          cd GDAL-3.2.2
           pwd
           cp /Users/runner/work/oq-builders/oq-builders/wheels/builders/gdal/setup_mac.py ./setup.py
-          export GDAL_DATA=/Library/Frameworks/GDAL.framework/Versions/3.1/Resources/gdal/gdal
-          python setup.py build_ext -I/Library/Frameworks/GDAL.framework/Versions/3.1/Headers -L/Library/Frameworks/GDAL.framework/Versions/3.1/unix/lib --gdal-config /Library/Frameworks/GDAL.framework/Versions/3.1/unix/bin/gdal-config
+          export GDAL_DATA=/Library/Frameworks/GDAL.framework/Versions/3.2/Resources/gdal/gdal
+          python setup.py build_ext -I/Library/Frameworks/GDAL.framework/Versions/3.2/Headers -L/Library/Frameworks/GDAL.framework/Versions/3.2/unix/lib --gdal-config /Library/Frameworks/GDAL.framework/Versions/3.2/unix/bin/gdal-config
           python setup.py build
           python setup.py install
           pip wheel --no-deps --no-binary :all: -w output .
