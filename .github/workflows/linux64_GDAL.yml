@@ -7,7 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     container: 
       image: quay.io/pypa/manylinux1_x86_64
-      #env:
+      env: 
+        GEM_SET_PY: 36 37 38
       #volumes:
       #  - /home/runner/work/output:/io
     steps:
