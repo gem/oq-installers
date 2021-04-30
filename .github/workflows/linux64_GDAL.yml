@@ -1,6 +1,5 @@
 name: Linux build GDAL 
 on:
-  push:
   schedule:
     - cron: "0 2 * * 5"
 jobs:

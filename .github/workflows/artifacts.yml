@@ -1,8 +1,9 @@
 name: Linux build setproctitle
 on:
-  push:
+  schedule:
+    - cron: "0 2 15 * *"
 jobs:
-  build_GDAL: 
+  build_whl: 
     runs-on: ubuntu-latest
     strategy:
       matrix:
