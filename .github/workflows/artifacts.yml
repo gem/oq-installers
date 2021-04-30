@@ -18,9 +18,6 @@ jobs:
       - name: build gdal wheel
         run: |
           bash -x wheels/builders/setproctitle.sh
-          cd wheels/wheelhouse
-          ls -lrt
-          pwd
       - name: Upload wheel
         uses: actions/upload-artifact@v1
         with:
