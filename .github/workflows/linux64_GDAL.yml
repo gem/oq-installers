@@ -20,12 +20,12 @@ jobs:
           ls -lrt
           pwd
       - name: Upload wheel from docker
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v1
         with:
           name: gdal wheel linux
           path: /__w/oq-builders/oq-builders/wheels/wheelhouse
       - name: Upload wheel from ubuntu
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v1
         with:
           name: gdal wheel linux
           path: /home/runner/work/oq-builders/oq-builders/wheels/wheelhouse
