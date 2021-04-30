@@ -1,9 +1,9 @@
-name: Linux build GDAL 
+name: Linux build setproctitle
 on:
   schedule:
-    - cron: "0 2 * * 5"
+    - cron: "0 2 15 * *"
 jobs:
-  build_GDAL: 
+  build_whl: 
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -18,10 +18,9 @@ jobs:
       - uses: actions/checkout@v1
       - name: build gdal wheel
         run: |
-          bash -x wheels/builders/gdal.sh
+          bash -x wheels/builders/setproctitle.sh
       - name: Upload wheel
         uses: actions/upload-artifact@v1
         with:
           name: gdal wheel linux
           path: /home/runner/output
-
