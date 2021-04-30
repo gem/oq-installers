@@ -7,7 +7,7 @@
 # Howard Butler hobu.inc@gmail.com
 
 
-gdal_version = '3.1.2'
+gdal_version = '3.2.2'
 
 import sys
 import os
@@ -478,7 +478,7 @@ setup_kwargs = dict(
 )
 
 # Copy gdal/proj data. 
-copy_data_tree('/Library/Frameworks/GDAL.framework/Versions/3.1/Resources/gdal/gdal', 'osgeo/gdal_data')
+copy_data_tree('/Library/Frameworks/GDAL.framework/Versions/3.2/Resources/gdal/gdal', 'osgeo/gdal_data')
 copy_data_tree('/usr/local/share/proj', 'osgeo/proj_data')
 
 # This section can be greatly simplified with python >= 3.5 using **
