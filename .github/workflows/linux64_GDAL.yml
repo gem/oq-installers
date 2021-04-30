@@ -5,28 +5,23 @@ on:
 jobs:
   build_GDAL: 
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [36, 37, 38]
     container: 
       image: quay.io/pypa/manylinux1_x86_64
       env: 
-        GEM_SET_PY: 36 37 38
-      #volumes:
-      #  - /home/runner/work/output:/io
+        GEM_SET_PY: ${{ matrix.python-version }}
+      volumes:
+        - /home/runner/output:/io
     steps:
       - uses: actions/checkout@v1
       - name: build gdal wheel
         run: |
           bash -x wheels/builders/gdal.sh
-          cd wheels/wheelhouse
-          ls -lrt
-          pwd
-      - name: Upload wheel from docker
+      - name: Upload wheel
         uses: actions/upload-artifact@v1
         with:
           name: gdal wheel linux
-          path: /__w/oq-builders/oq-builders/wheels/wheelhouse
-      - name: Upload wheel from ubuntu
-        uses: actions/upload-artifact@v1
-        with:
-          name: gdal wheel linux
-          path: /home/runner/work/oq-builders/oq-builders/wheels/wheelhouse
+          path: /home/runner/output
 

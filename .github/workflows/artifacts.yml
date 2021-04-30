@@ -1,13 +1,16 @@
-name: Linux build GDAL 
+name: Linux build setproctitle
 on:
   push:
 jobs:
   build_GDAL: 
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [36, 37, 38]
     container: 
       image: quay.io/pypa/manylinux1_x86_64
       env: 
-        GEM_SET_PY: 36
+        GEM_SET_PY: ${{ matrix.python-version }}
       volumes:
         - /home/runner/output:/io
     steps:
