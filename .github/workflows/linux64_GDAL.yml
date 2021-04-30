@@ -7,13 +7,25 @@ jobs:
     runs-on: ubuntu-latest
     container: 
       image: quay.io/pypa/manylinux1_x86_64
+      #env:
       #volumes:
       #  - /home/runner/work/output:/io
     steps:
       - uses: actions/checkout@v1
-      - name: 
+      - name: build gdal wheel
         run: |
           bash -x wheels/builders/gdal.sh
           cd wheels/wheelhouse
           ls -lrt
           pwd
+      - name: Upload wheel from docker
+        uses: actions/upload-artifact@v2
+        with:
+          name: gdal wheel linux
+          path: /__w/oq-builders/oq-builders/wheels/wheelhouse
+      - name: Upload wheel from ubuntu
+        uses: actions/upload-artifact@v2
+        with:
+          name: gdal wheel linux
+          path: /home/runner/work/oq-builders/oq-builders/wheels/wheelhouse
+
