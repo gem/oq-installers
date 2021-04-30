@@ -1,0 +1,30 @@
+name: Linux build GDAL 
+on:
+  push:
+jobs:
+  build_GDAL: 
+    runs-on: ubuntu-latest
+    container: 
+      image: quay.io/pypa/manylinux1_x86_64
+      env: 
+        GEM_SET_PY: 36
+      #volumes:
+      #  - /home/runner/work/output:/io
+    steps:
+      - uses: actions/checkout@v1
+      - name: build gdal wheel
+        run: |
+          bash -x wheels/builders/setproctitle.sh
+          cd wheels/wheelhouse
+          ls -lrt
+          pwd
+      - name: Upload wheel from ubuntu
+        uses: actions/upload-artifact@v1
+        with:
+          name: gdal wheel linux
+          path: /home/runner/work/oq-builders/oq-builders/wheels/wheelhouse
+      - name: Upload wheel from docker
+        uses: actions/upload-artifact@v1
+        with:
+          name: gdal wheel linux
+          path: /io/wheelhouse
