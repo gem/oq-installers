@@ -18,13 +18,8 @@ jobs:
           cd wheels/wheelhouse
           ls -lrt
           pwd
-      - name: Upload wheel from ubuntu
+      - name: Upload wheel
         uses: actions/upload-artifact@v1
         with:
           name: gdal wheel linux
           path: /home/runner/output
-      - name: Upload wheel from docker
-        uses: actions/upload-artifact@v1
-        with:
-          name: gdal wheel linux
-          path: /io/wheelhouse
