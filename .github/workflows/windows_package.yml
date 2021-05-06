@@ -29,9 +29,12 @@ jobs:
           echo "Extracting python wheels"
           $PY_VER="py${{ matrix.python-version }}"
           $py = $PY_VER.replace(".","")
+          git clone --depth=1 https://github.com/gem/oq-engine.git
+          cd oq-engine
           python -m pip install install -r requirements-$py-win64.txt
       - name: Downloading core apps from master
         run: |
+          cd ~
           mkdir oqdist
           git clone --depth=1 https://github.com/gem/oq-engine.git
           python -m pip -q wheel --disable-pip-version-check --no-deps -w ../oq-dist/engine ./${app}
