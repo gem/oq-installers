@@ -1,0 +1,59 @@
+name: Windows Installer for oq-engine
+on:
+  push:
+  schedule:
+    - cron: "0 5 * * 5"
+jobs:
+  Windows-Installer:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest]
+        python-version: [3.8]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Upgrade pip, wheel and setuptools
+        run: |
+          #git status
+          $PY_VER="py${{ matrix.python-version }}"
+          $py = $PY_VER.replace(".","")
+          #python -m pip install install -r requirements-$py-win64.txt
+          #python -m pip install -e .
+          python -m pip install pip wheel setuptools --upgrade
+      - name: Extracting python wheels for engine
+        run: |
+          echo "Extracting python wheels"
+          $PY_VER="py${{ matrix.python-version }}"
+          $py = $PY_VER.replace(".","")
+          python -m pip install install -r requirements-$py-win64.txt
+      - name: Downloading core apps from master
+        run: |
+          mkdir oqdist
+          git clone --depth=1 https://github.com/gem/oq-engine.git
+          python -m pip -q wheel --disable-pip-version-check --no-deps -w ../oq-dist/engine ./${app}
+      - name: Downloading standalone apps
+        run: |
+          $app = ("oq-platform-standalone", "oq-platform-ipt", "oq-platform-taxtweb", "oq-platform-taxonomy")
+          foreach ($element in $app) {
+              git clone -q --depth=1 https://github.com/gem/$element.git
+              python -m pip -q wheel --disable-pip-version-check --no-deps -w ../oq-dist/tools ./$element
+              if ( "$element" = "oq-platform-taxtweb" ) 
+              {
+                export PYBUILD_NAME="oq-taxonomy"
+                python -m pip -q wheel --disable-pip-version-check --no-deps -w ../oq-dist/tools ./$element
+                unset PYBUILD_NAME
+              }    
+          }
+          #- name: build expat geos and proj
+          #run: |
+            #mkdir src
+            #delocate-wheel -w ~/src/whl GDAL*.whl
+      - name: Upload wheel
+        uses: actions/upload-artifact@v2
+        with:
+          name: Output Wheel
+          path: ~/oq-dist/tools
