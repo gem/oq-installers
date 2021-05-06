@@ -47,7 +47,7 @@ jobs:
               if ( $element -eq "oq-platform-taxtweb" ) 
               {
                 #export PYBUILD_NAME="oq-taxonomy"
-                $Env:PYBUILD_NAME= = "oq-taxonomy"
+                $Env:PYBUILD_NAME = "oq-taxonomy"
                 python -m pip -q wheel --disable-pip-version-check --no-deps -w ../oq-dist/tools ./$element
                 unset PYBUILD_NAME
               }    
