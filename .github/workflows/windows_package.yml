@@ -51,9 +51,12 @@ jobs:
                 python -m pip -q wheel --disable-pip-version-check --no-deps -w ../oq-dist/tools ./$element
               }    
           }
-          ls
           cd ../oq-dist/tools
+          pwd
           ls 
+          cd ../oq-dist/
+          pwd
+          ls
           cd ~
           pwd
           #- name: build expat geos and proj
@@ -64,4 +67,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: Output Wheel
-          path: ~/oq-dist/tools
+          path: D:\a\oq-builders\oq-dist
