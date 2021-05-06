@@ -37,7 +37,7 @@ jobs:
           cd ~
           mkdir oqdist
           git clone --depth=1 https://github.com/gem/oq-engine.git
-          python -m pip -q wheel --disable-pip-version-check --no-deps -w ../oq-dist/engine ./${app}
+          python -m pip -q wheel --disable-pip-version-check --no-deps -w ../oq-dist/engine ./oq-engine
       - name: Downloading standalone apps
         run: |
           $app = ("oq-platform-standalone", "oq-platform-ipt", "oq-platform-taxtweb", "oq-platform-taxonomy")
