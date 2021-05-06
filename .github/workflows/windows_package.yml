@@ -53,7 +53,7 @@ jobs:
           }
           ls
           cd ../oq-dist/tools
-          ls -lrt
+          ls 
           cd ~
           pwd
           #- name: build expat geos and proj
