@@ -40,7 +40,7 @@ jobs:
           python -m pip wheel --disable-pip-version-check --no-deps -w ../oq-dist/engine ./oq-engine
       - name: Downloading standalone apps
         run: |
-          $app = ("oq-platform-standalone", "oq-platform-ipt", "oq-platform-taxtweb", "oq-platform-taxonomy")
+          $app = ("oq-platform-standalone", "oq-platform-ipt", "oq-platform-taxonomy", "oq-platform-taxtweb")
           foreach ($element in $app) {
               git clone -q --depth=1 https://github.com/gem/$element.git
               python -m pip wheel --disable-pip-version-check --no-deps -w ../oq-dist/tools ./$element
