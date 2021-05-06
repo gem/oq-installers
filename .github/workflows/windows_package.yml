@@ -37,13 +37,13 @@ jobs:
           cd ~
           mkdir oqdist
           git clone --depth=1 https://github.com/gem/oq-engine.git
-          python -m pip -q wheel --disable-pip-version-check --no-deps -w ../oq-dist/engine ./oq-engine
+          python -m pip wheel --disable-pip-version-check --no-deps -w ../oq-dist/engine ./oq-engine
       - name: Downloading standalone apps
         run: |
           $app = ("oq-platform-standalone", "oq-platform-ipt", "oq-platform-taxtweb", "oq-platform-taxonomy")
           foreach ($element in $app) {
               git clone -q --depth=1 https://github.com/gem/$element.git
-              python -m pip -q wheel --disable-pip-version-check --no-deps -w ../oq-dist/tools ./$element
+              python -m pip wheel --disable-pip-version-check --no-deps -w ../oq-dist/tools ./$element
               if ( "$element" = "oq-platform-taxtweb" ) 
               {
                 export PYBUILD_NAME="oq-taxonomy"
@@ -59,4 +59,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: Output Wheel
-          path: ~/oq-dist/tools
+          path: ~/oq-dist/
