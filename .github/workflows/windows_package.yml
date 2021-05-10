@@ -55,8 +55,14 @@ jobs:
           }
           pwd
           ls
+      - name: Install pyinstaller and run on engine folder
+        run: |
+          cd ~
+          cd oq-engine
+          python -m pip install pyinstaller
+          pyinstaller --onefile --noupx setup.py 
       - name: Upload wheel
         uses: actions/upload-artifact@v2
         with:
           name: Output Wheel
-          path: C:\Users\runneradmin\oq-dist
+          path: C:\Users\runneradmin\oq-engine\dist
