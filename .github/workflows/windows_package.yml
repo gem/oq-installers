@@ -53,18 +53,10 @@ jobs:
           }
           cd ../oq-dist/tools
           pwd
-          ls 
-          cd ../oq-dist/
-          pwd
+          cd D:\a\oq-builders\oq-builders\oq-dist
           ls
-          cd ~
-          pwd
-          #- name: build expat geos and proj
-          #run: |
-            #mkdir src
-            #delocate-wheel -w ~/src/whl GDAL*.whl
       - name: Upload wheel
         uses: actions/upload-artifact@v2
         with:
           name: Output Wheel
-          path: D:\a\oq-builders\oq-dist
+          path: D:\a\oq-builders\oq-builders\oq-dist
