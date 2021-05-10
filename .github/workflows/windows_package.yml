@@ -36,10 +36,11 @@ jobs:
         run: |
           cd ~
           mkdir oqdist
-          git clone --depth=1 https://github.com/gem/oq-engine.git
+          #git clone --depth=1 https://github.com/gem/oq-engine.git
           python -m pip wheel --disable-pip-version-check --no-deps -w ../oq-dist/engine ./oq-engine
       - name: Downloading standalone apps
         run: |
+          cd ~
           $app = ("oq-platform-standalone", "oq-platform-ipt", "oq-platform-taxonomy", "oq-platform-taxtweb")
           foreach ($element in $app) {
               git clone -q --depth=1 https://github.com/gem/$element.git
@@ -53,10 +54,9 @@ jobs:
           }
           cd ../oq-dist/tools
           pwd
-          cd D:\a\oq-builders\oq-builders\oq-dist
           ls
       - name: Upload wheel
         uses: actions/upload-artifact@v2
         with:
           name: Output Wheel
-          path: D:\a\oq-builders\oq-builders\oq-dist
+          path: C:\Users\runneradmin\oq-dist
