@@ -26,6 +26,7 @@ jobs:
           python -m pip install pip wheel setuptools --upgrade
       - name: Extracting python wheels for engine
         run: |
+          cd ~
           echo "Extracting python wheels"
           $PY_VER="py${{ matrix.python-version }}"
           $py = $PY_VER.replace(".","")
@@ -37,22 +38,21 @@ jobs:
           cd ~
           mkdir oqdist
           #git clone --depth=1 https://github.com/gem/oq-engine.git
-          python -m pip wheel --disable-pip-version-check --no-deps -w ../oq-dist/engine ./oq-engine
+          python -m pip wheel --disable-pip-version-check --no-deps -w oq-dist/engine ./oq-engine
       - name: Downloading standalone apps
         run: |
           cd ~
           $app = ("oq-platform-standalone", "oq-platform-ipt", "oq-platform-taxonomy", "oq-platform-taxtweb")
           foreach ($element in $app) {
               git clone -q --depth=1 https://github.com/gem/$element.git
-              python -m pip wheel --disable-pip-version-check --no-deps -w ../oq-dist/tools ./$element
+              python -m pip wheel --disable-pip-version-check --no-deps -w oq-dist/tools ./$element
               if ( $element -eq "oq-platform-taxtweb" ) 
               {
                 #export PYBUILD_NAME="oq-taxonomy"
                 $Env:PYBUILD_NAME = "oq-taxonomy"
-                python -m pip -q wheel --disable-pip-version-check --no-deps -w ../oq-dist/tools ./$element
+                python -m pip -q wheel --disable-pip-version-check --no-deps -w oq-dist/tools ./$element
               }    
           }
-          cd ../oq-dist/tools
           pwd
           ls
       - name: Upload wheel
