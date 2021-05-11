@@ -62,7 +62,7 @@ jobs:
           git clone -q  --depth=1 https://github.com/gem/oq-builders
           ls 
           oq --version
-          cp oq-builder/installer/windows/nsis/installer.nsi.win installer.nsi
+          cp oq-builders/installer/windows/nsis/installer.nsi.win installer.nsi
       - name: Upload wheel
         uses: actions/upload-artifact@v2
         with:
