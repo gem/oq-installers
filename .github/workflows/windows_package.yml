@@ -11,7 +11,7 @@ jobs:
         os: [windows-latest]
         python-version: [3.8]
     steps:
-      #- uses: actions/checkout@v2
+      - uses: actions/checkout@v2
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -40,7 +40,6 @@ jobs:
           python -m pip install install -r requirements-$py-win64.txt
           python -m pip install .
           cd ~
-          mkdir oqdist
           python -m pip wheel --disable-pip-version-check --no-deps -w oq-dist/engine ./oq-engine
           echo "Downloading standalone apps"
           cd ~
@@ -66,4 +65,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: Output Wheel
-          path: C:\Users\runneradmin\oqdist
+          path: C:\Users\runneradmin\oq-dist
