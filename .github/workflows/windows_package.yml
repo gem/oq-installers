@@ -22,15 +22,18 @@ jobs:
           python -m pip install pip wheel setuptools --upgrade
       - name: Create VENV for installation of engine and tools and display python version
         run: |
-          python -m venv c:\Users\runneradmin\python-dist
-          C:\Users\runneradmin\python-dist\Scripts\activate.ps1
+          git clone -q  --depth=1 https://github.com/gem/oq-builders
+          cd .\oq-builders\installers\windows\nsis\
+          python -m venv .\python-dist
+          C:\Users\runneradmin\oq-builders\installers\windows\nsis\python-dist\Scripts\activate.ps1
           python -m pip install pip wheel setuptools --upgrade
           python -c "import sys; print(sys.version)"
           where.exe python.exe
       - name: Extracting python wheels for engine and for core apps
         run: |
-          C:\Users\runneradmin\python-dist\Scripts\activate.ps1
           cd ~
+          cd .\oq-builders\installers\windows\nsis\
+          C:\Users\runneradmin\oq-builders\installers\windows\nsis\python-dist\Scripts\activate.ps1
           echo "Extracting python wheels"
           $PY_VER="py${{ matrix.python-version }}"
           $py = $PY_VER.replace(".","")
@@ -55,14 +58,11 @@ jobs:
           }
       - name: Prepare Windows Installer 
         run: |
-          C:\Users\runneradmin\python-dist\Scripts\activate.ps1
           cd ~
-          mkdir project
-          cd project
-          git clone -q  --depth=1 https://github.com/gem/oq-builders
-          ls 
-          oq --version
-          cp oq-builders/installer/windows/nsis/installer.nsi.win installer.nsi
+          cd .\oq-builders\installers\windows\nsis\
+          cp installer.nsi.win installer.nsi
+          curl.exe -LO https://ci.openquake.org/job/builders/job/pdf-builder/lastSuccessfulBuild/artifact/oq-engine/doc/manual/oq-manual.pdf
+          Rename-Item .\oq-manual.pdf "Openquake manual.pdf"
       - name: Upload wheel
         uses: actions/upload-artifact@v2
         with:
