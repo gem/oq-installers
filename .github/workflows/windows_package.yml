@@ -11,7 +11,6 @@ jobs:
         os: [windows-latest]
         python-version: [3.8]
     steps:
-      - uses: actions/checkout@v2
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -23,14 +22,14 @@ jobs:
           python -m pip install pip wheel setuptools --upgrade
       - name: Create VENV for installation of engine and tools and display python version
         run: |
-          python -m venv c:\Users\runneradmin\inst
-          C:\Users\runneradmin\inst\Scripts\activate.ps1
+          python -m venv c:\Users\runneradmin\python-dist
+          C:\Users\runneradmin\python-dist\Scripts\activate.ps1
           python -m pip install pip wheel setuptools --upgrade
           python -c "import sys; print(sys.version)"
           where.exe python.exe
       - name: Extracting python wheels for engine and for core apps
         run: |
-          C:\Users\runneradmin\inst\Scripts\activate.ps1
+          C:\Users\runneradmin\python-dist\Scripts\activate.ps1
           cd ~
           echo "Extracting python wheels"
           $PY_VER="py${{ matrix.python-version }}"
@@ -56,11 +55,14 @@ jobs:
           }
       - name: Prepare Windows Installer 
         run: |
-          C:\Users\runneradmin\inst\Scripts\activate.ps1
+          C:\Users\runneradmin\python-dist\Scripts\activate.ps1
           cd ~
+          mkdir project
+          cd project
+          git clone -q  --depth=1 https://github.com/gem/oq-builders
           ls 
           oq --version
-          #cp oq-builder/installer/windows/nsis/installer.nsi.tmpl installer.nsi
+          cp oq-builder/installer/windows/nsis/installer.nsi.win installer.nsi
       - name: Upload wheel
         uses: actions/upload-artifact@v2
         with:

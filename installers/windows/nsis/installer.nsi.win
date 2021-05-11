@@ -1,0 +1,345 @@
+# -*- coding: utf-8 -*-
+# vim: tabstop=2 shiftwidth=2 softtabstop=2 syntax=nsis
+#
+# Copyright (C) 2016-2019 GEM Foundation
+#
+# OpenQuake is free software: you can redistribute it and/or modify it
+# under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# OpenQuake is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with OpenQuake. If not, see <http://www.gnu.org/licenses/>.
+
+!define /date MYTIMESTAMP "%y%m%d%H%M"
+!define MYVERSION "2.99.0" # OpenQuake 2 tree
+!define PRODUCT_NAME "OpenQuake Engine"
+!define VER_CODE "${MYVERSION}"
+!define VER_BUILD "${MYTIMESTAMP}"
+!define PRODUCT_VERSION "${VER_CODE}.${VER_BUILD}"
+!define PUBLISHER "GEM Foundation"
+!define BITNESS "64"
+!define ARCH_TAG ""
+!define INSTALLER_NAME "OpenQuake_Engine_${VER_CODE}-${VER_BUILD}.exe"
+!define PRODUCT_ICON "openquake.ico"
+# WOW6432Node is needed because we are running 64bit software. It's hardcoded since we support only
+# installations on 64bit systems (code is 64bit only)
+!define REG_KEY "Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
+
+!include "FileFunc.nsh"
+!include "WordFunc.nsh"
+!include "x64.nsh"
+!include "WinVer.nsh"
+
+SetCompressor lzma
+
+RequestExecutionLevel admin
+
+; Modern UI installer stuff 
+!include "MUI2.nsh"
+!define MUI_ABORTWARNING
+!define MUI_ICON "openquake_small.ico"
+
+; UI pages
+!insertmacro MUI_PAGE_WELCOME
+!insertmacro MUI_PAGE_LICENSE "LICENSE.txt"
+!ifdef VER_CODE & VER_BUILD
+Page custom PageReinstall PageLeaveReinstall
+!endif
+!insertmacro MUI_PAGE_COMPONENTS
+!insertmacro MUI_PAGE_DIRECTORY
+!insertmacro MUI_PAGE_INSTFILES
+!insertmacro MUI_PAGE_FINISH
+!insertmacro MUI_LANGUAGE "English"
+
+!ifdef VER_CODE & VER_BUILD
+VIAddVersionKey "CompanyName" "${PUBLISHER}"
+VIAddVersionKey "LegalCopyright" "https://github.com/gem/oq-engine/blob/master/LICENSE"
+VIAddVersionKey "FileDescription" "OpenQuake Setup"
+VIAddVersionKey "ProductName" "${PRODUCT_NAME}"
+VIAddVersionKey "ProductVersion" "${VER_CODE}"
+VIAddVersionKey "FileVersion" "${VER_CODE}"
+VIProductVersion ${PRODUCT_VERSION}
+!endif
+
+Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
+OutFile "${INSTALLER_NAME}"
+InstallDir "$PROGRAMFILES${BITNESS}\${PRODUCT_NAME}"
+
+Function .onInit
+  ${IfNot} ${RunningX64}
+      MessageBox MB_OK "A 64bit OS is required"
+      Quit
+  ${EndIf}
+  ${IfNot} ${AtLeastWin10}
+    MessageBox MB_OK "Your Windows version is not supported. Use at your own risk."
+  ${EndIf}
+FunctionEnd
+
+Section -SETTINGS
+  SetOutPath "$INSTDIR"
+  SetOverwrite ifnewer
+SectionEnd
+
+Section "!Core Files" SecCore
+  SectionIn RO
+  SetShellVarContext all
+
+  SetOutPath "$INSTDIR"
+  File "openquake_black.ico"
+  File "oq-console.bat"
+  File "LICENSE.txt"
+
+  SetOutPath "$INSTDIR\python"
+  File /r "python-dist\Script\*.*"
+
+  ; Install MSVCRT if it's not already on the system
+  IfFileExists "$SYSDIR\ucrtbase.dll" skip_msvcrt
+  SetOutPath "$INSTDIR\python3.6"
+  File "dist\msvcrt\x64\*.dll"
+  skip_msvcrt:
+
+  ; Install MSVCP if it's not already on the system
+  IfFileExists "$SYSDIR\msvcp140.dll" skip_msvcp
+  SetOutPath "$INSTDIR\python3.6"
+  File "dist\msvcp\x64\msvcp140.dll"
+  skip_msvcp:
+
+  SetOutPath "$PLUGINSDIR\oq-dist"
+  File /r "oq-dist\*.*"
+SectionEnd
+
+Section "!OpenQuake Engine" SecEngine
+  SectionIn RO
+  SetOutPath "$INSTDIR"
+  File "openquake.ico"
+  File "oq-server.bat"
+  File "README.html"
+
+  SetOutPath "$PLUGINSDIR\oq-dist\engine"
+  DetailPrint "Installing the OpenQuake Engine..."
+  nsExec::ExecToLog '$INSTDIR\python\python.exe -m pip -q install --no-deps --no-index --no-warn-script-location -r "index.txt"'
+SectionEnd
+
+Section "OpenQuake Tools" SecTools
+  SetOutPath "$PLUGINSDIR\oq-dist\tools"
+  DetailPrint "Installing the OpenQuake Tools..."
+  nsExec::ExecToLog '$INSTDIR\python\python.exe -m pip -q install --no-deps --no-index --no-warn-script-location -r "index.txt"'
+SectionEnd
+
+Section "OpenQuake Engine demos and documentation" SecDocDemo
+  # Install manual and demos in 'Public\MyDocuments'
+  # keep disabled for now. It may be dangerous.
+  # SetOutPath "$DOCUMENTS\OpenQuake"
+  # File "OpenQuake manual.pdf"
+  # SetOutPath "$DOCUMENTS\OpenQuake\demos"
+  # File /r /x ".gitignore" "demos\*.*"
+
+  # Keep a copy also in the installation folder
+  SetOutPath "$INSTDIR"
+  File "OpenQuake manual.pdf"
+  SetOutPath "$INSTDIR\demos"
+  File /r /x ".gitignore" "demos\*.*"
+
+SectionEnd
+
+Section "OpenQuake Engine menu icons" SecMenu
+  SetOutPath "$INSTDIR"
+  CreateShortCut "$SMPROGRAMS\OpenQuake Engine (webui).lnk" "$INSTDIR\oq-server.bat" \
+      "" "$INSTDIR\openquake.ico"
+  CreateShortCut "$SMPROGRAMS\OpenQuake Engine (console).lnk" "$INSTDIR\oq-console.bat" \
+      "" "$INSTDIR\openquake_black.ico"
+SectionEnd
+
+Section "OpenQuake Engine desktop icons" SecIcon
+  SetOutPath "$INSTDIR"
+  CreateShortCut "$DESKTOP\OpenQuake Engine (console).lnk" "$INSTDIR\oq-console.bat" \
+      "" "$INSTDIR\openquake_black.ico"
+  CreateShortCut "$DESKTOP\OpenQuake Engine (webui).lnk" "$INSTDIR\oq-server.bat" \
+      "" "$INSTDIR\openquake.ico"
+SectionEnd
+
+Section -post
+  ; Byte-compile Python files.
+  RMDir /r "$INSTDIR\oq-dist"
+  DetailPrint "Byte-compiling Python modules..."
+  nsExec::ExecToLog '$INSTDIR\python\python.exe -m compileall -qq "$INSTDIR"'
+  FileOpen $0 "$INSTDIR\python\pycached" w
+  FileClose $0
+
+  WriteUninstaller $INSTDIR\uninstall.exe
+
+  ; Add ourselves to Add/remove programs
+  WriteRegStr HKLM "${REG_KEY}" "DisplayName" "${PRODUCT_NAME}"
+  WriteRegStr HKLM "${REG_KEY}" "Publisher" "${PUBLISHER}"
+  WriteRegStr HKLM "${REG_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
+  WriteRegStr HKLM "${REG_KEY}" "UninstallString" '"$INSTDIR\uninstall.exe"'
+  WriteRegStr HKLM "${REG_KEY}" "InstallLocation" "$INSTDIR"
+  WriteRegStr HKLM "${REG_KEY}" "DisplayIcon" "$INSTDIR\${PRODUCT_ICON}"
+  WriteRegDWORD HKLM "${REG_KEY}" "NoModify" 1
+  WriteRegDWORD HKLM "${REG_KEY}" "NoRepair" 1
+  ${GetSize} "$INSTDIR" "/S=0K" $0 $1 $2
+  IntFmt $0 "0x%08X" $0
+  WriteRegDWORD HKLM "${REG_KEY}" "EstimatedSize" "$0"
+
+  ; Check if we need to reboot
+  IfRebootFlag 0 noreboot
+    MessageBox MB_YESNO "A reboot is required to finish the installation. Do you wish to reboot now?" \
+                /SD IDNO IDNO noreboot
+    Reboot
+  noreboot:
+SectionEnd
+
+Section "Uninstall"
+  SetShellVarContext all
+  Delete $INSTDIR\uninstall.exe
+  Delete "$INSTDIR\${PRODUCT_ICON}"
+  RMDir /r "$INSTDIR\python"
+  ; Uninstall files
+    Delete "$INSTDIR\README.html"
+    Delete "$INSTDIR\LICENSE.txt"
+    Delete "$INSTDIR\OpenQuake manual.pdf"
+    Delete "$INSTDIR\openquake_black.ico"
+    Delete "$INSTDIR\openquake.ico"
+    Delete "$INSTDIR\oq-server.bat"
+    Delete "$INSTDIR\oq-console.bat"
+  ; Uninstall directories
+    RMDir /r "$INSTDIR\demos"
+  ; Uninstall shortcuts
+    Delete "$DESKTOP\OpenQuake Engine (webui).lnk"
+    Delete "$DESKTOP\OpenQuake Engine (console).lnk"
+    Delete "$SMPROGRAMS\OpenQuake Engine (webui).lnk"
+    Delete "$SMPROGRAMS\OpenQuake Engine (console).lnk"
+  RMDir $INSTDIR
+  DeleteRegKey HKLM "${REG_KEY}"
+SectionEnd
+
+
+!ifdef VER_CODE & VER_BUILD
+
+Var ReinstallPageCheck
+
+Function PageReinstall
+
+  ReadRegStr $R0 HKLM "Software\${PRODUCT_NAME}" ""
+  ReadRegStr $R1 HKLM "${REG_KEY}" "UninstallString"
+  ${IfThen} "$R0$R1" == "" ${|} Abort ${|}
+
+  StrCpy $R4 "older"
+  ReadRegDWORD $R0 HKLM "Software\${PRODUCT_NAME}" "VersionMajor"
+  ReadRegDWORD $R1 HKLM "Software\${PRODUCT_NAME}" "VersionMinor"
+  ReadRegDWORD $R2 HKLM "Software\${PRODUCT_NAME}" "VersionRevision"
+  ReadRegDWORD $R3 HKLM "Software\${PRODUCT_NAME}" "VersionBuild"
+  StrCpy $R0 $R0.$R1.$R2.$R3
+
+  ${VersionCompare} ${VER_CODE}.${VER_BUILD} $R0 $R0
+  ${If} $R0 == 0
+    StrCpy $R1 "${PRODUCT_NAME} ${PRODUCT_VERSION} is already installed. Select the operation you want to perform and click Next to continue."
+    StrCpy $R2 "Add/Reinstall components"
+    StrCpy $R3 "Uninstall ${PRODUCT_NAME}"
+    !insertmacro MUI_HEADER_TEXT "Already Installed" "Choose the maintenance option to perform."
+    StrCpy $R0 "2"
+  ${ElseIf} $R0 == 1
+    StrCpy $R1 "An $R4 version of ${PRODUCT_NAME} is installed on your system. It's recommended that you uninstall the current version before installing. Select the operation you want to perform and click Next to continue."
+    StrCpy $R2 "Uninstall before installing"
+    StrCpy $R3 "Upgrade/Repair"
+    !insertmacro MUI_HEADER_TEXT "Already Installed" "Choose how you want to install ${PRODUCT_NAME}."
+    StrCpy $R0 "1"
+  ${ElseIf} $R0 == 2
+    StrCpy $R1 "A newer version of ${PRODUCT_NAME} is already installed! It is not recommended that you install an older version. If you really want to install this older version, it's better to uninstall the current version first. Select the operation you want to perform and click Next to continue."
+    StrCpy $R2 "Uninstall before installing"
+    StrCpy $R3 "Do not uninstall"
+    !insertmacro MUI_HEADER_TEXT "Already Installed" "Choose how you want to install ${PRODUCT_NAME}."
+    StrCpy $R0 "1"
+  ${Else}
+    Abort
+  ${EndIf}
+
+  nsDialogs::Create 1018
+  Pop $R4
+
+  ${NSD_CreateLabel} 0 0 100% 24u $R1
+  Pop $R1
+
+  ${NSD_CreateRadioButton} 30u 50u -30u 8u $R2
+  Pop $R2
+  ${NSD_OnClick} $R2 PageReinstallUpdateSelection
+
+  ${NSD_CreateRadioButton} 30u 70u -30u 8u $R3
+  Pop $R3
+  ${NSD_OnClick} $R3 PageReinstallUpdateSelection
+
+  ${If} $ReinstallPageCheck != 2
+    SendMessage $R2 ${BM_SETCHECK} ${BST_CHECKED} 0
+  ${Else}
+    SendMessage $R3 ${BM_SETCHECK} ${BST_CHECKED} 0
+  ${EndIf}
+
+  ${NSD_SetFocus} $R2
+
+  nsDialogs::Show
+
+FunctionEnd
+
+Function PageReinstallUpdateSelection
+
+  Pop $R1
+
+  ${NSD_GetState} $R2 $R1
+
+  ${If} $R1 == ${BST_CHECKED}
+    StrCpy $ReinstallPageCheck 1
+  ${Else}
+    StrCpy $ReinstallPageCheck 2
+  ${EndIf}
+
+FunctionEnd
+
+Function PageLeaveReinstall
+
+  ${NSD_GetState} $R2 $R1
+
+  StrCmp $R0 "1" 0 +2 ; Existing install is not the same version?
+    StrCmp $R1 "1" reinst_uninstall reinst_done
+
+  StrCmp $R1 "1" reinst_done ; Same version, skip to add/reinstall components?
+
+  reinst_uninstall:
+  ReadRegStr $R1 HKLM "${REG_KEY}" "UninstallString"
+
+  ;Run uninstaller
+    HideWindow
+
+    ClearErrors
+    ExecWait '$R1 _?=$INSTDIR' $0
+
+    BringToFront
+
+    ${IfThen} ${Errors} ${|} StrCpy $0 2 ${|} ; ExecWait failed, set fake exit code
+
+  reinst_done:
+
+FunctionEnd
+
+!endif
+
+#Function .onMouseOverSection
+#    ; Find which section the mouse is over, and set the corresponding description.
+#    FindWindow $R0 "#32770" "" $HWNDPARENT
+#    GetDlgItem $R0 $R0 1043 ; description item (must be added to the UI)
+#
+#;    StrCmp $0 ${sec_py} 0 +2
+#;      SendMessage $R0 ${WM_SETTEXT} 0 "STR:The Python interpreter. \
+#;            This is required for ${PRODUCT_NAME} to run."
+#
+#    StrCmp $0 ${sec_app} "" +2
+#      SendMessage $R0 ${WM_SETTEXT} 0 "STR:The ${PRODUCT_NAME} by GEM."
+#    
+#    StrCmp $0 ${sec_icon} "" +2
+#      SendMessage $R0 ${WM_SETTEXT} 0 "STR:The OpenQuake Engine desktop icon."
+#FunctionEnd
