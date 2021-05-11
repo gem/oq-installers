@@ -24,7 +24,7 @@ jobs:
         run: |
           git clone -q  --depth=1 https://github.com/gem/oq-builders
           cd .\oq-builders\installers\windows\nsis\
-          python -m venv .\python-dist
+          python -m venv C:\Users\runneradmin\oq-builders\installers\windows\nsis\python-dist
           C:\Users\runneradmin\oq-builders\installers\windows\nsis\python-dist\Scripts\activate.ps1
           python -m pip install pip wheel setuptools --upgrade
           python -c "import sys; print(sys.version)"
