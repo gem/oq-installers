@@ -21,16 +21,15 @@ jobs:
           $PY_VER="py${{ matrix.python-version }}"
           $py = $PY_VER.replace(".","")
           python -m pip install pip wheel setuptools --upgrade
-      - name: Create VENV for installation of engine and tools
+      - name: Create VENV for installation of engine and tools and display python version
         run: |
           python -m venv c:\Users\runneradmin\inst
           C:\Users\runneradmin\inst\Scripts\activate.ps1
-      - name: Display Python version
-        run: |
           python -c "import sys; print(sys.version)"
           where.exe python.exe
       - name: Extracting python wheels for engine
         run: |
+          C:\Users\runneradmin\inst\Scripts\activate.ps1
           cd ~
           where.exe python.exe
           echo "Extracting python wheels"
