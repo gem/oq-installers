@@ -59,8 +59,9 @@ jobs:
         run: |
           C:\Users\runneradmin\inst\Scripts\activate.ps1
           cd ~
+          ls 
           oq --version
-          cp oq-builder/installer/windows/nsis/installer.nsi.tmpl installer.nsi
+          #cp oq-builder/installer/windows/nsis/installer.nsi.tmpl installer.nsi
       - name: Upload wheel
         uses: actions/upload-artifact@v2
         with:
