@@ -27,7 +27,7 @@ jobs:
           C:\Users\runneradmin\inst\Scripts\activate.ps1
           python -c "import sys; print(sys.version)"
           where.exe python.exe
-      - name: Extracting python wheels for engine
+      - name: Extracting python wheels for engine and for core apps
         run: |
           C:\Users\runneradmin\inst\Scripts\activate.ps1
           cd ~
@@ -38,14 +38,10 @@ jobs:
           git clone --depth=1 https://github.com/gem/oq-engine.git
           cd oq-engine
           python -m pip install install -r requirements-$py-win64.txt
-      - name: Downloading core apps from master
-        run: |
           cd ~
           mkdir oqdist
-          #git clone --depth=1 https://github.com/gem/oq-engine.git
           python -m pip wheel --disable-pip-version-check --no-deps -w oq-dist/engine ./oq-engine
-      - name: Downloading standalone apps
-        run: |
+          echo "Downloading standalone apps"
           cd ~
           $app = ("oq-platform-standalone", "oq-platform-ipt", "oq-platform-taxonomy", "oq-platform-taxtweb")
           foreach ($element in $app) {
@@ -60,9 +56,10 @@ jobs:
           }
       - name: Prepare Windows Installer 
         run: |
+          C:\Users\runneradmin\inst\Scripts\activate.ps1
           cd ~
-          cp installer/windows/nsis/installer.nsi.tmpl installer.nsi
-          python -m pip wheel --disable-pip-version-check --no-deps -w oq-dist/engine ./oq-engine
+          oq --version
+          cp oq-builder/installer/windows/nsis/installer.nsi.tmpl installer.nsi
       - name: Upload wheel
         uses: actions/upload-artifact@v2
         with:
