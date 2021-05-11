@@ -16,17 +16,23 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Upgrade pip, wheel and setuptools
+      - name: Upgrade pip, wheel and setuptools 
         run: |
-          #git status
           $PY_VER="py${{ matrix.python-version }}"
           $py = $PY_VER.replace(".","")
-          #python -m pip install install -r requirements-$py-win64.txt
-          #python -m pip install -e .
           python -m pip install pip wheel setuptools --upgrade
+      - name: Create VENV for installation of engine and tools
+        run: |
+          python -m venv c:\Users\runneradmin\inst
+          C:\Users\runneradmin\inst\Scripts\activate.ps1
+      - name: Display Python version
+        run: |
+          python -c "import sys; print(sys.version)"
+          where.exe python.exe
       - name: Extracting python wheels for engine
         run: |
           cd ~
+          where.exe python.exe
           echo "Extracting python wheels"
           $PY_VER="py${{ matrix.python-version }}"
           $py = $PY_VER.replace(".","")
@@ -53,16 +59,13 @@ jobs:
                 python -m pip -q wheel --disable-pip-version-check --no-deps -w oq-dist/tools ./$element
               }    
           }
-          pwd
-          ls
-      - name: Install pyinstaller and run on engine folder
+      - name: Prepare Windows Installer 
         run: |
           cd ~
-          cd oq-engine
-          python -m pip install pyinstaller
-          pyinstaller --onefile --noupx setup.py 
+          cp installer/windows/nsis/installer.nsi.tmpl installer.nsi
+          python -m pip wheel --disable-pip-version-check --no-deps -w oq-dist/engine ./oq-engine
       - name: Upload wheel
         uses: actions/upload-artifact@v2
         with:
           name: Output Wheel
-          path: C:\Users\runneradmin\oq-engine\dist
+          path: C:\Users\runneradmin\oqdist
