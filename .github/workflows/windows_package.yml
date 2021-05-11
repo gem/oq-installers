@@ -60,7 +60,7 @@ jobs:
         run: |
           cd ~
           cd .\oq-builders\installers\windows\nsis\
-          cp installer.nsi.win installer.nsi
+          pwd
           curl.exe -LO https://ci.openquake.org/job/builders/job/pdf-builder/lastSuccessfulBuild/artifact/oq-engine/doc/manual/oq-manual.pdf
           Rename-Item .\oq-manual.pdf "Openquake manual.pdf"
       - name: Upload wheel
