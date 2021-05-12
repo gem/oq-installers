@@ -64,8 +64,15 @@ jobs:
           $files.Name > .\oq-dist\tools\index.txt
           curl.exe -LO https://ci.openquake.org/job/builders/job/pdf-builder/lastSuccessfulBuild/artifact/oq-engine/doc/manual/oq-manual.pdf
           Rename-Item .\oq-manual.pdf "Openquake manual.pdf"
-          pwd
-          ls
+          Copy-Item -Path ".\oq-engine\demos\*" ".\demos\"
+          $source = Get-ChildItem -Path C:\Users\runneradmin\oq-builders\installers\windows\nsis\demos\ -Directory
+          Add-Type -assembly "system.io.compression.filesystem"
+          Foreach ($s in $source)
+          {
+            $destination = Join-path -path $path -ChildPath "$($s.name).zip"
+            If(Test-path $destination) {Remove-item $destination}
+            [io.compression.zipfile]::CreateFromDirectory($s.fullname, $destination)
+          }
           Copy-Item installer.nsi.win installer.nsi
           echo "Generating NSIS installer"
           makensis /V4 installer.nsi
