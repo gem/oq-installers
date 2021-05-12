@@ -11,24 +11,27 @@ jobs:
         os: [windows-latest]
         python-version: [3.8]
     steps:
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Upgrade pip, wheel and setuptools 
+      - name: Set up Python using embedded distribution
         run: |
-          $PY_VER="py${{ matrix.python-version }}"
-          $py = $PY_VER.replace(".","")
-          python -m pip install pip wheel setuptools --upgrade
+          curl  https://www.python.org/ftp/python/3.8.10/python-3.8.10-embed-amd64.zip --output python.zip
+          unzip python.zip 
+          echo "install pip and wheel and setuptools"
+          cd python
+          curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py
+          .\python.exe .\get-pip.py
+          mv .\python38._pth .\python38._pth.old
+          $Env:PYBUILD_NAME = "oq-taxonomy"
+          $Env:PY_PIP = "C:\Users\runneradmin\python\Scripts"
+          $Env:PY_LIBS = "C:\Users\runneradmin\python\Lib;C:\Users\sysadmin\python\Lib\site-package"
+          $Env:PY_HOME = "C:\Users\runneradmin\python"
+          python -c "import sys; print(sys.version)"
+          where.exe python.exe
       - name: Create VENV for installation of engine and tools and display python version
         run: |
           git clone -q  --depth=1 https://github.com/gem/oq-builders
           cd .\oq-builders\installers\windows\nsis\
           python -m venv C:\Users\runneradmin\oq-builders\installers\windows\nsis\python-dist
           C:\Users\runneradmin\oq-builders\installers\windows\nsis\python-dist\Scripts\activate.ps1
-          python -m pip install pip wheel setuptools --upgrade
-          python -c "import sys; print(sys.version)"
-          where.exe python.exe
       - name: Extracting python wheels for engine and for core apps
         run: |
           cd ~
