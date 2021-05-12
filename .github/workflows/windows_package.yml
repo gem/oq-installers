@@ -28,7 +28,6 @@ jobs:
           $Env:PY_LIBS = "C:\Users\runneradmin\python\Lib;C:\Users\runneradmin\python\Lib\site-package"
           $Env:PY_HOME = "C:\Users\runneradmin\python"
           $ENV:PATH="C:\Users\runneradmin\python\Scripts;$ENV:PATH"
-          dir env:
           .\python.exe -c "import sys; print(sys.version)"
           .\python.exe -m pip install pip setuptools wheel --upgrade
           where.exe python.exe
