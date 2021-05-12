@@ -14,7 +14,9 @@ jobs:
       - name: Set up Python using embedded distribution
         run: |
           curl  https://www.python.org/ftp/python/3.8.10/python-3.8.10-embed-amd64.zip --output python.zip
-          unzip python.zip 
+          where.exe unzip.exe
+          unzip.exe python.zip 
+          ls
           echo "install pip and wheel and setuptools"
           cd python
           curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py
