@@ -57,7 +57,7 @@ jobs:
           }
           cd ~
           cd .\oq-builders\installers\windows\nsis\
-          Copy-Item -Path "C:\Users\runneradmin\python\*" -Destination ".\python" -Recurse
+          Copy-Item -Path "C:\Users\runneradmin\python\" -Destination ".\" -Recurse
           $files = @(Get-ChildItem .\oq-dist\engine\*.whl)
           $files.Name > .\oq-dist\engine\index.txt
           $files = @(Get-ChildItem .\oq-dist\tools\*.whl)
