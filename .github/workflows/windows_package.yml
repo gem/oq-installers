@@ -64,6 +64,6 @@ jobs:
           Rename-Item .\oq-manual.pdf "Openquake manual.pdf"
       - name: Upload wheel
         uses: actions/upload-artifact@v2
-          with:
-          name: Output Wheel
+        with:
+          name: Windows-artifact
           path: C:\Users\runneradmin\oq-builders\installers\windows\nsis\oq-dist
