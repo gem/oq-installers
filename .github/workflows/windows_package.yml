@@ -50,7 +50,6 @@ jobs:
               python -m pip wheel --disable-pip-version-check --no-deps -w oq-dist/tools ./$element
               if ( $element -eq "oq-platform-taxtweb" ) 
               {
-                #export PYBUILD_NAME="oq-taxonomy"
                 $Env:PYBUILD_NAME = "oq-taxonomy"
                 python -m pip -q wheel --disable-pip-version-check --no-deps -w oq-dist/tools ./$element
               }    
@@ -64,9 +63,8 @@ jobs:
           $files.Name > .\oq-dist\tools\index.txt
           curl.exe -LO https://ci.openquake.org/job/builders/job/pdf-builder/lastSuccessfulBuild/artifact/oq-engine/doc/manual/oq-manual.pdf
           Rename-Item .\oq-manual.pdf "Openquake manual.pdf"
-          Copy-Item -Path ".\oq-engine\demos\*" ".\demos\"
           $path = "C:\Users\runneradmin\oq-builders\installers\windows\nsis\demos"
-          $source = Get-ChildItem -Path C:\Users\runneradmin\oq-builders\installers\windows\nsis\demos\ -Directory
+          $source = Get-ChildItem -Path C:\Users\runneradmin\oq-builders\installers\windows\nsis\oq-engine\demos -Directory
           Add-Type -assembly "system.io.compression.filesystem"
           Foreach ($s in $source)
           {
@@ -74,6 +72,7 @@ jobs:
             If(Test-path $destination) {Remove-item $destination}
             [io.compression.zipfile]::CreateFromDirectory($s.fullname, $destination)
           }
+          #Get-Content Select-String '^'__version__
           Copy-Item installer.nsi.win installer.nsi
           echo "Generating NSIS installer"
           makensis /V4 installer.nsi
