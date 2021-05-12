@@ -23,33 +23,25 @@ jobs:
           curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py
           .\python.exe .\get-pip.py
           mv .\python38._pth .\python38._pth.old
-          $Env:PY_PIP = "C:\Users\runneradmin\python\Scripts"
-          $Env:PY_LIBS = "C:\Users\runneradmin\python\Lib;C:\Users\sysadmin\python\Lib\site-package"
-          $Env:PY_HOME = "C:\Users\runneradmin\python"
+          $Env:PY_PIP = "D:\a\oq-builders\oq-builders\python\Scripts"
+          $Env:PY_LIBS = "D:\a\oq-builders\oq-builders\python\Lib;D:\a\oq-builders\oq-builders\python\Lib\site-package"
+          $Env:PY_HOME = "D:\a\oq-builders\oq-builders\python"
           python -c "import sys; print(sys.version)"
           where.exe python.exe
-      - name: Create VENV for installation of engine and tools and display python version
-        run: |
-          git clone -q  --depth=1 https://github.com/gem/oq-builders
-          cd .\oq-builders\installers\windows\nsis\
-          python -m venv C:\Users\runneradmin\oq-builders\installers\windows\nsis\python-dist
-          C:\Users\runneradmin\oq-builders\installers\windows\nsis\python-dist\Scripts\activate.ps1
       - name: Extracting python wheels for engine and for core apps
         run: |
+          $Env:PY_PIP = "D:\a\oq-builders\oq-builders\python\Scripts"
+          $Env:PY_LIBS = "D:\a\oq-builders\oq-builders\python\Lib;D:\a\oq-builders\oq-builders\python\Lib\site-package"
+          $Env:PY_HOME = "D:\a\oq-builders\oq-builders\python"
+          where python.exe
           cd ~
+          git clone -q  --depth=1 https://github.com/gem/oq-builders
           cd .\oq-builders\installers\windows\nsis\
-          C:\Users\runneradmin\oq-builders\installers\windows\nsis\python-dist\Scripts\activate.ps1
-          echo "Extracting python wheels"
-          $PY_VER="py${{ matrix.python-version }}"
-          $py = $PY_VER.replace(".","")
           git clone --depth=1 https://github.com/gem/oq-engine.git
           cd oq-engine
-          python -m pip install install -r requirements-$py-win64.txt
-          python -m pip install .
-          cd ~
+          python -m pip install install -r requirements-py38-win64.txt
           python -m pip wheel --disable-pip-version-check --no-deps -w oq-dist/engine ./oq-engine
           echo "Downloading standalone apps"
-          cd ~
           $app = ("oq-platform-standalone", "oq-platform-ipt", "oq-platform-taxonomy", "oq-platform-taxtweb")
           foreach ($element in $app) {
               git clone -q --depth=1 https://github.com/gem/$element.git
