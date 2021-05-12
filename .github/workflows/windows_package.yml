@@ -13,16 +13,16 @@ jobs:
     steps:
       - name: Set up Python using embedded distribution
         run: |
+          pwd
           curl  https://www.python.org/ftp/python/3.8.10/python-3.8.10-embed-amd64.zip --output python.zip
           where.exe unzip.exe
-          unzip.exe python.zip 
+          unzip.exe python.zip -d python
           ls
           echo "install pip and wheel and setuptools"
           cd python
           curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py
           .\python.exe .\get-pip.py
           mv .\python38._pth .\python38._pth.old
-          $Env:PYBUILD_NAME = "oq-taxonomy"
           $Env:PY_PIP = "C:\Users\runneradmin\python\Scripts"
           $Env:PY_LIBS = "C:\Users\runneradmin\python\Lib;C:\Users\sysadmin\python\Lib\site-package"
           $Env:PY_HOME = "C:\Users\runneradmin\python"
