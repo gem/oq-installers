@@ -9,7 +9,7 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest]
-        python-version: [3.8]
+        #python-version: [3.8]
     steps:
       - name: Set up Python using embedded distribution
         run: |
