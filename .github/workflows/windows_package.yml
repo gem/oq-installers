@@ -65,7 +65,7 @@ jobs:
           curl.exe -LO https://ci.openquake.org/job/builders/job/pdf-builder/lastSuccessfulBuild/artifact/oq-engine/doc/manual/oq-manual.pdf
           Rename-Item .\oq-manual.pdf "Openquake manual.pdf"
           pwd
-          ls -lrt
+          ls
           Copy-Item installer.nsi.win installer.nsi
           echo "Generating NSIS installer"
           makensis /V4 installer.nsi
