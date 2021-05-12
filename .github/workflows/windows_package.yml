@@ -28,15 +28,10 @@ jobs:
           $Env:PY_HOME = "D:\a\oq-builders\oq-builders\python"
           python -c "import sys; print(sys.version)"
           where.exe python.exe
-      - name: Extracting python wheels for engine and for core apps
-        run: |
-          $Env:PY_PIP = "D:\a\oq-builders\oq-builders\python\Scripts"
-          $Env:PY_LIBS = "D:\a\oq-builders\oq-builders\python\Lib;D:\a\oq-builders\oq-builders\python\Lib\site-package"
-          $Env:PY_HOME = "D:\a\oq-builders\oq-builders\python"
-          where python.exe
           cd ~
           git clone -q  --depth=1 https://github.com/gem/oq-builders
           cd .\oq-builders\installers\windows\nsis\
+          pwd
           git clone --depth=1 https://github.com/gem/oq-engine.git
           cd oq-engine
           python -m pip install install -r requirements-py38-win64.txt
