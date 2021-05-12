@@ -41,6 +41,7 @@ jobs:
           cd oq-engine
           python.exe -c "import sys; print(sys.version)"
           python -m pip install install -r requirements-py38-win64.txt
+          cd ..
           python -m pip wheel --disable-pip-version-check --no-deps -w oq-dist/engine ./oq-engine
           echo "Downloading standalone apps"
           $app = ("oq-platform-standalone", "oq-platform-ipt", "oq-platform-taxonomy", "oq-platform-taxtweb")
@@ -65,4 +66,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: Output Wheel
-          path: C:\Users\runneradmin\oq-dist
+          path: C:\Users\runneradmin\oq-builders\installers\windows\nsis
