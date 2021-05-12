@@ -59,9 +59,9 @@ jobs:
         run: |
           cd ~
           cd .\oq-builders\installers\windows\nsis\
-          $files = @(Get-ChildItem C:\Users\sysadmin\oq-builders\installers\windows\nsis\oq-dist\engine\*.whl)
+          $files = @(Get-ChildItem .\oq-dist\engine\*.whl)
           $files.Name > .\oq-dist\engine\index.txt
-          $files = @(Get-ChildItem C:\Users\sysadmin\oq-builders\installers\windows\nsis\oq-dist\tools\*.whl)
+          $files = @(Get-ChildItem .\oq-dist\tools\*.whl)
           $files.Name > .\oq-dist\tools\index.txt
           pwd
           curl.exe -LO https://ci.openquake.org/job/builders/job/pdf-builder/lastSuccessfulBuild/artifact/oq-engine/doc/manual/oq-manual.pdf
