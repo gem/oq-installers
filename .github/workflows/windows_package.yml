@@ -69,8 +69,10 @@ jobs:
           Copy-Item installer.nsi.win installer.nsi
           echo "Generating NSIS installer"
           makensis /V4 installer.nsi
+          mkdir out
+          Copy-Item *.exe .\out
       - name: Upload wheel
         uses: actions/upload-artifact@v2
         with:
           name: Windows-artifact
-          path: C:\Users\runneradmin\oq-builders\installers\windows\nsis\oq-dist\engine
+          path: C:\Users\runneradmin\oq-builders\installers\windows\nsis\out
