@@ -13,6 +13,7 @@ jobs:
     steps:
       - name: Set up Python using embedded distribution
         run: |
+          cd C:\Users\runneradmin
           pwd
           curl  https://www.python.org/ftp/python/3.8.10/python-3.8.10-embed-amd64.zip --output python.zip
           where.exe unzip.exe
@@ -23,12 +24,13 @@ jobs:
           curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py
           .\python.exe .\get-pip.py
           mv .\python38._pth .\python38._pth.old
-          $Env:PY_PIP = "D:\a\oq-builders\oq-builders\python\Scripts"
-          $Env:PY_LIBS = "D:\a\oq-builders\oq-builders\python\Lib;D:\a\oq-builders\oq-builders\python\Lib\site-package"
-          $Env:PY_HOME = "D:\a\oq-builders\oq-builders\python"
-          $ENV:PATH="D:\a\oq-builders\oq-builders\python\Scripts;$ENV:PATH"
+          $Env:PY_PIP = "C:\Users\runneradmin\python\Scripts"
+          $Env:PY_LIBS = "C:\Users\runneradmin\python\Lib;C:\Users\runneradmin\python\Lib\site-package"
+          $Env:PY_HOME = "C:\Users\runneradmin\python"
+          $ENV:PATH="C:\Users\runneradmin\python\Scripts;$ENV:PATH"
           dir env:
-          python -c "import sys; print(sys.version)"
+          python.exe -c "import sys; print(sys.version)"
+          python.exe -m pip install pip setuptools wheel --upgrade
           where.exe python.exe
           cd ~
           git clone -q  --depth=1 https://github.com/gem/oq-builders
