@@ -1,4 +1,4 @@
-n\ame: Windows Installer for oq-engine
+name: Windows Installer for oq-engine
 on:
   push:
   schedule:
@@ -62,8 +62,8 @@ jobs:
           pwd
           curl.exe -LO https://ci.openquake.org/job/builders/job/pdf-builder/lastSuccessfulBuild/artifact/oq-engine/doc/manual/oq-manual.pdf
           Rename-Item .\oq-manual.pdf "Openquake manual.pdf"
-          #- name: Upload wheel
-          #uses: actions/upload-artifact@v2
-          #with:
-          #name: Output Wheel
-          #path: C:\Users\runneradmin\oq-builders\installers\windows\nsis\oq-dist
+      - name: Upload wheel
+        uses: actions/upload-artifact@v2
+          with:
+          name: Output Wheel
+          path: C:\Users\runneradmin\oq-builders\installers\windows\nsis\oq-dist
