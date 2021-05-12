@@ -1,13 +1,13 @@
 @echo off
 setlocal
-set mypath=%~dp0
-set PATH=%mypath%\python3.6;%mypath%\python3.6\Scripts;%PATH%
+set mypath=C:\Program Files\OpenQuake Engine
+set PATH=%mypath%\python;%mypath%\python\Scripts;%PATH%
 
-if not exist python3.6\pycached (
+if not exist python\pycached (
    echo Building python cache. This may take a while.
    echo Please wait ...
    python.exe -m compileall -qq .
-   copy /y nul python3.6\pycached >nul
+   copy /y nul python\pycached >nul
 )
 
 echo OpenQuake environment loaded
