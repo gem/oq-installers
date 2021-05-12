@@ -100,13 +100,13 @@ Section "!Core Files" SecCore
 
   ; Install MSVCRT if it's not already on the system
   IfFileExists "$SYSDIR\ucrtbase.dll" skip_msvcrt
-  SetOutPath "$INSTDIR\python3.6"
+  SetOutPath "$INSTDIR\python"
   File "dist\msvcrt\x64\*.dll"
   skip_msvcrt:
 
   ; Install MSVCP if it's not already on the system
   IfFileExists "$SYSDIR\msvcp140.dll" skip_msvcp
-  SetOutPath "$INSTDIR\python3.6"
+  SetOutPath "$INSTDIR\python"
   File "dist\msvcp\x64\msvcp140.dll"
   skip_msvcp:
 
@@ -166,7 +166,7 @@ SectionEnd
 
 Section -post
   ; Byte-compile Python files.
-  RMDir /r "$INSTDIR\oq-dist"
+  ; RMDir /r "$INSTDIR\oq-dist"
   DetailPrint "Byte-compiling Python modules..."
   nsExec::ExecToLog '$INSTDIR\python\python.exe -m compileall -qq "$INSTDIR"'
   FileOpen $0 "$INSTDIR\python\pycached" w

@@ -55,17 +55,20 @@ jobs:
                 python -m pip -q wheel --disable-pip-version-check --no-deps -w oq-dist/tools ./$element
               }    
           }
-      - name: Prepare Windows Installer 
-        run: |
           cd ~
           cd .\oq-builders\installers\windows\nsis\
+          Copy-Item -Path "C:\Users\runneradmin\python\*" -Destination ".\python" -Recurse
           $files = @(Get-ChildItem .\oq-dist\engine\*.whl)
           $files.Name > .\oq-dist\engine\index.txt
           $files = @(Get-ChildItem .\oq-dist\tools\*.whl)
           $files.Name > .\oq-dist\tools\index.txt
-          pwd
           curl.exe -LO https://ci.openquake.org/job/builders/job/pdf-builder/lastSuccessfulBuild/artifact/oq-engine/doc/manual/oq-manual.pdf
           Rename-Item .\oq-manual.pdf "Openquake manual.pdf"
+          pwd
+          ls -lrt
+          Copy-Item installer.nsi.win installer.nsi
+          echo "Generating NSIS installer"
+          makensis /V4 installer.nsi
       - name: Upload wheel
         uses: actions/upload-artifact@v2
         with:
