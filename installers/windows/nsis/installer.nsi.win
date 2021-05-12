@@ -96,7 +96,7 @@ Section "!Core Files" SecCore
   File "LICENSE.txt"
 
   SetOutPath "$INSTDIR\python"
-  File /r "python\Script\*.*"
+  File /r "python\*.*"
 
   ; Install MSVCRT if it's not already on the system
   IfFileExists "$SYSDIR\ucrtbase.dll" skip_msvcrt
