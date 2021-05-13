@@ -48,8 +48,7 @@ jobs:
           git clone -q  --depth=1 -b ${Env:CURRENT_BRANCH} https://github.com/gem/oq-builders
           cd .\oq-builders\installers\windows\nsis\
           pwd
-          #git clone --depth=1 -b ${Env:CURRENT_BRANCH} https://github.com/gem/oq-engine.git
-          git clone --depth=1 https://github.com/gem/oq-engine.git
+          git clone --depth=1 -b ${Env:CURRENT_BRANCH} https://github.com/gem/oq-engine.git
           cd oq-engine
           pwd
           dir
@@ -60,8 +59,7 @@ jobs:
           echo "Downloading standalone apps"
           $app = ("oq-platform-standalone", "oq-platform-ipt", "oq-platform-taxonomy", "oq-platform-taxtweb")
           foreach ($element in $app) {
-              #git clone -q --depth=1 -b {Env:CURRENT_BRANCH} https://github.com/gem/$element.git
-              git clone -q --depth=1 https://github.com/gem/$element.git
+              git clone -q --depth=1 -b {Env:CURRENT_BRANCH} https://github.com/gem/$element.git
               python -m pip wheel --disable-pip-version-check --no-deps -w oq-dist/tools ./$element
               if ( $element -eq "oq-platform-taxtweb" ) 
               {
