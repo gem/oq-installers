@@ -16,8 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with OpenQuake. If not, see <http://www.gnu.org/licenses/>.
 
-!define /date MYTIMESTAMP "%y%m%d%H%M"
-!define MYVERSION "3.00.0"
+!define /date MYTIMESTAMP "CHANGEHERETIME"
+!define MYVERSION "CHANGEHERERELEASE"
 !define PRODUCT_NAME "OpenQuake Engine"
 !define VER_CODE "${MYVERSION}"
 !define VER_BUILD "${MYTIMESTAMP}"

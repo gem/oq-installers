@@ -5,16 +5,30 @@ on:
     - cron: "0 5 * * 5"
 jobs:
   Windows-Installer:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [windows-latest]
-        #python-version: [3.8]
+    runs-on: windows-latest
+    env:
+      GIT_BRANCH: ${{ github.ref }}
+      GIT_COMMIT_SHA: ${{ github.sha }}
+      GIT_COMMITTED_AT: ${{ ?? }}
     steps:
-      - name: Set up Python using embedded distribution
+      - name: Set Variables
+        run: |
+          echo "Working Path: ${Env:GITHUB_WORKSPACE}"
+          $branchName = $Env:GITHUB_REF -replace 'refs/heads/', ''
+          echo "Branch: ${branchName}"
+          echo "CURRENT_BRANCH=${branchName}" >> $Env:GITHUB_ENV
+      - name: Output Variables
+        run: |
+          echo "${Env:CURRENT_BRANCH}"
+      - name: Set up Python using embedded distribution and create Installer
+        env:
+          GIT_BRANCH: ${{ github.ref }}
+          GIT_COMMIT_SHA: ${{ github.sha }}
+          GIT_COMMITTED_AT: ${{ ?? }}
         run: |
           cd C:\Users\runneradmin
           pwd
+          Write-Host $Env:GITHUB_REF
           curl  https://www.python.org/ftp/python/3.8.10/python-3.8.10-embed-amd64.zip --output python.zip
           where.exe unzip.exe
           unzip.exe python.zip -d python
@@ -73,13 +87,16 @@ jobs:
             If(Test-path $destination) {Remove-item $destination}
             [io.compression.zipfile]::CreateFromDirectory($s.fullname, $destination)
           }
-          #Get-Content Select-String '^'__version__
-          Copy-Item installer.nsi.win installer.nsi
+          $version = Select-String -Path .\oq-engine\openquake\baselib\__init__.py -Pattern '__version__ ='
+          $pattern = "(?<=\').+?(?=\')"
+          $inst_version = [regex]::Matches($version, $pattern).Value
+          (Get-Content -Path .\installer.nsi.win -Raw) -replace 'CHANGEHERERELEASE', $inst_version | Set-Content -Path .\installer.nsi
           echo "Generating NSIS installer"
           makensis /V4 installer.nsi
           mkdir out
           Copy-Item *.exe .\out
-      - name: Upload wheel
+          Copy-Item README.html .\out
+      - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
           name: Windows-artifact
