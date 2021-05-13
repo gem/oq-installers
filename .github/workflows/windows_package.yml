@@ -39,9 +39,7 @@ jobs:
           $Env:PY_LIBS = "C:\Users\runneradmin\python\Lib;C:\Users\runneradmin\python\Lib\site-package"
           $Env:PY_HOME = "C:\Users\runneradmin\python"
           $ENV:PATH="C:\Users\runneradmin\python\Scripts;$ENV:PATH"
-          .\python.exe -c "import sys; print(sys.version)"
           .\python.exe -m pip install pip setuptools wheel --upgrade
-          where.exe python.exe
           Set-Alias -Name python -Value C:\Users\runneradmin\python\python.exe
           Set-Alias -Name pip -Value C:\Users\runneradmin\python\Scripts\pip.exe
           cd ~
@@ -68,7 +66,8 @@ jobs:
           }
           cd ~
           cd .\oq-builders\installers\windows\nsis\
-          python -m markdown oq-engine\README.md > README.html
+          Get-Content -Path .\oq-engine\README.md -Raw
+          python -m markdown .\oq-engine\README.md > .\README.html
           Copy-Item -Path "C:\Users\runneradmin\python\" -Destination "C:\Users\runneradmin\oq-builders\installers\windows\nsis\" -Recurse
           $files = @(Get-ChildItem .\oq-dist\engine\*.whl)
           $files.Name > .\oq-dist\engine\index.txt
