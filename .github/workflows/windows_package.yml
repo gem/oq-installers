@@ -30,7 +30,6 @@ jobs:
           curl  https://www.python.org/ftp/python/3.8.10/python-3.8.10-embed-amd64.zip --output python.zip
           where.exe unzip.exe
           unzip.exe python.zip -d python
-          ls
           echo "install pip and wheel and setuptools"
           cd python
           curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py
@@ -46,7 +45,8 @@ jobs:
           Set-Alias -Name python -Value C:\Users\runneradmin\python\python.exe
           Set-Alias -Name pip -Value C:\Users\runneradmin\python\Scripts\pip.exe
           cd ~
-          git clone -q  --depth=1 -b ${branchName} https://github.com/gem/oq-builders
+          echo "${Env:CURRENT_BRANCH}"
+          git clone -q  --depth=1 -b ${Env:CURRENT_BRANCH} https://github.com/gem/oq-builders
           cd .\oq-builders\installers\windows\nsis\
           pwd
           git clone --depth=1 https://github.com/gem/oq-engine.git
