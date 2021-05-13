@@ -4,7 +4,7 @@ on:
   schedule:
     - cron: "0 5 * * 5"
 jobs:
-  Windows-Installer:
+  Build_Installer:
     runs-on: windows-latest
     env:
       GIT_BRANCH: ${{ github.ref }}
@@ -39,7 +39,7 @@ jobs:
           $Env:PY_LIBS = "C:\Users\runneradmin\python\Lib;C:\Users\runneradmin\python\Lib\site-package"
           $Env:PY_HOME = "C:\Users\runneradmin\python"
           $ENV:PATH="C:\Users\runneradmin\python\Scripts;$ENV:PATH"
-          .\python.exe -m pip install pip setuptools wheel --upgrade
+          .\python.exe -m pip install pip wheel --upgrade
           .\python.exe -m pip install markdown==3.2.2
           Set-Alias -Name python -Value C:\Users\runneradmin\python\python.exe
           Set-Alias -Name pip -Value C:\Users\runneradmin\python\Scripts\pip.exe
@@ -59,7 +59,7 @@ jobs:
           echo "Downloading standalone apps"
           $app = ("oq-platform-standalone", "oq-platform-ipt", "oq-platform-taxonomy", "oq-platform-taxtweb")
           foreach ($element in $app) {
-              git clone -q --depth=1 -b ${Env:CURRENT_BRANCH} https://github.com/gem/$element.git
+              git clone -q --depth=1 -b {Env:CURRENT_BRANCH} https://github.com/gem/$element.git
               python -m pip wheel --disable-pip-version-check --no-deps -w oq-dist/tools ./$element
               if ( $element -eq "oq-platform-taxtweb" ) 
               {
@@ -100,5 +100,30 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: Windows-artifact
+          name: Installer
           path: C:\Users\runneradmin\oq-builders\installers\windows\nsis\out
+  Test_Installer:
+    needs: Build_Installer
+    runs-on: windows-latest
+    env:
+      GIT_BRANCH: ${{ github.ref }}
+      GIT_COMMIT_SHA: ${{ github.sha }}
+    steps:
+      - name: Set Variables
+        run: |
+          echo "Working Path: ${Env:GITHUB_WORKSPACE}"
+          $branchName = $Env:GITHUB_REF -replace 'refs/heads/', ''
+          echo "Branch: ${branchName}"
+          echo "CURRENT_BRANCH=${branchName}" >> $Env:GITHUB_ENV
+      - name: Download Windows Installer from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: Installer
+      - name: Execute the Installer
+        run: |
+          $Install = Get-ChildItem -Filter *.exe 
+          Start-Process -FilePath $Install.Fullname -ArgumentList "/S" -Wait
+          cd "C:\program files\Openquake Engine"
+          $ENV:PATH="C:\program files\Openquake Engine\python\Scripts"
+          oq.exe --version
+          oq.exe engine --run "https://downloads.openquake.org/pkgs/test_event_based_risk_inputs_bc.zip"
