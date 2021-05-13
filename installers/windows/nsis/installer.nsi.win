@@ -73,10 +73,12 @@ InstallDir "$PROGRAMFILES${BITNESS}\${PRODUCT_NAME}"
 
 Function .onInit
   ${IfNot} ${RunningX64}
+      IfSilent +2
       MessageBox MB_OK "A 64bit OS is required"
       Quit
   ${EndIf}
   ${IfNot} ${AtLeastWin10}
+    IfSilent +2
     MessageBox MB_OK "Your Windows version is not supported. Use at your own risk."
   ${EndIf}
 FunctionEnd
@@ -192,6 +194,7 @@ Section -post
 
   ; Check if we need to reboot
   IfRebootFlag 0 noreboot
+    IfSilent +2
     MessageBox MB_YESNO "A reboot is required to finish the installation. Do you wish to reboot now?" \
                 /SD IDNO IDNO noreboot
     Reboot
