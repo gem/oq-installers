@@ -123,8 +123,6 @@ jobs:
           name: Installer
       - name: Execute the Installer
         run: |
-          pwd 
-          ls
           $Install = Get-ChildItem -Filter *.exe 
           Start-Process -FilePath $Install.Fullname -ArgumentList "/S" -Wait
           cd "C:\program files\Openquake Engine"
