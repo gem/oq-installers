@@ -68,6 +68,7 @@ jobs:
           cd .\oq-builders\installers\windows\nsis\
           Get-Content -Path .\oq-engine\README.md -Raw
           python -m markdown .\oq-engine\README.md > .\README.html
+          Get-Content -Path .\README.html -Raw
           Copy-Item -Path "C:\Users\runneradmin\python\" -Destination "C:\Users\runneradmin\oq-builders\installers\windows\nsis\" -Recurse
           $files = @(Get-ChildItem .\oq-dist\engine\*.whl)
           $files.Name > .\oq-dist\engine\index.txt
