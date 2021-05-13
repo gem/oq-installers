@@ -4,7 +4,7 @@ on:
   schedule:
     - cron: "0 5 * * 5"
 jobs:
-  Windows-Installer:
+  Build Windows Installer:
     runs-on: windows-latest
     env:
       GIT_BRANCH: ${{ github.ref }}
@@ -48,7 +48,8 @@ jobs:
           git clone -q  --depth=1 -b ${Env:CURRENT_BRANCH} https://github.com/gem/oq-builders
           cd .\oq-builders\installers\windows\nsis\
           pwd
-          git clone --depth=1 -b ${Env:CURRENT_BRANCH} https://github.com/gem/oq-engine.git
+          #git clone --depth=1 -b ${Env:CURRENT_BRANCH} https://github.com/gem/oq-engine.git
+          git clone --depth=1 https://github.com/gem/oq-engine.git
           cd oq-engine
           pwd
           dir
@@ -59,7 +60,8 @@ jobs:
           echo "Downloading standalone apps"
           $app = ("oq-platform-standalone", "oq-platform-ipt", "oq-platform-taxonomy", "oq-platform-taxtweb")
           foreach ($element in $app) {
-              git clone -q --depth=1 -b ${Env:CURRENT_BRANCH} https://github.com/gem/$element.git
+              #git clone -q --depth=1 -b {Env:CURRENT_BRANCH} https://github.com/gem/$element.git
+              git clone -q --depth=1 https://github.com/gem/$element.git
               python -m pip wheel --disable-pip-version-check --no-deps -w oq-dist/tools ./$element
               if ( $element -eq "oq-platform-taxtweb" ) 
               {
@@ -100,5 +102,26 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: Windows-artifact
+          name: Installer
           path: C:\Users\runneradmin\oq-builders\installers\windows\nsis\out
+  Test Installer and run Demos:
+    runs-on: windows-latest
+    env:
+      GIT_BRANCH: ${{ github.ref }}
+      GIT_COMMIT_SHA: ${{ github.sha }}
+    steps:
+      - name: Set Variables
+        run: |
+          echo "Working Path: ${Env:GITHUB_WORKSPACE}"
+          $branchName = $Env:GITHUB_REF -replace 'refs/heads/', ''
+          echo "Branch: ${branchName}"
+          echo "CURRENT_BRANCH=${branchName}" >> $Env:GITHUB_ENV
+      - name: Download Windows Installer from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: Installer
+      - name: Unzip the Installer and run it
+        run: |
+          pwd 
+          ls
+          unzip -l Installer.zip
