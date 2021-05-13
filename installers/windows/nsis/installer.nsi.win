@@ -216,6 +216,7 @@ Section "Uninstall"
     Delete "$INSTDIR\oq-console.bat"
   ; Uninstall directories
     RMDir /r "$INSTDIR\demos"
+    RMDir /r "$INSTDIR\doc"
   ; Uninstall shortcuts
     Delete "$DESKTOP\OpenQuake Engine (webui).lnk"
     Delete "$DESKTOP\OpenQuake Engine (console).lnk"
