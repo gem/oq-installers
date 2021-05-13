@@ -89,10 +89,9 @@ jobs:
           $inst_version = [regex]::Matches($version, $pattern).Value
           $time_of_git = git log -n1 --pretty='format:%cd' --date=format:'%y%m%d%H%M
           $time_of_git.ToString()
-          #(Get-Content -Path .\installer.nsi.win -Raw) -replace 'CHANGETIME', $time_of_git.ToString() -replace 'CHANGEHERERELEASE', $inst_version | Set-Content -Path .\installer.nsi
           #makensis /V4 installer.nsi
           mkdir out
-          Copy-Item *.exe .\out
+          #Copy-Item *.exe .\out
           Copy-Item README.html .\out
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
