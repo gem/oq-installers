@@ -121,8 +121,12 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: Installer
-      - name: Unzip the Installer and run it
+      - name: Execute the Installer
         run: |
           pwd 
           ls
-          unzip -l Installer.zip
+          $Install = Get-ChildItem -Filter *.exe \.
+          Start-Process $Install.Fullname -ArgumentList "/S"
+          cd "c:\program files\Openquake Engine"
+          pwd
+          ls
