@@ -1,11 +1,11 @@
 @echo off
 setlocal
-set mypath=%~dp0
-set PATH=%mypath%\python3.6;%mypath%\python3.6\Scripts;%PATH%
+set mypath=C:\Program Files\OpenQuake Engine
+set PATH=%mypath%\python;%mypath%\python\Scripts;%PATH%
 set OQ_HOST=localhost
 set OQ_PORT=8800
 
-if not exist python3.6\pycached (
+if not exist python\pycached (
    echo Building python cache. This may take a while.
    echo Please wait ...
    python.exe -m compileall -qq .

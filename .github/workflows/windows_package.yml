@@ -1,0 +1,101 @@
+name: Windows Installer for oq-engine
+on:
+  push:
+  schedule:
+    - cron: "0 5 * * 5"
+jobs:
+  Windows-Installer:
+    runs-on: windows-latest
+    env:
+      GIT_BRANCH: ${{ github.ref }}
+      GIT_COMMIT_SHA: ${{ github.sha }}
+    steps:
+      - name: Set Variables
+        run: |
+          echo "Working Path: ${Env:GITHUB_WORKSPACE}"
+          $branchName = $Env:GITHUB_REF -replace 'refs/heads/', ''
+          echo "Branch: ${branchName}"
+          echo "CURRENT_BRANCH=${branchName}" >> $Env:GITHUB_ENV
+      - name: Output Variables
+        run: |
+          echo "${Env:CURRENT_BRANCH}"
+      - name: Set up Python using embedded distribution and create Installer
+        env:
+          GIT_BRANCH: ${{ github.ref }}
+          GIT_COMMIT_SHA: ${{ github.sha }}
+        run: |
+          cd C:\Users\runneradmin
+          pwd
+          Write-Host $Env:GITHUB_REF
+          curl  https://www.python.org/ftp/python/3.8.10/python-3.8.10-embed-amd64.zip --output python.zip
+          where.exe unzip.exe
+          unzip.exe python.zip -d python
+          echo "install pip and wheel and setuptools and markdown"
+          cd python
+          curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py
+          .\python.exe .\get-pip.py
+          mv .\python38._pth .\python38._pth.old
+          $Env:PY_PIP = "C:\Users\runneradmin\python\Scripts"
+          $Env:PY_LIBS = "C:\Users\runneradmin\python\Lib;C:\Users\runneradmin\python\Lib\site-package"
+          $Env:PY_HOME = "C:\Users\runneradmin\python"
+          $ENV:PATH="C:\Users\runneradmin\python\Scripts;$ENV:PATH"
+          .\python.exe -m pip install pip setuptools wheel --upgrade
+          .\python.exe -m pip install markdown==3.2.2
+          Set-Alias -Name python -Value C:\Users\runneradmin\python\python.exe
+          Set-Alias -Name pip -Value C:\Users\runneradmin\python\Scripts\pip.exe
+          cd ~
+          echo "${Env:CURRENT_BRANCH}"
+          git clone -q  --depth=1 -b ${Env:CURRENT_BRANCH} https://github.com/gem/oq-builders
+          cd .\oq-builders\installers\windows\nsis\
+          pwd
+          git clone --depth=1 -b ${Env:CURRENT_BRANCH} https://github.com/gem/oq-engine.git
+          cd oq-engine
+          python -c "import sys; print(sys.version)"
+          python -m pip install install -r requirements-py38-win64.txt
+          cd ..
+          python -m pip wheel --disable-pip-version-check --no-deps -w oq-dist/engine ./oq-engine
+          echo "Downloading standalone apps"
+          $app = ("oq-platform-standalone", "oq-platform-ipt", "oq-platform-taxonomy", "oq-platform-taxtweb")
+          foreach ($element in $app) {
+              git clone -q --depth=1 -b ${Env:CURRENT_BRANCH} https://github.com/gem/$element.git
+              python -m pip wheel --disable-pip-version-check --no-deps -w oq-dist/tools ./$element
+              if ( $element -eq "oq-platform-taxtweb" ) 
+              {
+                $Env:PYBUILD_NAME = "oq-taxonomy"
+                python -m pip -q wheel --disable-pip-version-check --no-deps -w oq-dist/tools ./$element
+              }    
+          }
+          cd ~
+          cd .\oq-builders\installers\windows\nsis\
+          python -m markdown .\oq-engine\README.md > .\README.html
+          Copy-Item -Path "C:\Users\runneradmin\python\" -Destination "C:\Users\runneradmin\oq-builders\installers\windows\nsis\" -Recurse
+          $files = @(Get-ChildItem .\oq-dist\engine\*.whl)
+          $files.Name > .\oq-dist\engine\index.txt
+          $files = @(Get-ChildItem .\oq-dist\tools\*.whl)
+          $files.Name > .\oq-dist\tools\index.txt
+          curl.exe -LO https://ci.openquake.org/job/builders/job/pdf-builder/lastSuccessfulBuild/artifact/oq-engine/doc/manual/oq-manual.pdf
+          Rename-Item .\oq-manual.pdf "Openquake manual.pdf"
+          $path = "C:\Users\runneradmin\oq-builders\installers\windows\nsis\demos"
+          $source = Get-ChildItem -Path C:\Users\runneradmin\oq-builders\installers\windows\nsis\oq-engine\demos -Directory
+          Add-Type -assembly "system.io.compression.filesystem"
+          Foreach ($s in $source)
+          {
+            $destination = Join-path -path $path -ChildPath "$($s.name).zip"
+            If(Test-path $destination) {Remove-item $destination}
+            [io.compression.zipfile]::CreateFromDirectory($s.fullname, $destination)
+          }
+          echo "Generating NSIS installer with oq version and time of git"
+          $version = Select-String -Path .\oq-engine\openquake\baselib\__init__.py -Pattern '__version__ ='
+          $pattern = "(?<=\').+?(?=\')"
+          $inst_version = [regex]::Matches($version, $pattern).Value
+          $time_of_git = git log -n1 --pretty='format:%cd' --date=format:'%y%m%d%H%M'
+          echo "version: ${inst_version} and time: ${time_of_git}"
+          (Get-Content -Path .\installer.nsi.win -Raw) -replace 'CHANGETIME', $time_of_git -replace 'CHANGEHERERELEASE', $inst_version | Set-Content -Path .\installer.nsi
+          makensis /V4 installer.nsi
+          mkdir out
+          Copy-Item *.exe .\out
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: Windows-artifact
+          path: C:\Users\runneradmin\oq-builders\installers\windows\nsis\out
