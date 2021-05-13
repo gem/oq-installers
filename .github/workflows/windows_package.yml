@@ -105,6 +105,7 @@ jobs:
           name: Installer
           path: C:\Users\runneradmin\oq-builders\installers\windows\nsis\out
   Test_Installer:
+    needs: Build_Installer
     runs-on: windows-latest
     env:
       GIT_BRANCH: ${{ github.ref }}
