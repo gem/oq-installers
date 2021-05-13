@@ -49,7 +49,7 @@ jobs:
           pwd
           git clone --depth=1 https://github.com/gem/oq-engine.git
           cd oq-engine
-          python.exe -c "import sys; print(sys.version)"
+          python -c "import sys; print(sys.version)"
           python -m pip install install -r requirements-py38-win64.txt
           cd ..
           python -m pip wheel --disable-pip-version-check --no-deps -w oq-dist/engine ./oq-engine
