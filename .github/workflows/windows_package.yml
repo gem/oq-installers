@@ -125,7 +125,7 @@ jobs:
         run: |
           pwd 
           ls
-          $Install = Get-ChildItem -Filter *.exe \.
+          $Install = Get-ChildItem -Filter *.exe 
           Start-Process $Install.Fullname -ArgumentList "/S"
           cd "c:\program files\Openquake Engine"
           pwd
