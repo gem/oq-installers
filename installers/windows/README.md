@@ -1,6 +1,6 @@
 ## OpenQuake installers for Windows ##
 
-### Requirements
+### Requirements for build with Docker
 
 - WINE: https://www.winehq.org/
 - Python: https://www.python.org/
