@@ -50,6 +50,8 @@ jobs:
           pwd
           git clone --depth=1 -b ${Env:CURRENT_BRANCH} https://github.com/gem/oq-engine.git
           cd oq-engine
+          pwd
+          dir
           python -c "import sys; print(sys.version)"
           python -m pip install install -r requirements-py38-win64.txt
           cd ..
@@ -75,6 +77,7 @@ jobs:
           $files.Name > .\oq-dist\tools\index.txt
           curl.exe -LO https://ci.openquake.org/job/builders/job/pdf-builder/lastSuccessfulBuild/artifact/oq-engine/doc/manual/oq-manual.pdf
           Rename-Item .\oq-manual.pdf "Openquake manual.pdf"
+          Copy-Item -Path "C:\Users\runneradmin\oq-builders\installers\windows\nsis\oq-engine\doc" -Destination "C:\Users\runneradmin\oq-builders\installers\windows\nsis\" -Recurse
           $path = "C:\Users\runneradmin\oq-builders\installers\windows\nsis\demos"
           $source = Get-ChildItem -Path C:\Users\runneradmin\oq-builders\installers\windows\nsis\oq-engine\demos -Directory
           Add-Type -assembly "system.io.compression.filesystem"
@@ -88,7 +91,7 @@ jobs:
           $version = Select-String -Path .\oq-engine\openquake\baselib\__init__.py -Pattern '__version__ ='
           $pattern = "(?<=\').+?(?=\')"
           $inst_version = [regex]::Matches($version, $pattern).Value
-          $time_of_git = git log -n1 --pretty='format:%cd' --date=format:'%y%m%d%H%M'
+          $time_of_git = git -C .\oq-engine log -n1 --pretty='format:%cd' --date=format:'%y%m%d%H%M'
           echo "version: ${inst_version} and time: ${time_of_git}"
           (Get-Content -Path .\installer.nsi.win -Raw) -replace 'CHANGETIME', $time_of_git -replace 'CHANGEHERERELEASE', $inst_version | Set-Content -Path .\installer.nsi
           makensis /V4 installer.nsi

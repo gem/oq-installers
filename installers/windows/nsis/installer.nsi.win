@@ -95,6 +95,9 @@ Section "!Core Files" SecCore
   File "oq-console.bat"
   File "LICENSE.txt"
 
+  SetOutPath "$INSTDIR\doc"
+  File /r "doc\*.*"
+
   SetOutPath "$INSTDIR\python"
   File /r "python\*.*"
 
