@@ -83,11 +83,13 @@ jobs:
             If(Test-path $destination) {Remove-item $destination}
             [io.compression.zipfile]::CreateFromDirectory($s.fullname, $destination)
           }
+          echo "Generating NSIS installer with oq version and time of git"
           $version = Select-String -Path .\oq-engine\openquake\baselib\__init__.py -Pattern '__version__ ='
           $pattern = "(?<=\').+?(?=\')"
           $inst_version = [regex]::Matches($version, $pattern).Value
-          (Get-Content -Path .\installer.nsi.win -Raw) -replace 'CHANGEHERERELEASE', $inst_version | Set-Content -Path .\installer.nsi
-          echo "Generating NSIS installer"
+          (Get-Content -Path .\installer.nsi.win -Raw) -replace 'CHANGEHERERELEASE', $inst_version | Set-Content -Path .\installer.nsi.1
+          $time_of_git = git log -n1 --pretty='format:%cd' --date=format:'%y%m%d%H%M
+          (Get-Content -Path .\installer.nsi.1 -Raw) -replace 'CHANGETIME', $time_of_git | Set-Content -Path .\installer.nsi
           makensis /V4 installer.nsi
           mkdir out
           Copy-Item *.exe .\out
