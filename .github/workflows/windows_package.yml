@@ -23,7 +23,6 @@ jobs:
         env:
           GIT_BRANCH: ${{ github.ref }}
           GIT_COMMIT_SHA: ${{ github.sha }}
-          GIT_COMMITTED_AT: ${{ ?? }}
         run: |
           cd C:\Users\runneradmin
           pwd
