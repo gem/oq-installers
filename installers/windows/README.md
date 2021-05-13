@@ -8,7 +8,8 @@
 - OQ python dependencies: http://ftp.openquake.org/wheelhouse/windows
 - Python markdown: https://pypi.python.org/pypi/Markdown
 
-Microsoft Windows is not required.
+### Microsoft build 
+
 
 ### Build with Docker
 
