@@ -4,7 +4,7 @@ on:
   schedule:
     - cron: "0 5 * * 5"
 jobs:
-  Build Windows Installer:
+  Build_Installer:
     runs-on: windows-latest
     env:
       GIT_BRANCH: ${{ github.ref }}
@@ -104,7 +104,7 @@ jobs:
         with:
           name: Installer
           path: C:\Users\runneradmin\oq-builders\installers\windows\nsis\out
-  Test Installer and run Demos:
+  Test_Installer:
     runs-on: windows-latest
     env:
       GIT_BRANCH: ${{ github.ref }}
