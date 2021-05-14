@@ -49,7 +49,7 @@ jobs:
           cd .\oq-builders\installers\windows\nsis\
           mkdir .\oq-dist\engine
           ls
-          git clone --depth=1 https://github.com/gem/oq-engine.git
+          git clone -q -b installer --depth=1 https://github.com/gem/oq-engine.git
           cd oq-engine
           Copy-Item -Path ".\install.py" -Destination "C:\Users\runneradmin\oq-builders\installers\windows\nsis\oq-dist\engine" -Recurse
           python -c "import sys; print(sys.version)"
