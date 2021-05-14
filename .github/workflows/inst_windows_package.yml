@@ -47,7 +47,8 @@ jobs:
           echo "${Env:CURRENT_BRANCH}"
           git clone -q  --depth=1 https://github.com/gem/oq-builders
           cd .\oq-builders\installers\windows\nsis\
-          pwd
+          mkdir .\oq-dist\engine
+          ls
           git clone --depth=1 https://github.com/gem/oq-engine.git
           cd oq-engine
           Copy-Item -Path ".\install.py" -Destination "C:\Users\runneradmin\oq-builders\installers\windows\nsis\oq-dist\engine" -Recurse
