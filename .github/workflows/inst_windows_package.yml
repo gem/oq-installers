@@ -94,7 +94,7 @@ jobs:
           Set-Alias -Name python -Value C:\Users\runneradmin\python\python.exe
           Set-Alias -Name pip -Value C:\Users\runneradmin\python\Scripts\pip.exe
           cd ..
-          python -m markdown "C:\Users\runneradmin\oq-builders\installer\windows\nsis\oq-engine\README.md" > .\README.html
+          python -m markdown "C:\Users\runneradmin\oq-builders\installers\windows\nsis\oq-engine\README.md" > .\README.html
           Copy-Item -Path "C:\Users\runneradmin\oq-builders\installers\windows\nsis\oq-dist\" -Destination ".\" -Recurse
           $files = @(Get-ChildItem .\oq-dist\engine\*.whl)
           $files.Name > .\oq-dist\engine\index.txt
@@ -136,7 +136,7 @@ jobs:
           $Install = Get-ChildItem -Filter *.exe 
           Start-Process -FilePath $Install.Fullname -ArgumentList "/S" -Wait
           cd "C:\Program Files\OpenQuake\"
-          $ENV:PATH="C:\program files\OpenQuake\Scripts"
+          $ENV:PATH="C:\Program Files\OpenQuake\Scripts"
           pwd
           ls
           #.\oq.exe --version
