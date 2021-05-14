@@ -67,9 +67,22 @@ jobs:
               }    
           }
           cd ~
-          cd .\oq-builders\installers\windows\nsis\
-          python -m markdown .\oq-engine\README.md > .\README.html
-          Copy-Item -Path "C:\Users\runneradmin\python\" -Destination "C:\Users\runneradmin\oq-builders\installers\windows\nsis\" -Recurse
+          mkdir package
+          cd package
+          curl  https://www.python.org/ftp/python/3.8.10/python-3.8.10-embed-amd64.zip --output python.zip
+          unzip.exe python.zip -d python
+          echo "install pip and wheel"
+          cd python
+          curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py
+          .\python.exe .\get-pip.py
+          mv .\python38._pth .\python38._pth.old
+          $Env:PY_PIP = "C:\Users\runneradmin\package\python\Scripts"
+          $Env:PY_LIBS = "C:\Users\runneradmin\package\python\Lib;C:\Users\runneradmin\python\Lib\site-package"
+          $Env:PY_HOME = "C:\Users\runneradmin\package\python"
+          $ENV:PATH="C:\Users\runneradmin\package\python\Scripts;$ENV:PATH"
+          cd ..
+          python -m markdown "C":\Users\runneradmin\oq-builders\oq-engine\README.md > .\README.html
+          Copy-Item -Path "C:\Users\runneradmin\oq-builders\installers\windows\nsis\oq-dist\" -Destination ".\" -Recurse
           $files = @(Get-ChildItem .\oq-dist\engine\*.whl)
           $files.Name > .\oq-dist\engine\index.txt
           $files = @(Get-ChildItem .\oq-dist\tools\*.whl)
@@ -82,7 +95,10 @@ jobs:
           $inst_version = [regex]::Matches($version, $pattern).Value
           $time_of_git = git -C .\oq-engine log -n1 --pretty='format:%cd' --date=format:'%y%m%d%H%M'
           echo "version: ${inst_version} and time: ${time_of_git}"
+          Copy-Item -Path "C:\Users\runneradmin\oq-builders\installers\windows\nsis\installer.nsi.ist" -Destination ".\" 
           (Get-Content -Path .\installer.nsi.ist -Raw) -replace 'CHANGETIME', $time_of_git -replace 'CHANGEHERERELEASE', $inst_version | Set-Content -Path .\installer.nsi
+          pwd
+          ls
           makensis /V4 installer.nsi
           mkdir out
           Copy-Item *.exe .\out
@@ -90,7 +106,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: Installer
-          path: C:\Users\runneradmin\oq-builders\installers\windows\nsis\out
+          path: C:\Users\runneradmin\package\out
   Test_Installer:
     needs: Build_Installer
     runs-on: windows-latest
