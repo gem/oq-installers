@@ -97,9 +97,6 @@ Section "!Core Files" SecCore
   File "oq-console.bat"
   File "LICENSE.txt"
 
-  SetOutPath "$INSTDIR\doc"
-  File /r "doc\*.*"
-
   SetOutPath "$INSTDIR\python"
   File /r "python\*.*"
 
@@ -216,7 +213,6 @@ Section "Uninstall"
     Delete "$INSTDIR\oq-console.bat"
   ; Uninstall directories
     RMDir /r "$INSTDIR\demos"
-    RMDir /r "$INSTDIR\doc"
   ; Uninstall shortcuts
     Delete "$DESKTOP\OpenQuake Engine (webui).lnk"
     Delete "$DESKTOP\OpenQuake Engine (console).lnk"
