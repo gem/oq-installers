@@ -75,6 +75,7 @@ jobs:
           $time_of_git = git -C .\oq-engine log -n1 --pretty='format:%cd' --date=format:'%y%m%d%H%M'
           Write-Host "version: ${inst_version} and time: ${time_of_git}"
           (Get-Content -Path .\installer.nsi.ist -Raw) -replace 'CHANGETIME', $time_of_git -replace 'CHANGEHERERELEASE', $inst_version | Set-Content -Path .\installer.nsi
+          Write-Host "Create portable environment for engine"
           cd ~
           mkdir package
           cd package
