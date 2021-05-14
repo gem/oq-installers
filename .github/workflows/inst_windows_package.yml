@@ -67,6 +67,15 @@ jobs:
               }    
           }
           cd ~
+          cd .\oq-builders\installers\windows\nsis
+          echo "Generating NSIS installer with oq version and time of git"
+          $version = Select-String -Path .\oq-engine\openquake\baselib\__init__.py -Pattern '__version__ ='
+          $pattern = "(?<=\').+?(?=\')"
+          $inst_version = [regex]::Matches($version, $pattern).Value
+          $time_of_git = git -C .\oq-engine log -n1 --pretty='format:%cd' --date=format:'%y%m%d%H%M'
+          Write-Host "version: ${inst_version} and time: ${time_of_git}"
+          (Get-Content -Path .\installer.nsi.ist -Raw) -replace 'CHANGETIME', $time_of_git -replace 'CHANGEHERERELEASE', $inst_version | Set-Content -Path .\installer.nsi
+          cd ~
           mkdir package
           cd package
           curl  https://www.python.org/ftp/python/3.8.10/python-3.8.10-embed-amd64.zip --output python.zip
@@ -80,6 +89,10 @@ jobs:
           $Env:PY_LIBS = "C:\Users\runneradmin\package\python\Lib;C:\Users\runneradmin\python\Lib\site-package"
           $Env:PY_HOME = "C:\Users\runneradmin\package\python"
           $ENV:PATH="C:\Users\runneradmin\package\python\Scripts;$ENV:PATH"
+          .\python.exe -m pip install wheel virtualenv --upgrade
+          .\python.exe -m pip install markdown==3.2.2
+          Set-Alias -Name python -Value C:\Users\runneradmin\python\python.exe
+          Set-Alias -Name pip -Value C:\Users\runneradmin\python\Scripts\pip.exe
           cd ..
           python -m markdown "C":\Users\runneradmin\oq-builders\oq-engine\README.md > .\README.html
           Copy-Item -Path "C:\Users\runneradmin\oq-builders\installers\windows\nsis\oq-dist\" -Destination ".\" -Recurse
@@ -89,14 +102,7 @@ jobs:
           $files.Name > .\oq-dist\tools\index.txt
           curl.exe -LO https://ci.openquake.org/job/builders/job/pdf-builder/lastSuccessfulBuild/artifact/oq-engine/doc/manual/oq-manual.pdf
           Rename-Item .\oq-manual.pdf "Openquake manual.pdf"
-          echo "Generating NSIS installer with oq version and time of git"
-          $version = Select-String -Path .\oq-engine\openquake\baselib\__init__.py -Pattern '__version__ ='
-          $pattern = "(?<=\').+?(?=\')"
-          $inst_version = [regex]::Matches($version, $pattern).Value
-          $time_of_git = git -C .\oq-engine log -n1 --pretty='format:%cd' --date=format:'%y%m%d%H%M'
-          echo "version: ${inst_version} and time: ${time_of_git}"
-          Copy-Item -Path "C:\Users\runneradmin\oq-builders\installers\windows\nsis\installer.nsi.ist" -Destination ".\" 
-          (Get-Content -Path .\installer.nsi.ist -Raw) -replace 'CHANGETIME', $time_of_git -replace 'CHANGEHERERELEASE', $inst_version | Set-Content -Path .\installer.nsi
+          Copy-Item -Path "C:\Users\runneradmin\oq-builders\installers\windows\nsis\installer.nsi" -Destination ".\" 
           pwd
           ls
           makensis /V4 installer.nsi
@@ -107,6 +113,7 @@ jobs:
         with:
           name: Installer
           path: C:\Users\runneradmin\package\out
+
   Test_Installer:
     needs: Build_Installer
     runs-on: windows-latest
