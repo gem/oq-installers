@@ -134,22 +134,6 @@ Section "OpenQuake Tools" SecTools
   nsExec::ExecToLog '$INSTDIR\python\python.exe -m pip -q install --no-deps --no-index --no-warn-script-location -r "index.txt"'
 SectionEnd
 
-Section "OpenQuake Engine demos and documentation" SecDocDemo
-  # Install manual and demos in 'Public\MyDocuments'
-  # keep disabled for now. It may be dangerous.
-  # SetOutPath "$DOCUMENTS\OpenQuake"
-  # File "OpenQuake manual.pdf"
-  # SetOutPath "$DOCUMENTS\OpenQuake\demos"
-  # File /r /x ".gitignore" "demos\*.*"
-
-  # Keep a copy also in the installation folder
-  SetOutPath "$INSTDIR"
-  File "OpenQuake manual.pdf"
-  SetOutPath "$INSTDIR\demos"
-  File /r /x ".gitignore" "demos\*.*"
-
-SectionEnd
-
 Section "OpenQuake Engine menu icons" SecMenu
   SetOutPath "$INSTDIR"
   CreateShortCut "$SMPROGRAMS\OpenQuake Engine (webui).lnk" "$INSTDIR\oq-server.bat" \
