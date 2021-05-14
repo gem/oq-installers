@@ -112,7 +112,7 @@ jobs:
         run: |
           $Install = Get-ChildItem -Filter *.exe 
           Start-Process -FilePath $Install.Fullname -ArgumentList "/S" -Wait
-          cd "C:\program files\OpenQuake\Scripts"
+          cd "C:\Program Files\OpenQuake\"
           $ENV:PATH="C:\program files\OpenQuake\Scripts"
           pwd
           ls
