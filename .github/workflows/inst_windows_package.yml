@@ -89,7 +89,7 @@ jobs:
           $Env:PY_LIBS = "C:\Users\runneradmin\package\python\Lib;C:\Users\runneradmin\python\Lib\site-package"
           $Env:PY_HOME = "C:\Users\runneradmin\package\python"
           $ENV:PATH="C:\Users\runneradmin\package\python\Scripts;$ENV:PATH"
-          .\python.exe -m pip install wheel virtualenv --upgrade
+          .\python.exe -m pip install wheel --upgrade
           .\python.exe -m pip install markdown==3.2.2
           Set-Alias -Name python -Value C:\Users\runneradmin\python\python.exe
           Set-Alias -Name pip -Value C:\Users\runneradmin\python\Scripts\pip.exe
