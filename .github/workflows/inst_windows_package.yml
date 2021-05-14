@@ -124,5 +124,6 @@ jobs:
           Start-Process -FilePath $Install.Fullname -ArgumentList "/S" -Wait
           cd "C:\program files\Openquake Engine"
           $ENV:PATH="C:\program files\Openquake Engine\python\Scripts"
-          oq.exe --version
-          oq.exe engine --run "https://downloads.openquake.org/pkgs/test_event_based_risk_inputs_bc.zip"
+          cd "C:\user\runneradmin\openquake\"
+          .\oq.exe --version
+          .\oq.exe engine --run "https://downloads.openquake.org/pkgs/test_event_based_risk_inputs_bc.zip"
