@@ -1,4 +1,4 @@
-name: Windows Installer for oq-engine
+name: Installer python on Windows for oq-engine
 on:
   push:
   schedule:
@@ -30,7 +30,7 @@ jobs:
           curl  https://www.python.org/ftp/python/3.8.10/python-3.8.10-embed-amd64.zip --output python.zip
           where.exe unzip.exe
           unzip.exe python.zip -d python
-          echo "install pip and wheel and setuptools and markdown"
+          echo "install pip and wheel and markdown"
           cd python
           curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py
           .\python.exe .\get-pip.py
@@ -92,7 +92,7 @@ jobs:
           $inst_version = [regex]::Matches($version, $pattern).Value
           $time_of_git = git -C .\oq-engine log -n1 --pretty='format:%cd' --date=format:'%y%m%d%H%M'
           echo "version: ${inst_version} and time: ${time_of_git}"
-          (Get-Content -Path .\installer.nsi.win -Raw) -replace 'CHANGETIME', $time_of_git -replace 'CHANGEHERERELEASE', $inst_version | Set-Content -Path .\installer.nsi
+          (Get-Content -Path .\installer.nsi.ist -Raw) -replace 'CHANGETIME', $time_of_git -replace 'CHANGEHERERELEASE', $inst_version | Set-Content -Path .\installer.nsi
           makensis /V4 installer.nsi
           mkdir out
           Copy-Item *.exe .\out

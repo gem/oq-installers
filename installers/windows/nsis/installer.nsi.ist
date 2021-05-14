@@ -128,7 +128,7 @@ Section "!OpenQuake Engine" SecEngine
 
   SetOutPath "$PLUGINSDIR\oq-dist\engine"
   DetailPrint "Installing the OpenQuake Engine..."
-  nsExec::ExecToLog '$INSTDIR\python\python.exe install.py'
+  nsExec::ExecToLog '$INSTDIR\python\python.exe install.py user'
 SectionEnd
 
 Section "OpenQuake Tools" SecTools
