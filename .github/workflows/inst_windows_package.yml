@@ -103,6 +103,9 @@ jobs:
           curl.exe -LO https://ci.openquake.org/job/builders/job/pdf-builder/lastSuccessfulBuild/artifact/oq-engine/doc/manual/oq-manual.pdf
           Rename-Item .\oq-manual.pdf "Openquake manual.pdf"
           Copy-Item -Path "C:\Users\runneradmin\oq-builders\installers\windows\nsis\installer.nsi" -Destination ".\" 
+          Copy-Item -Path "C:\Users\runneradmin\oq-builders\installers\windows\nsis\openquake*.*" -Destination ".\" 
+          Copy-Item -Path "C:\Users\runneradmin\oq-builders\installers\windows\nsis\oq-*.*" -Destination ".\" 
+          Copy-Item -Path "C:\Users\runneradmin\oq-builders\installers\windows\nsis\LICENSE.txt" -Destination ".\" 
           pwd
           ls
           makensis /V4 installer.nsi
