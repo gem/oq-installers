@@ -113,6 +113,10 @@ Section "!OpenQuake Engine" SecEngine
 
   SetOutPath "$INSTDIR\oq-dist\engine"
   DetailPrint "Installing the OpenQuake Engine..."
+  DetailPrint '"$INSTDIR\python\python.exe" "$INSTDIR\oq-dist\engine\install.py user"'
+  DetailPrint ""
+  DetailPrint "       Return value: $0"
+  DetailPrint ""
   nsExec::ExecToLog '$INSTDIR\python\python.exe $INSTDIR\oq-dist\engine\install.py user'
 SectionEnd
 
