@@ -90,13 +90,17 @@ jobs:
           $Env:PY_LIBS = "C:\Users\runneradmin\package\python\Lib;C:\Users\runneradmin\python\Lib\site-package"
           $Env:PY_HOME = "C:\Users\runneradmin\package\python"
           $ENV:PATH="C:\Users\runneradmin\package\python\Scripts;$ENV:PATH"
+          cp python.exe .\Scripts
           .\python.exe -m pip install wheel --upgrade
           .\python.exe -m pip install markdown==3.2.2
           Set-Alias -Name python -Value C:\Users\runneradmin\python\python.exe
           Set-Alias -Name pip -Value C:\Users\runneradmin\python\Scripts\pip.exe
           cd ..
           python -m markdown "C:\Users\runneradmin\oq-builders\installers\windows\nsis\oq-engine\README.md" > .\README.html
-          Copy-Item -Path "C:\Users\runneradmin\oq-builders\installers\windows\nsis\oq-dist\" -Destination ".\" -Recurse
+          Copy-Item -Path "C:\Users\runneradmin\oq-builders\installers\windows\nsis\oq-dist\*" -Destination ".\oq-dist" -Recurse
+          cd oq-dist
+          ls
+          cd ..
           $files = @(Get-ChildItem .\oq-dist\engine\*.whl)
           $files.Name > .\oq-dist\engine\index.txt
           $files = @(Get-ChildItem .\oq-dist\tools\*.whl)
@@ -107,8 +111,6 @@ jobs:
           Copy-Item -Path "C:\Users\runneradmin\oq-builders\installers\windows\nsis\openquake*.*" -Destination ".\" 
           Copy-Item -Path "C:\Users\runneradmin\oq-builders\installers\windows\nsis\oq-*.*" -Destination ".\" 
           Copy-Item -Path "C:\Users\runneradmin\oq-builders\installers\windows\nsis\LICENSE.txt" -Destination ".\" 
-          pwd
-          ls
           makensis /V4 installer.nsi
           mkdir out
           Copy-Item *.exe .\out
