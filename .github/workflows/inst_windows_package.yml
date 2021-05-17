@@ -145,8 +145,10 @@ jobs:
           $Install = Get-ChildItem -Filter *.exe 
           Start-Process -FilePath $Install.Fullname -ArgumentList "/S" -Wait
           cd "C:\Program Files\OpenQuake\"
-          $ENV:PATH="C:\Program Files\OpenQuake\Scripts"
+          $ENV:PATH="C:\Program Files\OpenQuake\python\Scripts"
           pwd
           ls
-          #.\oq.exe --version
+          cd .\python\Scripts
+          ls
+          .\oq.exe --version
           #.\oq.exe engine --run "https://downloads.openquake.org/pkgs/test_event_based_risk_inputs_bc.zip"
