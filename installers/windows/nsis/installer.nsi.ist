@@ -110,7 +110,6 @@ Section "!OpenQuake Engine" SecEngine
   File "openquake.ico"
   File "oq-server.bat"
   File "README.html"
-  File "python._pth.old"
 
   SetOutPath "$INSTDIR"
   DetailPrint "Installing the OpenQuake Engine..."
@@ -141,7 +140,7 @@ SectionEnd
 
 Section -post
   ; Byte-compile Python files.
-  ; RMDir /r "$INSTDIR\oq-dist"
+  RMDir /r "$INSTDIR\oq-dist"
   DetailPrint "Byte-compiling Python modules..."
   nsExec::ExecToLog '$INSTDIR\python\python.exe -m compileall -qq "$INSTDIR"'
   FileOpen $0 "$INSTDIR\python\pycached" w
