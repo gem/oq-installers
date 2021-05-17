@@ -100,7 +100,7 @@ Section "!Core Files" SecCore
   SetOutPath "$INSTDIR\python"
   File /r "python\*.*"
 
-  SetOutPath "$PLUGINSDIR\oq-dist"
+  SetOutPath "$INSTDIR\oq-dist"
   File /r "oq-dist\*.*"
 SectionEnd
 
@@ -111,13 +111,13 @@ Section "!OpenQuake Engine" SecEngine
   File "oq-server.bat"
   File "README.html"
 
-  SetOutPath "$PLUGINSDIR\oq-dist\engine"
+  SetOutPath "$INSTDIR\oq-dist\engine"
   DetailPrint "Installing the OpenQuake Engine..."
   nsExec::ExecToLog '$INSTDIR\python\python.exe install.py user'
 SectionEnd
 
 Section "OpenQuake Tools" SecTools
-  SetOutPath "$PLUGINSDIR\oq-dist\tools"
+  SetOutPath "$INSTDIR\oq-dist\tools"
   DetailPrint "Installing the OpenQuake Tools..."
   nsExec::ExecToLog '$INSTDIR\python\python.exe -m pip -q install --no-deps --no-index --no-warn-script-location -r "index.txt"'
 SectionEnd
