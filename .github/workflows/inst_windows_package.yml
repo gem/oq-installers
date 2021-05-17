@@ -48,7 +48,6 @@ jobs:
           git clone -q  -b installer --depth=1 https://github.com/gem/oq-builders
           cd .\oq-builders\installers\windows\nsis\
           mkdir .\oq-dist\engine
-          ls
           git clone -q -b installer --depth=1 https://github.com/gem/oq-engine.git
           cd oq-engine
           Copy-Item -Path ".\install.py" -Destination "C:\Users\runneradmin\oq-builders\installers\windows\nsis\oq-dist\engine" -Recurse
@@ -85,6 +84,7 @@ jobs:
           cd python
           curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py
           .\python.exe .\get-pip.py
+          Write-Host "mv .\python38._pth C:\Users\runneradmin\package\python._pth.old"
           mv .\python38._pth C:\Users\runneradmin\package\python._pth.old
           $Env:PY_PIP = "C:\Users\runneradmin\package\python\Scripts"
           $Env:PY_LIBS = "C:\Users\runneradmin\package\python\Lib;C:\Users\runneradmin\python\Lib\site-package"
@@ -97,10 +97,8 @@ jobs:
           cd ..
           python -m markdown "C:\Users\runneradmin\oq-builders\installers\windows\nsis\oq-engine\README.md" > .\README.html
           Write-Host "Copy the wheel created for the standalone"
-          ls "C:\Users\runneradmin\oq-builders\installers\windows\nsis\oq-dist\*"
           Copy-Item -Path "C:\Users\runneradmin\oq-builders\installers\windows\nsis\oq-dist" -Destination ".\" -Recurse
           cd oq-dist
-          ls
           cd ..
           $files = @(Get-ChildItem .\oq-dist\engine\*.whl)
           $files.Name > .\oq-dist\engine\index.txt
