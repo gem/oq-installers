@@ -117,7 +117,7 @@ Section "!OpenQuake Engine" SecEngine
   DetailPrint ""
   DetailPrint "       Return value: $0"
   DetailPrint ""
-  nsExec::ExecToLog '$INSTDIR\python\python.exe $INSTDIR\oq-dist\engine\install.py user'
+  nsExec::ExecToLog '"$INSTDIR\python\python.exe" "$INSTDIR\oq-dist\engine\install.py" user'
 SectionEnd
 
 Section "OpenQuake Tools" SecTools
