@@ -85,12 +85,11 @@ jobs:
           cd python
           curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py
           .\python.exe .\get-pip.py
-          mv .\python38._pth .\python._pth.old
+          mv .\python38._pth ..\python._pth.old
           $Env:PY_PIP = "C:\Users\runneradmin\package\python\Scripts"
           $Env:PY_LIBS = "C:\Users\runneradmin\package\python\Lib;C:\Users\runneradmin\python\Lib\site-package"
           $Env:PY_HOME = "C:\Users\runneradmin\package\python"
           $ENV:PATH="C:\Users\runneradmin\package\python\Scripts;$ENV:PATH"
-          cp python.exe .\Scripts
           .\python.exe -m pip install wheel --upgrade
           .\python.exe -m pip install markdown==3.2.2
           Set-Alias -Name python -Value C:\Users\runneradmin\python\python.exe
