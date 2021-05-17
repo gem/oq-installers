@@ -111,7 +111,7 @@ Section "!OpenQuake Engine" SecEngine
   File "oq-server.bat"
   File "README.html"
 
-  SetOutPath "$INSTDIR\oq-dist\engine"
+  SetOutPath "$INSTDIR\python"
   DetailPrint "Installing the OpenQuake Engine..."
   DetailPrint '"$INSTDIR\python\python.exe" "$INSTDIR\oq-dist\engine\install.py user"'
   DetailPrint ""
