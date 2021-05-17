@@ -85,11 +85,13 @@ jobs:
           curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py
           .\python.exe .\get-pip.py
           Write-Host "mv .\python38._pth C:\Users\runneradmin\package\python._pth.old"
-          mv .\python38._pth C:\Users\runneradmin\package\python._pth.old
-          $Env:PY_PIP = "C:\Users\runneradmin\package\python\Scripts"
-          $Env:PY_LIBS = "C:\Users\runneradmin\package\python\Lib;C:\Users\runneradmin\python\Lib\site-package"
-          $Env:PY_HOME = "C:\Users\runneradmin\package\python"
-          $ENV:PATH="C:\Users\runneradmin\package\python\Scripts;$ENV:PATH"
+          mv .\python38._pth .\python._pth.old
+          $env:PY_PIP = "C:\Users\runneradmin\package\python\Scripts"
+          $env:PY_LIBS = "C:\Users\runneradmin\package\python\Lib;C:\Users\runneradmin\python\Lib\site-package"
+          $env:PY_HOME = "C:\Users\runneradmin\package\python"
+          $env:PATH="C:\Users\runneradmin\package\python\Scripts;$ENV:PATH"
+          echo ${env:}
+          echo ${env:PATH}
           .\python.exe -m pip install wheel --upgrade
           .\python.exe -m pip install markdown==3.2.2
           Set-Alias -Name python -Value C:\Users\runneradmin\python\python.exe
@@ -102,7 +104,6 @@ jobs:
           cd ..
           $files = @(Get-ChildItem .\oq-dist\engine\*.whl)
           $files.Name > .\oq-dist\engine\index.txt
-          Get-Content -Path .\oq-dist\engine\install.py -Raw
           $files = @(Get-ChildItem .\oq-dist\tools\*.whl)
           $files.Name > .\oq-dist\tools\index.txt
           curl.exe -LO https://ci.openquake.org/job/builders/job/pdf-builder/lastSuccessfulBuild/artifact/oq-engine/doc/manual/oq-manual.pdf
