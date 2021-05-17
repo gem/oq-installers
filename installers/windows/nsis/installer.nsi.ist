@@ -110,6 +110,7 @@ Section "!OpenQuake Engine" SecEngine
   File "openquake.ico"
   File "oq-server.bat"
   File "README.html"
+  File "python._pth.old"
 
   SetOutPath "$INSTDIR"
   DetailPrint "Installing the OpenQuake Engine..."

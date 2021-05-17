@@ -152,4 +152,4 @@ jobs:
           set PATH=%mypath%\python;%mypath%\python\Scripts;%PATH%
           oq --version
           "C:\Program Files\OpenQuake\python\Scripts\oq" --version
-          shell: cmd
+        shell: cmd
