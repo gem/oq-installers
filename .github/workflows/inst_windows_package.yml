@@ -142,12 +142,13 @@ jobs:
           $Install = Get-ChildItem -Filter *.exe 
           Start-Process -FilePath $Install.Fullname -ArgumentList "/S" -Wait
           cd "C:\Program Files\OpenQuake\"
-          $ENV:PATH="C:\Program Files\OpenQuake\python\Scripts"
+          $env:PATH="C:\Program Files\OpenQuake\python\Scripts"
+          echo ${env:PATH}
           pwd
       - name: Run oq 
         run: |
           set mypath=C:\Program Files\OpenQuake
           set PATH=%mypath%\python;%mypath%\python\Scripts;%PATH%
+          echo %PATH%
           oq --version
-          "C:\Program Files\OpenQuake\python\Scripts\oq" --version
         shell: cmd
