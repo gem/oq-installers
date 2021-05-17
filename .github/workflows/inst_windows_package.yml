@@ -97,7 +97,9 @@ jobs:
           Set-Alias -Name pip -Value C:\Users\runneradmin\python\Scripts\pip.exe
           cd ..
           python -m markdown "C:\Users\runneradmin\oq-builders\installers\windows\nsis\oq-engine\README.md" > .\README.html
-          Copy-Item -Path "C:\Users\runneradmin\oq-builders\installers\windows\nsis\oq-dist\*" -Destination ".\oq-dist" -Recurse
+          Write-Host "Copy the wheel created for the standalone"
+          ls "C:\Users\runneradmin\oq-builders\installers\windows\nsis\oq-dist\*"
+          Copy-Item -Path "C:\Users\runneradmin\oq-builders\installers\windows\nsis\oq-dist" -Destination ".\" -Recurse
           cd oq-dist
           ls
           cd ..
