@@ -61,7 +61,8 @@ jobs:
               python -m pip wheel --disable-pip-version-check --no-deps -w oq-dist/tools ./$element
               if ( $element -eq "oq-platform-taxtweb" ) 
               {
-                $Env:PYBUILD_NAME = "oq-taxonomy"
+                $env:PYBUILD_NAME = "oq-taxonomy"
+                echo ${env:PYBUILD_NAME} 
                 python -m pip -q wheel --disable-pip-version-check --no-deps -w oq-dist/tools ./$element
               }    
           }
@@ -90,7 +91,7 @@ jobs:
           $env:PY_LIBS = "C:\Users\runneradmin\package\python\Lib;C:\Users\runneradmin\python\Lib\site-package"
           $env:PY_HOME = "C:\Users\runneradmin\package\python"
           $env:PATH="C:\Users\runneradmin\package\python\Scripts;$ENV:PATH"
-          echo ${env:}
+          echo ${env:PY_HOME}
           echo ${env:PATH}
           .\python.exe -m pip install wheel --upgrade
           .\python.exe -m pip install markdown==3.2.2
