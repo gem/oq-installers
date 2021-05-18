@@ -18,7 +18,7 @@
 
 !define /date MYTIMESTAMP "CHANGETIME"
 !define MYVERSION "CHANGEHERERELEASE"
-!define PRODUCT_NAME "OpenQuake Engine"
+!define PRODUCT_NAME "OpenQuake"
 !define VER_CODE "${MYVERSION}"
 !define VER_BUILD "${MYTIMESTAMP}"
 !define PRODUCT_VERSION "${VER_CODE}.${VER_BUILD}"
