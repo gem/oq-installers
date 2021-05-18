@@ -45,10 +45,10 @@ jobs:
           Set-Alias -Name pip -Value C:\Users\runneradmin\python\Scripts\pip.exe
           cd ~
           echo "${Env:CURRENT_BRANCH}"
-          git clone -q  -b installer --depth=1 https://github.com/gem/oq-builders
+          git clone -q  -b ${Env:CURRENT_BRANCH} --depth=1 https://github.com/gem/oq-builders
           cd .\oq-builders\installers\windows\nsis\
           mkdir .\oq-dist\engine
-          git clone -q -b installer --depth=1 https://github.com/gem/oq-engine.git
+          git clone -q -b ${Env:CURRENT_BRANCH} --depth=1 https://github.com/gem/oq-engine.git
           cd oq-engine
           Copy-Item -Path ".\install.py" -Destination "C:\Users\runneradmin\oq-builders\installers\windows\nsis\oq-dist\engine" -Recurse
           python -c "import sys; print(sys.version)"
@@ -57,7 +57,7 @@ jobs:
           echo "Downloading standalone apps"
           $app = ("oq-platform-standalone", "oq-platform-ipt", "oq-platform-taxonomy", "oq-platform-taxtweb")
           foreach ($element in $app) {
-              git clone -q --depth=1 https://github.com/gem/$element.git
+          git clone -q -b -b ${Env:CURRENT_BRANCH} --depth=1 https://github.com/gem/$element.git
               python -m pip wheel --disable-pip-version-check --no-deps -w oq-dist/tools ./$element
               if ( $element -eq "oq-platform-taxtweb" ) 
               {
@@ -153,4 +153,5 @@ jobs:
           set PATH=%mypath%\python;%mypath%\python\Scripts;%PATH%
           echo %PATH%
           oq --version
+          oq.exe engine --run "https://downloads.openquake.org/pkgs/test_event_based_risk_inputs_bc.zip"
         shell: cmd
