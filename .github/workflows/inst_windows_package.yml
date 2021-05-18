@@ -2,7 +2,7 @@ name: Installer python on Windows for oq-engine
 on:
   push:
   schedule:
-    - cron: "0 5 * * 5"
+    - cron: "0 21 * * 4"
 jobs:
   Build_Installer:
     runs-on: windows-latest
