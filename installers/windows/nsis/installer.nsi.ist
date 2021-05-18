@@ -97,25 +97,10 @@ Section "!Core Files" SecCore
   File "oq-console.bat"
   File "LICENSE.txt"
 
-  SetOutPath "$INSTDIR\doc"
-  File /r "doc\*.*"
-
   SetOutPath "$INSTDIR\python"
   File /r "python\*.*"
 
-  ; Install MSVCRT if it's not already on the system
-  IfFileExists "$SYSDIR\ucrtbase.dll" skip_msvcrt
-  SetOutPath "$INSTDIR\python"
-  File "dist\msvcrt\x64\*.dll"
-  skip_msvcrt:
-
-  ; Install MSVCP if it's not already on the system
-  IfFileExists "$SYSDIR\msvcp140.dll" skip_msvcp
-  SetOutPath "$INSTDIR\python"
-  File "dist\msvcp\x64\msvcp140.dll"
-  skip_msvcp:
-
-  SetOutPath "$PLUGINSDIR\oq-dist"
+  SetOutPath "$INSTDIR\oq-dist"
   File /r "oq-dist\*.*"
 SectionEnd
 
@@ -126,31 +111,15 @@ Section "!OpenQuake Engine" SecEngine
   File "oq-server.bat"
   File "README.html"
 
-  SetOutPath "$PLUGINSDIR\oq-dist\engine"
+  SetOutPath "$INSTDIR"
   DetailPrint "Installing the OpenQuake Engine..."
-  nsExec::ExecToLog '$INSTDIR\python\python.exe -m pip -q install --no-deps --no-index --no-warn-script-location -r "index.txt"'
+  nsExec::ExecToLog '"$INSTDIR\python\python.exe" "$INSTDIR\oq-dist\engine\install.py" user'
 SectionEnd
 
 Section "OpenQuake Tools" SecTools
-  SetOutPath "$PLUGINSDIR\oq-dist\tools"
+  SetOutPath "$INSTDIR\oq-dist\tools"
   DetailPrint "Installing the OpenQuake Tools..."
   nsExec::ExecToLog '$INSTDIR\python\python.exe -m pip -q install --no-deps --no-index --no-warn-script-location -r "index.txt"'
-SectionEnd
-
-Section "OpenQuake Engine demos and documentation" SecDocDemo
-  # Install manual and demos in 'Public\MyDocuments'
-  # keep disabled for now. It may be dangerous.
-  # SetOutPath "$DOCUMENTS\OpenQuake"
-  # File "OpenQuake manual.pdf"
-  # SetOutPath "$DOCUMENTS\OpenQuake\demos"
-  # File /r /x ".gitignore" "demos\*.*"
-
-  # Keep a copy also in the installation folder
-  SetOutPath "$INSTDIR"
-  File "OpenQuake manual.pdf"
-  SetOutPath "$INSTDIR\demos"
-  File /r /x ".gitignore" "demos\*.*"
-
 SectionEnd
 
 Section "OpenQuake Engine menu icons" SecMenu
@@ -216,7 +185,6 @@ Section "Uninstall"
     Delete "$INSTDIR\oq-console.bat"
   ; Uninstall directories
     RMDir /r "$INSTDIR\demos"
-    RMDir /r "$INSTDIR\doc"
   ; Uninstall shortcuts
     Delete "$DESKTOP\OpenQuake Engine (webui).lnk"
     Delete "$DESKTOP\OpenQuake Engine (console).lnk"

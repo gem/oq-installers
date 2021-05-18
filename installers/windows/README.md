@@ -1,4 +1,5 @@
 ## OpenQuake installers for Windows ##
+Use the same universal installers of engine
 
 ### Requirements
 

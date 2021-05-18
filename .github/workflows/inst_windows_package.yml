@@ -1,7 +1,8 @@
-name: Windows Installer for oq-engine
+name: Installer python on Windows for oq-engine
 on:
+  push:
   schedule:
-    - cron: "0 5 * * 5"
+    - cron: "0 21 * * 4"
 jobs:
   Build_Installer:
     runs-on: windows-latest
@@ -29,11 +30,11 @@ jobs:
           curl  https://www.python.org/ftp/python/3.8.10/python-3.8.10-embed-amd64.zip --output python.zip
           where.exe unzip.exe
           unzip.exe python.zip -d python
-          echo "install pip and wheel and setuptools and markdown"
+          echo "install pip and wheel and markdown"
           cd python
           curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py
           .\python.exe .\get-pip.py
-          mv .\python38._pth .\python38._pth.old
+          mv .\python38._pth .\python._pth.old
           $Env:PY_PIP = "C:\Users\runneradmin\python\Scripts"
           $Env:PY_LIBS = "C:\Users\runneradmin\python\Lib;C:\Users\runneradmin\python\Lib\site-package"
           $Env:PY_HOME = "C:\Users\runneradmin\python"
@@ -44,55 +45,74 @@ jobs:
           Set-Alias -Name pip -Value C:\Users\runneradmin\python\Scripts\pip.exe
           cd ~
           echo "${Env:CURRENT_BRANCH}"
-          git clone -q  --depth=1 -b ${Env:CURRENT_BRANCH} https://github.com/gem/oq-builders
+          git clone -q  -b ${Env:CURRENT_BRANCH} --depth=1 https://github.com/gem/oq-builders
           cd .\oq-builders\installers\windows\nsis\
-          pwd
-          git clone --depth=1 -b ${Env:CURRENT_BRANCH} https://github.com/gem/oq-engine.git
+          mkdir .\oq-dist\engine
+          git clone -q -b ${Env:CURRENT_BRANCH} --depth=1 https://github.com/gem/oq-engine.git
           cd oq-engine
-          pwd
-          dir
+          Copy-Item -Path ".\install.py" -Destination "C:\Users\runneradmin\oq-builders\installers\windows\nsis\oq-dist\engine" -Recurse
           python -c "import sys; print(sys.version)"
           python -m pip install install -r requirements-py38-win64.txt
           cd ..
-          python -m pip wheel --disable-pip-version-check --no-deps -w oq-dist/engine ./oq-engine
           echo "Downloading standalone apps"
           $app = ("oq-platform-standalone", "oq-platform-ipt", "oq-platform-taxonomy", "oq-platform-taxtweb")
           foreach ($element in $app) {
-              git clone -q --depth=1 -b {Env:CURRENT_BRANCH} https://github.com/gem/$element.git
+          git clone -q -b -b ${Env:CURRENT_BRANCH} --depth=1 https://github.com/gem/$element.git
               python -m pip wheel --disable-pip-version-check --no-deps -w oq-dist/tools ./$element
               if ( $element -eq "oq-platform-taxtweb" ) 
               {
-                $Env:PYBUILD_NAME = "oq-taxonomy"
+                $env:PYBUILD_NAME = "oq-taxonomy"
+                echo ${env:PYBUILD_NAME} 
                 python -m pip -q wheel --disable-pip-version-check --no-deps -w oq-dist/tools ./$element
               }    
           }
           cd ~
-          cd .\oq-builders\installers\windows\nsis\
-          python -m markdown .\oq-engine\README.md > .\README.html
-          Copy-Item -Path "C:\Users\runneradmin\python\" -Destination "C:\Users\runneradmin\oq-builders\installers\windows\nsis\" -Recurse
+          cd .\oq-builders\installers\windows\nsis
+          echo "Generating NSIS installer with oq version and time of git"
+          $version = Select-String -Path .\oq-engine\openquake\baselib\__init__.py -Pattern '__version__ ='
+          $pattern = "(?<=\').+?(?=\')"
+          $inst_version = [regex]::Matches($version, $pattern).Value
+          $time_of_git = git -C .\oq-engine log -n1 --pretty='format:%cd' --date=format:'%y%m%d%H%M'
+          Write-Host "version: ${inst_version} and time: ${time_of_git}"
+          (Get-Content -Path .\installer.nsi.ist -Raw) -replace 'CHANGETIME', $time_of_git -replace 'CHANGEHERERELEASE', $inst_version | Set-Content -Path .\installer.nsi
+          Write-Host "Create portable environment for engine"
+          cd ~
+          mkdir package
+          cd package
+          curl  https://www.python.org/ftp/python/3.8.10/python-3.8.10-embed-amd64.zip --output python.zip
+          unzip.exe python.zip -d python
+          echo "install pip and wheel"
+          cd python
+          curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py
+          .\python.exe .\get-pip.py
+          Write-Host "mv .\python38._pth C:\Users\runneradmin\package\python._pth.old"
+          mv .\python38._pth .\python._pth.old
+          $env:PY_PIP = "C:\Users\runneradmin\package\python\Scripts"
+          $env:PY_LIBS = "C:\Users\runneradmin\package\python\Lib;C:\Users\runneradmin\python\Lib\site-package"
+          $env:PY_HOME = "C:\Users\runneradmin\package\python"
+          $env:PATH="C:\Users\runneradmin\package\python\Scripts;$ENV:PATH"
+          echo ${env:PY_HOME}
+          echo ${env:PATH}
+          .\python.exe -m pip install wheel --upgrade
+          .\python.exe -m pip install markdown==3.2.2
+          Set-Alias -Name python -Value C:\Users\runneradmin\python\python.exe
+          Set-Alias -Name pip -Value C:\Users\runneradmin\python\Scripts\pip.exe
+          cd ..
+          python -m markdown "C:\Users\runneradmin\oq-builders\installers\windows\nsis\oq-engine\README.md" > .\README.html
+          Write-Host "Copy the wheel created for the standalone"
+          Copy-Item -Path "C:\Users\runneradmin\oq-builders\installers\windows\nsis\oq-dist" -Destination ".\" -Recurse
+          cd oq-dist
+          cd ..
           $files = @(Get-ChildItem .\oq-dist\engine\*.whl)
           $files.Name > .\oq-dist\engine\index.txt
           $files = @(Get-ChildItem .\oq-dist\tools\*.whl)
           $files.Name > .\oq-dist\tools\index.txt
           curl.exe -LO https://ci.openquake.org/job/builders/job/pdf-builder/lastSuccessfulBuild/artifact/oq-engine/doc/manual/oq-manual.pdf
           Rename-Item .\oq-manual.pdf "Openquake manual.pdf"
-          Copy-Item -Path "C:\Users\runneradmin\oq-builders\installers\windows\nsis\oq-engine\doc" -Destination "C:\Users\runneradmin\oq-builders\installers\windows\nsis\" -Recurse
-          $path = "C:\Users\runneradmin\oq-builders\installers\windows\nsis\demos"
-          $source = Get-ChildItem -Path C:\Users\runneradmin\oq-builders\installers\windows\nsis\oq-engine\demos -Directory
-          Add-Type -assembly "system.io.compression.filesystem"
-          Foreach ($s in $source)
-          {
-            $destination = Join-path -path $path -ChildPath "$($s.name).zip"
-            If(Test-path $destination) {Remove-item $destination}
-            [io.compression.zipfile]::CreateFromDirectory($s.fullname, $destination)
-          }
-          echo "Generating NSIS installer with oq version and time of git"
-          $version = Select-String -Path .\oq-engine\openquake\baselib\__init__.py -Pattern '__version__ ='
-          $pattern = "(?<=\').+?(?=\')"
-          $inst_version = [regex]::Matches($version, $pattern).Value
-          $time_of_git = git -C .\oq-engine log -n1 --pretty='format:%cd' --date=format:'%y%m%d%H%M'
-          echo "version: ${inst_version} and time: ${time_of_git}"
-          (Get-Content -Path .\installer.nsi.win -Raw) -replace 'CHANGETIME', $time_of_git -replace 'CHANGEHERERELEASE', $inst_version | Set-Content -Path .\installer.nsi
+          Copy-Item -Path "C:\Users\runneradmin\oq-builders\installers\windows\nsis\installer.nsi" -Destination ".\" 
+          Copy-Item -Path "C:\Users\runneradmin\oq-builders\installers\windows\nsis\openquake*.*" -Destination ".\" 
+          Copy-Item -Path "C:\Users\runneradmin\oq-builders\installers\windows\nsis\oq-*.*" -Destination ".\" 
+          Copy-Item -Path "C:\Users\runneradmin\oq-builders\installers\windows\nsis\LICENSE.txt" -Destination ".\" 
           makensis /V4 installer.nsi
           mkdir out
           Copy-Item *.exe .\out
@@ -100,7 +120,8 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: Installer
-          path: C:\Users\runneradmin\oq-builders\installers\windows\nsis\out
+          path: C:\Users\runneradmin\package\out
+
   Test_Installer:
     needs: Build_Installer
     runs-on: windows-latest
@@ -122,7 +143,15 @@ jobs:
         run: |
           $Install = Get-ChildItem -Filter *.exe 
           Start-Process -FilePath $Install.Fullname -ArgumentList "/S" -Wait
-          cd "C:\program files\Openquake Engine"
-          $ENV:PATH="C:\program files\Openquake Engine\python\Scripts"
-          oq.exe --version
+          cd "C:\Program Files\OpenQuake\"
+          $env:PATH="C:\Program Files\OpenQuake\python\Scripts"
+          echo ${env:PATH}
+          pwd
+      - name: Run oq 
+        run: |
+          set mypath=C:\Program Files\OpenQuake
+          set PATH=%mypath%\python;%mypath%\python\Scripts;%PATH%
+          echo %PATH%
+          oq --version
           oq.exe engine --run "https://downloads.openquake.org/pkgs/test_event_based_risk_inputs_bc.zip"
+        shell: cmd
