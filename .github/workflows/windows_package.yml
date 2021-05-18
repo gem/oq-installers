@@ -1,6 +1,5 @@
 name: Windows Installer for oq-engine
 on:
-  push:
   schedule:
     - cron: "0 5 * * 5"
 jobs:
